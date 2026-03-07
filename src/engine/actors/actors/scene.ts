@@ -1,17 +1,25 @@
 import * as PIXI from 'pixi.js';
+import { SceneStage } from '../scene_stage';
 
 export type SceneContainerOptions = PIXI.ContainerOptions & {
-    sceneData: any[]
+    sceneSettingsData?: any,
+    sceneActorData: any[]
 }
 
 export class Scene extends PIXI.Container {
+    protected stage!: SceneStage;
+
+    protected sceneSettingsData: any;
+    protected sceneActorData: any[];
+    
     constructor(options: SceneContainerOptions) {
         super(options);
 
-        for (let i = 0; i < options.sceneData.length; i++) {
-            const sceneActor = options.sceneData[i];
+        this.sceneActorData = options.sceneActorData;
+        this.sceneSettingsData = options?.sceneSettingsData || {};
+    }
 
-            
-        }
+    public setStage(stage: SceneStage) {
+        this.stage = stage;
     }
 }

@@ -1,12 +1,16 @@
 import * as PIXI from "pixi.js";
 import { BaseFactoryCreator } from "../base_factory_creator";
-import { PositionalActorData } from "../actor_factory";
+import { ActorFactory, PositionalActorData } from "../actor_factory";
 
-export type ContainerCreatorData = PositionalActorData & {}
+export type ContainerCreatorData = PositionalActorData & {
+    children?: any[]
+}
 
 export class ContainerCreator extends BaseFactoryCreator<PIXI.Container> {
     public build(data: ContainerCreatorData, parent?: PIXI.Container): PIXI.Container {
-        const { id, x, y, scale, visible, alpha, rotation, angle, zIndex } = data;
+        const actorFactory = ActorFactory.instance;
+
+        const { id, x, y, scale, visible, alpha, rotation, angle, zIndex, children} = data;
 
         const container = new PIXI.Container({
             label: id || "container",
@@ -23,6 +27,15 @@ export class ContainerCreator extends BaseFactoryCreator<PIXI.Container> {
         
         if (parent) {
             parent.addChild(container);
+        }
+
+        // Add children from data
+        if (children) {
+            for (let i = 0; i < children.length; i++) {
+                const sceneDataEntry = children[i];
+                
+                actorFactory.buildActor(sceneDataEntry, container);
+            }
         }
 
         return container;

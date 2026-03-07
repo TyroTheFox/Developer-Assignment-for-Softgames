@@ -3,7 +3,8 @@ import { AssetLoader } from "./engine/assets/asset_loader";
 import { initDevtools } from '@pixi/devtools';
 
 (async () => {
-  const assetLoader = new AssetLoader();
+  const assetLoader = AssetLoader.instance;
+  const actorFactory = AssetLoader.instance;
 
   // Create a new application
   const app = new Application();

@@ -15,10 +15,12 @@ export type AssetManifestEntry = {
 };
 
 export class AssetLoader {
+    static #instance: AssetLoader;
+
     private assetBundleList: string[] = [];
     private assetManifest: AssetManifestEntry[] = [];
 
-    constructor() {
+    private constructor() {
         const assetBundles = assetManifestData.bundle;
         
         for (let i = 0; i < assetBundles.length; i++) {
@@ -27,6 +29,14 @@ export class AssetLoader {
             this.assetBundleList.push(assetBundle.name);
             this.assetManifest.push(assetBundle);
         }
+    }
+
+    public static get instance(): AssetLoader {
+        if (!AssetLoader.#instance) {
+            AssetLoader.#instance = new AssetLoader();
+        }
+
+        return AssetLoader.#instance;
     }
 
     public async loadAsset(assetURL: string) {
