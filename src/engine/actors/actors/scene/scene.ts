@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js';
 import { SceneStage } from './scene_stage';
 import { ActorFactory, BaseActorData } from '../../actor_factory';
 import { StageManager } from './stage_manager';
+import { AssetLoader } from '../../../assets/asset_loader';
 
 export type SceneContainerOptions = BaseActorData & PIXI.ContainerOptions & {
     settings?: any,
@@ -11,7 +12,8 @@ export type SceneContainerOptions = BaseActorData & PIXI.ContainerOptions & {
 export class Scene extends PIXI.Container {
     protected stage!: SceneStage;
     protected stageManager!: StageManager;
-    private actorFactory = ActorFactory.instance;
+    protected actorFactory = ActorFactory.instance;
+    protected assetLoader = AssetLoader.instance;
 
     protected sceneSettingsData: any;
     protected sceneActorData: any[];

@@ -43,14 +43,14 @@ export class StageManager {
         return StageManager.#instance;
     }
 
-    public changeScene(stage: string, newScene: string) {
+    public async changeScene(stage: string, newScene: string) {
         const currentStage = this.stageMap.get(stage);
 
         if (currentStage) {
             const scene = this.sceneMap.get(newScene);
 
             if (scene) {
-                currentStage.transitionTo(scene);
+                await currentStage.transitionTo(scene);
             }
         }
     }

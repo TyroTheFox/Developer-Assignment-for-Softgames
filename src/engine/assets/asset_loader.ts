@@ -50,11 +50,14 @@ export class AssetLoader {
     }
 
     public async loadAssetBundles() {
+        const promises = [];
         for (let i = 0; i < this.assetBundleList.length; i++) {
             const assetBundleData = this.assetBundleList[i];
 
-            await this.loadAssetBundle(assetBundleData);
+            promises.push(this.loadAssetBundle(assetBundleData));
         }
+
+        await Promise.all(promises);
     }
 
     public async loadAssetBundle(bundleName: string) {
