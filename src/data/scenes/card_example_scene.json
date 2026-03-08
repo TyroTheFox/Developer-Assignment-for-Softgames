@@ -1,0 +1,14 @@
+{
+    "id": "card_example",
+    "type": "scene",
+    "settings": [],
+    "actors": [
+        {
+            "id": "test",
+            "type": "sprite",
+            "x": 300,
+            "y": 300,
+            "texture": "cards_club_2"
+        }
+    ]
+}

@@ -1,12 +1,12 @@
 import * as PIXI from "pixi.js";
 import { ContainerCreator } from "./factory_creators/container_creator";
 import { SpriteCreator } from "./factory_creators/sprite_creator";
-import { SceneCreator } from "./factory_creators/scene_creator";
+import { BaseFactoryCreator } from "./base_factory_creator";
 
 export type BaseActorData = {
     id: string,
     type: string,
-    zIndex: number
+    zIndex?: number
 }
 
 export type PositionalActorData = BaseActorData & {
@@ -26,10 +26,9 @@ export type PositionalActorData = BaseActorData & {
 export class ActorFactory {
     static #instance: ActorFactory;
     
-    private actorCreators = new Map([
+    private actorCreators = new Map<string, BaseFactoryCreator<any>>([
         ["container", new ContainerCreator()],
-        ["sprite", new SpriteCreator()],
-        ["scene", new SceneCreator()]
+        ["sprite", new SpriteCreator()]
     ]);
 
     private constructor() {}
@@ -40,6 +39,10 @@ export class ActorFactory {
         }
 
         return ActorFactory.#instance;
+    }
+
+    public addCreator<Type>(key: string, creator: BaseFactoryCreator<Type>) {
+        this.actorCreators.set(key, creator);
     }
 
     public buildActor<ActorDataType extends BaseActorData, ReturnType>(data: ActorDataType, parent?: PIXI.Container): ReturnType {

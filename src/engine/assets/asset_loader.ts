@@ -2,8 +2,6 @@ import {Assets} from 'pixi.js';
 
 import assetManifestData from '../../data/assets/asset_manifest.json' assert {type: 'json'};
 
-console.log(assetManifestData);
-
 export type AssetsManifestEntryData = {
     alias: string,
     src: string

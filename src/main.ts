@@ -1,13 +1,16 @@
-import { Application, Assets, Sprite } from "pixi.js";
+import { Application } from "pixi.js";
 import { AssetLoader } from "./engine/assets/asset_loader";
 import { initDevtools } from '@pixi/devtools';
+import { StageManager } from "./engine/actors/actors/scene/stage_manager";
+
+import cardExampleSceneData from './data/scenes/card_example_scene.json' assert {type: 'json'};
+import { CardExampleScene } from "./game/scenes/card_example_scene";
 
 (async () => {
-  const assetLoader = AssetLoader.instance;
-  const actorFactory = AssetLoader.instance;
-
   // Create a new application
   const app = new Application();
+
+  const assetLoader = AssetLoader.instance;
 
   // Initialize the application
   await app.init({ background: "#1099bb", resizeTo: window });
@@ -20,26 +23,20 @@ import { initDevtools } from '@pixi/devtools';
   await assetLoader.loadAssetManifestBundleData();
   await assetLoader.loadAssetBundles();
 
-  // Load the bunny texture
-  // const texture = await Assets.load(Assets.get('cards_club_2'));
+  const mainStageManager = StageManager.instance(
+    [
+      { key: "card_example", scene: new CardExampleScene(cardExampleSceneData) }
+    ], 
+    [
+      { key: "main", initialStage: "card_example"}
+    ], 
+    app.stage
+  );
 
-  // Create a bunny Sprite
-  const bunny = new Sprite(Assets.get('cards_club_2'));
-
-  // Center the sprite's anchor point
-  bunny.anchor.set(0.5);
-
-  // Move the sprite to the center of the screen
-  bunny.position.set(app.screen.width / 2, app.screen.height / 2);
-
-  // Add the bunny to the stage
-  app.stage.addChild(bunny);
+  mainStageManager.changeScene("main", "card_example");
 
   // Listen for animate update
   app.ticker.add((time) => {
-    // Just for fun, let's rotate mr rabbit a little.
-    // * Delta is 1 if running at 100% performance *
-    // * Creates frame-independent transformation *
-    bunny.rotation += 0.1 * time.deltaTime;
+    mainStageManager.updateStages(time);
   });
 })();
