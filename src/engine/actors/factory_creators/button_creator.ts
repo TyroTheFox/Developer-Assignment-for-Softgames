@@ -1,22 +1,23 @@
 import * as PIXI from "pixi.js";
+import { Button } from "@pixi/ui";
 import { BaseFactoryCreator } from "../base_factory_creator";
 import { ActorFactory, PositionalActorData } from "../actor_factory";
 import { Container } from "../actors/container";
 
-export type ContainerCreatorData = PositionalActorData & {
+export type ButtonCreatorData = PositionalActorData & {
     children?: any[]
 }
 
-export class ContainerCreator extends BaseFactoryCreator<Container> {
-    public build(data: ContainerCreatorData, parent: PIXI.Container): Container {
+export class ButtonCreator extends BaseFactoryCreator<Button> {
+    public build(data: ButtonCreatorData, parent: PIXI.Container): Button {
         const actorFactory = ActorFactory.instance;
-        const { id, x, y, xExactPos, yExactPos, scale, visible, alpha, rotation, angle, zIndex, children, cullable} = data;
+        const { id, x, y, xExactPos, yExactPos, scale, visible, alpha, rotation, angle, zIndex, children, cullable } = data;
 
         let caluclatedX = xExactPos ? xExactPos : (x || 0) * parent.width;
         let caluclatedY = yExactPos ? yExactPos : (y || 0) * parent.height;
 
         const container = new Container({
-            label: id || "container",
+            label: id || "button",
             position: { x: caluclatedX, y: caluclatedY },
             scale: { x: scale?.x || 1, y: scale?.y || 1 },
             rotation: rotation || undefined,
@@ -32,13 +33,12 @@ export class ContainerCreator extends BaseFactoryCreator<Container> {
             for (let i = 0; i < children.length; i++) {
                 const sceneDataEntry = children[i];
                 
-                const newActor = actorFactory.buildActor<any, any>(sceneDataEntry, container);
-
-                newActor.x = sceneDataEntry.x || 0;
-                newActor.y = sceneDataEntry.y || 0;
+                actorFactory.buildActor(sceneDataEntry, container);
             }
         }
 
-        return container;
+        const button = new Button(container);
+
+        return button;
     }
 }

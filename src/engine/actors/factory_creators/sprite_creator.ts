@@ -1,31 +1,34 @@
 import * as PIXI from "pixi.js";
 import { BaseFactoryCreator } from "../base_factory_creator";
 import { PositionalActorData } from "../actor_factory";
+import { Sprite } from "../actors/sprite";
+import { GameScreen } from "../../screen/game_screen";
 
 export type SpriteCreatorData = PositionalActorData & {
     texture: string;
 }
 
-export class SpriteCreator extends BaseFactoryCreator<PIXI.Sprite> {
-    public build(data: SpriteCreatorData, parent?: PIXI.Container): PIXI.Sprite {
-        const { id, texture, anchor, x, y, scale, visible, alpha, rotation, angle, zIndex } = data;
+export class SpriteCreator extends BaseFactoryCreator<Sprite> {
+    public build(data: SpriteCreatorData, parent: PIXI.Container): Sprite {
+        const gameScreen = GameScreen.instance;
+        const { id, texture, anchor, x, y, xExactPos, yExactPos, scale, visible, alpha, rotation, angle, zIndex, cullable } = data;
 
-        const sprite = new PIXI.Sprite({
+        let caluclatedX = xExactPos ? xExactPos : (x || 0) * gameScreen.gameScreenDimensions.width;
+        let caluclatedY = yExactPos ? yExactPos : (y || 0) * gameScreen.gameScreenDimensions.height;
+
+        const sprite = new Sprite({
+            label: id || "container",
             texture: PIXI.Assets.get(texture),
             anchor: anchor || 0.5,
-            position: { x: x || 0, y: y || 0},
+            position: { x: caluclatedX, y: caluclatedY },
             scale: { x: scale?.x || 1, y: scale?.y || 1 },
             rotation: rotation || undefined,
             angle: angle || undefined,
             zIndex: zIndex || 0,
-            label: id || "container",
             visible: visible || true,
-            alpha: alpha || 1
-        });
-        
-        if (parent) {
-            parent.addChild(sprite);
-        }
+            alpha: alpha || 1,
+            cullable: cullable || true
+        }, data, parent);
 
         return sprite;
     }

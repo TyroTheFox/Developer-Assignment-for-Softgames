@@ -1,0 +1,13 @@
+{
+    "id": "game_menu",
+    "type": "scene",
+    "settings": {
+        "scaleWithScreen": false
+    },
+    "actors": [
+        {
+            "id": "menuPanel",
+            "type": "list"
+        }
+    ]
+}

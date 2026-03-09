@@ -1,6 +1,7 @@
 import * as PIXI from "pixi.js";
 import { Scene } from "./scene";
 import { SceneStage } from "./scene_stage";
+import { GameScreen } from "../../../screen/game_screen";
 
 export type sceneListPair = {
     key: string,
@@ -16,6 +17,7 @@ export class StageManager {
     static #instance: StageManager;
     private stageMap: Map<string, SceneStage> = new Map();
     private sceneMap: Map<string, Scene> = new Map();
+    protected gameScreen = GameScreen.instance;
 
     private constructor(sceneList: sceneListPair[], stageList: stageListPair[], baseContainer: PIXI.Container) {
         for (let i = 0; i < sceneList.length; i++) {

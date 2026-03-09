@@ -1,14 +1,42 @@
 {
     "id": "card_example",
     "type": "scene",
-    "settings": [],
+    "settings": {
+        "deck": {
+            "size": 144,
+            "cardSpriteData": {
+                "id": "card",
+                "type": "sprite"
+            }
+        }
+    },
     "actors": [
         {
             "id": "test",
             "type": "sprite",
-            "x": 300,
-            "y": 300,
-            "texture": "cards_club_2"
+            "texture": "cards_club_2",
+            "x": 0.2,
+            "y": 0.4,
+            "scale": {
+                "x": 1,
+                "y": 1
+            }
+        },
+        {
+            "id": "cardSpace",
+            "type": "container",
+            "children": [
+                {
+                    "id": "deckContainer1",
+                    "type": "container",
+                    "x": -400
+                },
+                {
+                    "id": "deckContainer2",
+                    "type": "container",
+                    "x": 400
+                }
+            ]
         }
     ]
 }

@@ -1,21 +1,31 @@
 import * as PIXI from "pixi.js";
+
 import { ContainerCreator } from "./factory_creators/container_creator";
 import { SpriteCreator } from "./factory_creators/sprite_creator";
 import { BaseFactoryCreator } from "./base_factory_creator";
+import { FancyButtonCreator } from "./factory_creators/fancy_button_creator";
+import { ButtonCreator } from "./factory_creators/button_creator";
+import { ListCreator } from "./factory_creators/list_creator";
+import { TextCreator } from "./factory_creators/text_creator";
 
 export type BaseActorData = {
     id: string,
     type: string,
-    zIndex?: number
+    zIndex?: number,
+    cullable?: boolean
 }
 
 export type PositionalActorData = BaseActorData & {
     x?: number,
     y?: number,
+    xExactPos?: number,
+    yExactPos?: number,
     scale?: { 
         x?: number,
         y?: number
     },
+    width?: number,
+    height?: number,
     visible?: boolean,
     anchor?: number,
     alpha?: number,
@@ -28,7 +38,11 @@ export class ActorFactory {
     
     private actorCreators = new Map<string, BaseFactoryCreator<any>>([
         ["container", new ContainerCreator()],
-        ["sprite", new SpriteCreator()]
+        ["sprite", new SpriteCreator()],
+        ["fancyButton", new FancyButtonCreator()],
+        ["button", new ButtonCreator()],
+        ["list", new ListCreator()],
+        ["text", new TextCreator()]
     ]);
 
     private constructor() {}
@@ -39,10 +53,6 @@ export class ActorFactory {
         }
 
         return ActorFactory.#instance;
-    }
-
-    public addCreator<Type>(key: string, creator: BaseFactoryCreator<Type>) {
-        this.actorCreators.set(key, creator);
     }
 
     public buildActor<ActorDataType extends BaseActorData, ReturnType>(data: ActorDataType, parent?: PIXI.Container): ReturnType {
