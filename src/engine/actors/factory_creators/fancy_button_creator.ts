@@ -3,6 +3,7 @@ import * as PIXIUI from "@pixi/ui";
 import { BaseFactoryCreator } from "../base_factory_creator";
 import { ActorFactory, PositionalActorData } from "../actor_factory";
 import { FancyButton } from "../actors/fancy_button";
+import { GameScreen } from "../../screen/game_screen";
 
 export type FancyButtonCreatorData = PositionalActorData & {
     options: PIXIUI.ButtonOptions,
@@ -21,11 +22,11 @@ export type FancyButtonCreatorData = PositionalActorData & {
 export class FancyButtonCreator extends BaseFactoryCreator<FancyButton> {
     public build(data: FancyButtonCreatorData, parent: PIXI.Container): FancyButton {
         const actorFactory = ActorFactory.instance;
-
+        const gameScreen = GameScreen.instance;
         const { id, x, y, xExactPos, yExactPos, pivotX, pivotY, scale, visible, alpha, rotation, angle, zIndex, views, options, text, cullable } = data;
 
-        let caluclatedX = xExactPos ? xExactPos : (x || 0) * parent.width;
-        let caluclatedY = yExactPos ? yExactPos : (y || 0) * parent.height;
+        let caluclatedX = xExactPos ? xExactPos : (x || 0) * gameScreen.gameScreenDimensions.width;
+        let caluclatedY = yExactPos ? yExactPos : (y || 0) * gameScreen.gameScreenDimensions.height;
 
         const buttonOptions = {...options};
 

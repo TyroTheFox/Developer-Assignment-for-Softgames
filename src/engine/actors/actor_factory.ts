@@ -9,6 +9,7 @@ import { ListCreator } from "./factory_creators/list_creator";
 import { TextCreator } from "./factory_creators/text_creator";
 import { DrawnGraphicsCreator } from "./factory_creators/drawn_graphics_creator";
 import { CharacterSpriteCreator } from "./factory_creators/character_sprite_creator";
+import { DialogueBoxCreator } from "./factory_creators/dialogue_box_creator";
 
 export type BaseActorData = {
     id: string,
@@ -48,7 +49,8 @@ export class ActorFactory {
         ["list", new ListCreator()],
         ["text", new TextCreator()],
         ["drawnGraphics", new DrawnGraphicsCreator()],
-        ["characterSprite", new CharacterSpriteCreator()]
+        ["characterSprite", new CharacterSpriteCreator()],
+        ["dialogueBox", new DialogueBoxCreator()]
     ]);
 
     private constructor() {}

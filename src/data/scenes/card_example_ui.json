@@ -1,0 +1,17 @@
+{
+    "id": "card_example_ui",
+    "type": "scene",
+    "settings": {
+        "scaleWithScreen": false
+    },
+    "actors": [
+        {
+            "id": "playerHandContainer",
+            "type": "list",
+            "listType": "horizontal",
+            "options": {
+                "elementsMargin": 40 
+            }
+        }
+    ]
+}

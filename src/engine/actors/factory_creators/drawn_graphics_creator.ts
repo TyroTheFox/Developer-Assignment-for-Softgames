@@ -2,6 +2,7 @@ import * as PIXI from "pixi.js";
 import { BaseFactoryCreator } from "../base_factory_creator";
 import { PositionalActorData } from "../actor_factory";
 import { DrawnGraphics } from "../actors/drawn_graphics";
+import { GameScreen } from "../../screen/game_screen";
 
 export type DrawStep = {
     functionName: string,
@@ -14,10 +15,11 @@ export type DrawnGraphicsCreatorData = PositionalActorData & {
 
 export class DrawnGraphicsCreator extends BaseFactoryCreator<DrawnGraphics> {
     public build(data: DrawnGraphicsCreatorData, parent: PIXI.Container): DrawnGraphics {
+        const gameScreen = GameScreen.instance;
         const { id, x, y, xExactPos, yExactPos, pivotX, pivotY, scale, visible, alpha, rotation, angle, zIndex, cullable } = data;
 
-        let caluclatedX = xExactPos ? xExactPos : (x || 0) * parent.width;
-        let caluclatedY = yExactPos ? yExactPos : (y || 0) * parent.height;
+        let caluclatedX = xExactPos ? xExactPos : (x || 0) * gameScreen.gameScreenDimensions.width;
+        let caluclatedY = yExactPos ? yExactPos : (y || 0) * gameScreen.gameScreenDimensions.height;
 
         const drawGraphics = new DrawnGraphics({
             label: id || "drawnGraphics",

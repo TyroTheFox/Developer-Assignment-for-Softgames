@@ -39,6 +39,20 @@ export class Sprite extends PIXI.Sprite {
         this.y = this.gameScreen.gameScreenDimensions.height * this.gamePosition.y;
     }
 
+    /**
+     * Relative Pivot X Position of the Object
+     */
+    public set pivotX(coord: number) {
+        this.pivot.x = coord;
+    }
+
+    /**
+     * Relative Pivot Y Position of the Object
+     */
+    public set pivotY(coord: number) {
+        this.pivot.y = coord;
+    }
+
     public resize(width: number, height: number) {
         let caluclatedX = this.exactPosition.x ? this.exactPosition.x : width * (this.gamePosition.x || 0);
         let caluclatedY = this.exactPosition.y ? this.exactPosition.y : height * (this.gamePosition.y || 0);

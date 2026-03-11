@@ -4,6 +4,8 @@ import { PixiPlugin } from "gsap/PixiPlugin";
 import { app, GameScreen } from "./engine/screen/game_screen";
 import { AssetLoader } from "./engine/assets/asset_loader";
 
+import { EmptyUI } from "./game/scenes/empty_ui";
+
 // Game Menu
 import { GameMenuScene } from "./game/scenes/game_menu_scene";
 import gameMenuSceneData from './data/scenes/game_menu_scene.json' assert {type: 'json'};
@@ -12,9 +14,15 @@ import gameMenuSceneData from './data/scenes/game_menu_scene.json' assert {type:
 import { CardExampleScene } from "./game/scenes/card_example_scene";
 import cardExampleSceneData from './data/scenes/card_example_scene.json' assert {type: 'json'};
 
+import { CardExampleUI } from "./game/scenes/card_example_ui";
+import cardExampleUIData from './data/scenes/card_example_ui.json' assert {type: 'json'};
+
 // "Magic Words" Dialogue Scene
 import { DialogueExampleScene } from "./game/scenes/dialogue_example_scene";
 import dialogueExampleScene from './data/scenes/dialogue_example_scene.json' assert {type: 'json'};
+
+import { DialogueExampleUI } from "./game/scenes/dialogue_example_ui";
+import dialogueExampleUIData from './data/scenes/dialogue_example_ui.json' assert {type: 'json'};
 
 // "Phoenix Flame" Particle Effect Scene
 import { FireEmitterScene } from "./game/scenes/fire_emitter_scene";
@@ -36,15 +44,22 @@ PixiPlugin.registerPIXI(PIXI);
 
   await mainGameScreen.loadGame(
     [
-      { key: "card_example",      scene: new CardExampleScene(cardExampleSceneData) },
-      { key: "fire_emitter",      scene: new FireEmitterScene(fireEmitterSceneData) },
-      { key: "dialogue_example",  scene: new DialogueExampleScene(dialogueExampleScene) },
+      { key: "empty_ui",              scene: new EmptyUI({"id": "empty scene", "type": "scene", "settings": {}, "actors": []}) },
 
-      { key: "main_menu",         scene: new GameMenuScene(gameMenuSceneData) }
+      { key: "card_example",          scene: new CardExampleScene(cardExampleSceneData) },
+      { key: "card_example_ui",       scene: new CardExampleUI(cardExampleUIData) },
+
+      { key: "fire_emitter",          scene: new FireEmitterScene(fireEmitterSceneData) },
+
+      { key: "dialogue_example",      scene: new DialogueExampleScene(dialogueExampleScene) },
+      { key: "dialogue_example_ui",   scene: new DialogueExampleUI(dialogueExampleUIData) },
+
+      { key: "main_menu",             scene: new GameMenuScene(gameMenuSceneData) }
     ], 
     [
-      { key: "main",              initialStage: "card_example" },
-      { key: "menu",              initialStage: "main_menu" }
+      { key: "main",                  initialStage: "dialogue_example" },
+      { key: "hud",                   initialStage: "dialogue_example_ui" },
+      { key: "menu",                  initialStage: "main_menu" }
     ]
   );
 

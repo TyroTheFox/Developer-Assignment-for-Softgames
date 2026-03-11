@@ -1,4 +1,3 @@
-import * as PIXI from "pixi.js";
 import { gsap } from 'gsap';
 import { Scene } from "../../engine/actors/actors/scene/scene";
 import { Container } from "../../engine/actors/actors/container";
@@ -40,14 +39,17 @@ export class GameMenuScene extends Scene {
 
         cardExampleButton.onPress.connect(() => {
             this.gameScreen.changeScene('main', 'card_example');
+            this.gameScreen.changeScene('hud', 'card_example_ui');
         });
 
         dialogueExampleButton.onPress.connect(() => {
             this.gameScreen.changeScene('main', 'fire_emitter');
+            this.gameScreen.changeScene('hud', 'empty_ui');
         });
 
         fireEmitterButton.onPress.connect(() => {
             this.gameScreen.changeScene('main', 'dialogue_example');
+            this.gameScreen.changeScene('hud', 'dialogue_example_ui');
         });
 
         this.menuButton.onPress.connect(() => {
@@ -65,7 +67,11 @@ export class GameMenuScene extends Scene {
         });
     }
 
-    public override update(_time: PIXI.Ticker): void {
-        this.menuPanel.pivot.y = window.innerHeight * 0.5;
+    public override resize(width: number, height: number, scale: number) {
+        super.resize(width, height, scale);
+
+        if (this.menuPanel) {
+            this.menuPanel.pivot.y = window.innerHeight * 0.5;
+        }
     }
 }

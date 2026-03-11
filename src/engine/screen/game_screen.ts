@@ -56,9 +56,16 @@ export class GameScreen {
         this.fpsCounter = new PIXI.Text({
             x: this.gameScreenDimensions.width * 0.05,
             y: this.gameScreenDimensions.height * 0.05,
-            text: "0"
-        }); 
+            text: "0",
+            style: {
+                fontSize: 20,
+                fill: 'white',
+                stroke: 'black',
+                align: 'center'
+            },
+        });
 
+        this.fpsCounter.zIndex = 1000;
         app.stage.addChild(this.fpsCounter);
     }
 

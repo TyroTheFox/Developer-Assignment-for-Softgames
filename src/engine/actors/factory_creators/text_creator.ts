@@ -2,6 +2,7 @@ import * as PIXI from "pixi.js";
 import { BaseFactoryCreator } from "../base_factory_creator";
 import { PositionalActorData } from "../actor_factory";
 import { GameText } from "../actors/text";
+import { GameScreen } from "../../screen/game_screen";
 
 export type TextCreatorData = PositionalActorData & {
     text?: string,
@@ -10,10 +11,11 @@ export type TextCreatorData = PositionalActorData & {
 
 export class TextCreator extends BaseFactoryCreator<GameText> {
     public build(data: TextCreatorData, parent: PIXI.Container): GameText {
+        const gameScreen = GameScreen.instance;
         const { id, text, style, anchor, x, y, xExactPos, yExactPos, pivotX, pivotY, scale, visible, alpha, rotation, angle, zIndex, cullable } = data;
 
-        let caluclatedX = xExactPos ? xExactPos : (x || 0) * parent.width;
-        let caluclatedY = yExactPos ? yExactPos : (y || 0) * parent.height;
+        let caluclatedX = xExactPos ? xExactPos : (x || 0) * gameScreen.gameScreenDimensions.width;
+        let caluclatedY = yExactPos ? yExactPos : (y || 0) * gameScreen.gameScreenDimensions.height;
 
         const gameText = new GameText({
             text: text,

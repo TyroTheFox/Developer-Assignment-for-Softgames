@@ -3,6 +3,7 @@ import { Button } from "@pixi/ui";
 import { BaseFactoryCreator } from "../base_factory_creator";
 import { ActorFactory, PositionalActorData } from "../actor_factory";
 import { Container } from "../actors/container";
+import { GameScreen } from "../../screen/game_screen";
 
 export type ButtonCreatorData = PositionalActorData & {
     children?: any[]
@@ -11,10 +12,11 @@ export type ButtonCreatorData = PositionalActorData & {
 export class ButtonCreator extends BaseFactoryCreator<Button> {
     public build(data: ButtonCreatorData, parent: PIXI.Container): Button {
         const actorFactory = ActorFactory.instance;
+        const gameScreen = GameScreen.instance;
         const { id, x, y, xExactPos, yExactPos, pivotX, pivotY, scale, visible, alpha, rotation, angle, zIndex, children, cullable } = data;
 
-        let caluclatedX = xExactPos ? xExactPos : (x || 0) * parent.width;
-        let caluclatedY = yExactPos ? yExactPos : (y || 0) * parent.height;
+        let caluclatedX = xExactPos ? xExactPos : (x || 0) * gameScreen.gameScreenDimensions.width;
+        let caluclatedY = yExactPos ? yExactPos : (y || 0) * gameScreen.gameScreenDimensions.height;
 
         const view = new Container({
             label: id || id + "_view"

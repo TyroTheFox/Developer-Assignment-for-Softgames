@@ -20,10 +20,7 @@ export type CharacterSpriteCreatorData = PositionalActorData & {
 
 export class CharacterSpriteCreator extends BaseFactoryCreator<CharacterSprite> {
     public build(data: CharacterSpriteCreatorData, parent: PIXI.Container): CharacterSprite {
-        const { id, x, y, xExactPos, yExactPos, pivotX, pivotY, scale, visible, alpha, rotation, angle, zIndex, spriteFrames, cullable} = data;
-
-        let caluclatedX = xExactPos ? xExactPos : (x || 0) * parent.width;
-        let caluclatedY = yExactPos ? yExactPos : (y || 0) * parent.height;
+        const { id, x, y, pivotX, pivotY, scale, visible, alpha, rotation, angle, zIndex, spriteFrames, cullable} = data;
 
         let frames: Record<string, Sprite> = {};
 
@@ -52,9 +49,9 @@ export class CharacterSpriteCreator extends BaseFactoryCreator<CharacterSprite> 
             }
         }
 
-        const container = new CharacterSprite({
+        const characterSprite = new CharacterSprite({
             label: id || "characterSprite",
-            position: { x: caluclatedX, y: caluclatedY },
+            position: { x: (x || 0), y: (y || 0) },
             scale: { x: scale?.x || 1, y: scale?.y || 1 },
             rotation: rotation || undefined,
             angle: angle || undefined,
@@ -63,8 +60,12 @@ export class CharacterSpriteCreator extends BaseFactoryCreator<CharacterSprite> 
             alpha: alpha || 1,
             cullable: cullable || true,
             pivot: { x: pivotX || 0, y: pivotY || 0 }
-        }, data, frames, parent);
+        }, data, frames);
 
-        return container;
+        if (parent) {
+            parent.addChild(characterSprite);
+        }
+
+        return characterSprite;
     }
 }

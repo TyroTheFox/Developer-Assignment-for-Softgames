@@ -42,15 +42,13 @@
                 },
                 {
                     "id": "buttonList",
-                    "type": "list",
-                    "y": 0.3,
-                    "options": {
-                        "elementsMargin": 20
-                    },
+                    "type": "container",
+                    "y": 0.05,
                     "children": [
                         {
                             "id": "cardButton",
                             "type": "fancyButton",
+                            "x": -0.07,
                             "views": {
                                 "default": [
                                     {
@@ -153,6 +151,7 @@
                         {
                             "id": "fireEmitterButton",
                             "type": "fancyButton",
+                            "x": 0.07,
                             "views": {
                                 "default": [
                                     {

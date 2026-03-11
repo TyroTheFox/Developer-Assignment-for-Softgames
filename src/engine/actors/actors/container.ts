@@ -33,7 +33,7 @@ export class Container extends PIXI.Container {
      */
     public set gameX(coord: number) {
         this.gamePosition.x = coord;
-        this.x = (this.parent?.width || this.gameScreen.gameScreenDimensions.width) * this.gamePosition.x;
+        this.x = this.gameScreen.gameScreenDimensions.width * this.gamePosition.x;
     }
 
     /**
@@ -41,12 +41,26 @@ export class Container extends PIXI.Container {
      */
     public set gameY(coord: number) {
         this.gamePosition.y = coord;
-        this.y = (this.parent?.height || this.gameScreen.gameScreenDimensions.height) * this.gamePosition.y;
+        this.y = this.gameScreen.gameScreenDimensions.height * this.gamePosition.y;
+    }
+
+    /**
+     * Relative Pivot X Position of the Object
+     */
+    public set pivotX(coord: number) {
+        this.pivot.x = coord;
+    }
+
+    /**
+     * Relative Pivot Y Position of the Object
+     */
+    public set pivotY(coord: number) {
+        this.pivot.y = coord;
     }
 
     public resize(width: number, height: number) {
-        let caluclatedX = this.exactPosition.x ? this.exactPosition.x : (this.parent?.width || width) * (this.gamePosition.x || 0);
-        let caluclatedY = this.exactPosition.y ? this.exactPosition.y : (this.parent?.height || height) * (this.gamePosition.y || 0);
+        let caluclatedX = this.exactPosition.x ? this.exactPosition.x : width * (this.gamePosition.x || 0);
+        let caluclatedY = this.exactPosition.y ? this.exactPosition.y : height * (this.gamePosition.y || 0);
 
         this.x = caluclatedX;
         this.y = caluclatedY;

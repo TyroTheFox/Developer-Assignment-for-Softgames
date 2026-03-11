@@ -1,30 +1,17 @@
 import * as PIXI from 'pixi.js';
-import { GameScreen } from '../../screen/game_screen';
 import { Sprite } from './sprite';
 import { CharacterSpriteCreatorData } from '../factory_creators/character_sprite_creator';
 
 export class CharacterSprite extends PIXI.Container {
-    private gameScreen = GameScreen.instance;
     protected actorData!: CharacterSpriteCreatorData;
-    protected gamePosition: { x: number | null, y: number | null } = { x: null, y: null};
-    protected exactPosition: { x: number | null, y: number | null } = { x: null, y: null};
     
     protected spriteMap: Map<string, Sprite> = new Map();
     protected currentSprite!: Sprite;
     
-    constructor(options: PIXI.ContainerOptions, data: CharacterSpriteCreatorData, spriteList: Record<string, Sprite>, parent?: PIXI.Container) {
+    constructor(options: PIXI.ContainerOptions, data: CharacterSpriteCreatorData, spriteList: Record<string, Sprite>) {
         super(options);
 
         this.actorData = data;
-
-        this.gamePosition = { x: data?.x || null, y: data?.y || null };
-        this.exactPosition = { x: data?.xExactPos || null, y: data?.yExactPos || null };
-        
-        if (parent) {
-            parent.addChild(this);
-
-            parent.on('scene_resize', (width, height) => this.resize(width, height));
-        }
 
         (Object.entries(spriteList) as [string, Sprite][]).forEach(([key, value]) => {
             this.spriteMap.set(key, value);
@@ -40,19 +27,17 @@ export class CharacterSprite extends PIXI.Container {
     }
 
     /**
-     * Position of X as a percentage of the Screen
+     * Relative Pivot X Position of the Object
      */
-    public set gameX(coord: number) {
-        this.gamePosition.x = coord;
-        this.x = (this.parent?.width || this.gameScreen.gameScreenDimensions.width) * this.gamePosition.x;
+    public set pivotX(coord: number) {
+        this.pivot.x = coord;
     }
 
     /**
-     * Position of Y as a percentage of the Screen
+     * Relative Pivot Y Position of the Object
      */
-    public set gameY(coord: number) {
-        this.gamePosition.y = coord;
-        this.y = (this.parent?.height || this.gameScreen.gameScreenDimensions.height) * this.gamePosition.y;
+    public set pivotY(coord: number) {
+        this.pivot.y = coord;
     }
 
     public setSprite(frameName: string) {
@@ -63,13 +48,5 @@ export class CharacterSprite extends PIXI.Container {
             this.currentSprite = this.spriteMap.get(frameName) as Sprite;
             this.currentSprite.visible = true;
         }
-    }
-
-    public resize(width: number, height: number) {
-        let caluclatedX = this.exactPosition.x ? this.exactPosition.x : (this.parent?.width || width) * (this.gamePosition.x || 0);
-        let caluclatedY = this.exactPosition.y ? this.exactPosition.y : (this.parent?.height || height) * (this.gamePosition.y || 0);
-
-        this.x = caluclatedX;
-        this.y = caluclatedY;
     }
 }
