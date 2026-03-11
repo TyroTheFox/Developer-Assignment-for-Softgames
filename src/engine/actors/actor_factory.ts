@@ -7,6 +7,8 @@ import { FancyButtonCreator } from "./factory_creators/fancy_button_creator";
 import { ButtonCreator } from "./factory_creators/button_creator";
 import { ListCreator } from "./factory_creators/list_creator";
 import { TextCreator } from "./factory_creators/text_creator";
+import { DrawnGraphicsCreator } from "./factory_creators/drawn_graphics_creator";
+import { CharacterSpriteCreator } from "./factory_creators/character_sprite_creator";
 
 export type BaseActorData = {
     id: string,
@@ -20,6 +22,8 @@ export type PositionalActorData = BaseActorData & {
     y?: number,
     xExactPos?: number,
     yExactPos?: number,
+    pivotX?: number,
+    pivotY?: number,
     scale?: { 
         x?: number,
         y?: number
@@ -42,7 +46,9 @@ export class ActorFactory {
         ["fancyButton", new FancyButtonCreator()],
         ["button", new ButtonCreator()],
         ["list", new ListCreator()],
-        ["text", new TextCreator()]
+        ["text", new TextCreator()],
+        ["drawnGraphics", new DrawnGraphicsCreator()],
+        ["characterSprite", new CharacterSpriteCreator()]
     ]);
 
     private constructor() {}
@@ -64,7 +70,7 @@ export class ActorFactory {
             throw new Error(`Cannot build ${id}, missing ${type} Builder`);
         }
 
-        const newActor = actorCreator?.build(data, parent);
+        const newActor = actorCreator.build(data, parent);
 
         return newActor as ReturnType;
     }

@@ -10,7 +10,7 @@ export type TextCreatorData = PositionalActorData & {
 
 export class TextCreator extends BaseFactoryCreator<GameText> {
     public build(data: TextCreatorData, parent: PIXI.Container): GameText {
-        const { id, text, style, anchor, x, y, xExactPos, yExactPos, scale, visible, alpha, rotation, angle, zIndex, cullable } = data;
+        const { id, text, style, anchor, x, y, xExactPos, yExactPos, pivotX, pivotY, scale, visible, alpha, rotation, angle, zIndex, cullable } = data;
 
         let caluclatedX = xExactPos ? xExactPos : (x || 0) * parent.width;
         let caluclatedY = yExactPos ? yExactPos : (y || 0) * parent.height;
@@ -27,7 +27,8 @@ export class TextCreator extends BaseFactoryCreator<GameText> {
             label: id || "text",
             visible: visible || true,
             alpha: alpha || 1,
-            cullable: cullable || true
+            cullable: cullable || true,
+            pivot: { x: pivotX || 0, y: pivotY || 0 }
         }, data, parent);
         
         return gameText;

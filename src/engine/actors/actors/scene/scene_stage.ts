@@ -23,6 +23,7 @@ export class SceneStage {
         this.allowUpdate = false;
         if (this.scene) {
             await this.scene.onExit();
+            this.scene.visible = false;
         }
 
         this.scene = scene;
@@ -30,6 +31,7 @@ export class SceneStage {
 
         await this.scene.onEnter();
         this.allowUpdate = true;
+        this.scene.visible = true;
     }
 
     public updateCurrentScene(time: PIXI.Ticker) {

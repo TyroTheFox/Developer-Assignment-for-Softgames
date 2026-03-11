@@ -22,15 +22,38 @@ export class FancyButtonCreator extends BaseFactoryCreator<FancyButton> {
     public build(data: FancyButtonCreatorData, parent: PIXI.Container): FancyButton {
         const actorFactory = ActorFactory.instance;
 
-        const { id, x, y, xExactPos, yExactPos, scale, visible, alpha, rotation, angle, zIndex, views, options, text, cullable } = data;
+        const { id, x, y, xExactPos, yExactPos, pivotX, pivotY, scale, visible, alpha, rotation, angle, zIndex, views, options, text, cullable } = data;
 
         let caluclatedX = xExactPos ? xExactPos : (x || 0) * parent.width;
         let caluclatedY = yExactPos ? yExactPos : (y || 0) * parent.height;
 
-        options.defaultView = views && views?.default && views?.default instanceof String ? this.constructViewContainer(views.default as any[], actorFactory) : undefined;
-        options.hoverView = views && views?.hover && views?.hover instanceof String ? this.constructViewContainer(views.hover as any[], actorFactory) : undefined;
-        options.pressedView = views && views?.pressed && views?.pressed instanceof String ? this.constructViewContainer(views.pressed as any[], actorFactory) : undefined;
-        options.disabledView = views && views?.disabled && views?.disabled instanceof String ? this.constructViewContainer(views.disabled as any[], actorFactory) : undefined;
+        const buttonOptions = {...options};
+
+        if (views) {
+            if (views?.default && typeof views?.default === 'string') {
+                buttonOptions.defaultView = views.default as string;
+            } else {
+                buttonOptions.defaultView = this.constructViewContainer(views.default as any[], actorFactory);
+            }
+
+            if (views?.hover && typeof views?.hover === 'string') {
+                buttonOptions.hoverView = views.hover as string;
+            } else {
+                buttonOptions.hoverView = this.constructViewContainer(views.hover as any[], actorFactory);
+            }
+
+            if (views?.pressed && typeof views?.pressed === 'string') {
+                buttonOptions.pressedView = views.pressed as string;
+            } else {
+                buttonOptions.pressedView = this.constructViewContainer(views.pressed as any[], actorFactory);
+            }
+
+            if (views?.disabled && typeof views?.disabled === 'string') {
+                buttonOptions.disabledView = views.disabled as string;
+            } else {
+                buttonOptions.disabledView = this.constructViewContainer(views.disabled as any[], actorFactory);
+            }
+        }
 
         if (text) {
             const buttonText = new PIXI.Text({
@@ -39,10 +62,10 @@ export class FancyButtonCreator extends BaseFactoryCreator<FancyButton> {
                 style: text.style 
             });
 
-            options.text = buttonText as PIXI.Text;
+            buttonOptions.text = buttonText as PIXI.Text;
         }
 
-        const fancyButton = new FancyButton(options, data, parent);
+        const fancyButton = new FancyButton(buttonOptions, data, parent);
 
         fancyButton.label = id || "fancyButton";
         fancyButton.position.set(caluclatedX, caluclatedY);
@@ -53,6 +76,7 @@ export class FancyButtonCreator extends BaseFactoryCreator<FancyButton> {
         fancyButton.visible = visible || fancyButton.visible;
         fancyButton.alpha = alpha || fancyButton.alpha;
         fancyButton.cullable = cullable || true;
+        fancyButton.pivot = { x: pivotX || 0, y: pivotY || 0 };
 
         return fancyButton;
     }

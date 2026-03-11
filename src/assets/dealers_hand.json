@@ -1,0 +1,33 @@
+{"frames": {
+
+"hand-1":
+{
+	"frame": {"x":1,"y":1,"w":649,"h":659},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":86,"y":56,"w":649,"h":659},
+	"sourceSize": {"w":796,"h":725},
+	"anchor": {"x":0.654523,"y":0.870345}
+},
+"hand-2":
+{
+	"frame": {"x":1,"y":662,"w":575,"h":567},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":575,"h":567},
+	"sourceSize": {"w":575,"h":567},
+	"anchor": {"x":0.770435,"y":0.888889}
+}},
+"animations": {
+	"hand": ["hand-1","hand-2"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "dealers_hand.webp",
+	"format": "RGBA8888",
+	"size": {"w":651,"h":1230},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:d9518422519591098497045d17bf664c:f6bbf186caf3d5a7a709e1a25a7d7b6c:137f273fb0f8731affcf6f4a02404380$"
+}
+}

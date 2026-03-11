@@ -1,11 +1,19 @@
 {
     "bundle": [
         {
-            "name": "cards",
+            "name": "cardExampleScene",
             "assets": [
                 {
                     "alias": "cards",
                     "src": "src/assets/cards.json"
+                },
+                {
+                    "alias": "pokerTableBG",
+                    "src": "src/assets/poker_table_bg.json"
+                },
+                {
+                    "alias": "dealersHand",
+                    "src": "src/assets/dealers_hand.json"
                 }
             ]
         }

@@ -1,18 +1,33 @@
 import * as PIXI from "pixi.js";
 import { gsap } from 'gsap';
 import { Scene } from "../../engine/actors/actors/scene/scene";
-import { Sprite } from "../../engine/actors/actors/sprite";
 import { SpriteCreatorData } from "../../engine/actors/factory_creators/sprite_creator";
 import { Container } from "../../engine/actors/actors/container";
+import { Sprite } from "../../engine/actors/actors/sprite";
+import { CharacterSprite } from "../../engine/actors/actors/character_sprite";
+import { Dealer } from "../characters/card_example/dealer";
 
 export class CardExampleScene extends Scene {
-    private testSprite!: PIXI.Sprite;
+    private tweenTimeline!: gsap.core.Timeline;
+    protected pokerTableBackground!: Sprite;
+
+    protected dealer!: Dealer;
 
     public override async init(): Promise<void> {
-        const { actorFactory } = this;
+        const { actorFactory, gameScreen } = this;
         const { size, cardSpriteData } = this.sceneSettingsData.deck;
 
-        this.testSprite = this.getChildByLabel('test') as Sprite;
+        const { width, height, scaleAgainstValue } = gameScreen.gameScreenDimensions;
+
+        this.pokerTableBackground = this.getChildByLabel('pokerTableBG') as Sprite;
+        this.pokerTableBackground.width = width * scaleAgainstValue;
+        this.pokerTableBackground.height = height * scaleAgainstValue;
+
+        const dealerSpaceContainer = this.getChildByLabel('dealerSpace') as Container;
+        const dealerLeftHand = dealerSpaceContainer.getChildByLabel('dealerLeftHand') as CharacterSprite;
+        const dealerRightHand = dealerSpaceContainer.getChildByLabel('dealerRightHand') as CharacterSprite;
+
+        this.dealer = new Dealer(dealerLeftHand, dealerRightHand);
 
         const cardSpaceContainer = this.getChildByLabel('cardSpace') as Container;
         const deckContainer1 = cardSpaceContainer.getChildByLabel('deckContainer1') as Container;
@@ -42,17 +57,29 @@ export class CardExampleScene extends Scene {
         const topCard2 = deckContainer2.getChildAt(deckContainer2.children.length -1);
         topCard2.x = topCard2.height * 0.3;
 
-        const testTimeline = gsap.timeline({
+        this.tweenTimeline = gsap.timeline({
             delay: 1,
             repeat: -1,
             yoyo: true,
             repeatDelay: 1
         });
 
-        testTimeline.to(topCard1, { duration: 2, x: deckContainer2.x - deckContainer1.x, ease: 'expo.inOut' });
+        this.tweenTimeline.to(topCard1, { duration: 2, x: deckContainer2.x - deckContainer1.x, ease: 'expo.inOut' });
+        this.tweenTimeline.pause(0);
     }
 
-    public override update(time: PIXI.Ticker): void {
-        this.testSprite.rotation += 0.1 * time.deltaTime;
+    public override update(_time: PIXI.Ticker): void {
+        const { width, height, scaleAgainstValue } = this.gameScreen.gameScreenDimensions;
+
+        this.pokerTableBackground.width = width * scaleAgainstValue;
+        this.pokerTableBackground.height = height * scaleAgainstValue;
+    }
+
+    public override async onEnter(): Promise<void> {
+        this.tweenTimeline.resume();
+    }
+
+    public override async onExit(): Promise<void> {
+        this.tweenTimeline.pause(0);
     }
 }

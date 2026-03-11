@@ -1,12 +1,14 @@
 import * as PIXI from 'pixi.js';
 import { GameScreen } from '../../screen/game_screen';
 import { ContainerCreatorData } from '../factory_creators/container_creator';
+import { Button } from '@pixi/ui';
 
 export class Container extends PIXI.Container {
     private gameScreen = GameScreen.instance;
     protected actorData!: ContainerCreatorData;
     protected gamePosition: { x: number | null, y: number | null } = { x: null, y: null};
     protected exactPosition: { x: number | null, y: number | null } = { x: null, y: null};
+    public buttonInstance!: Button;
     
     constructor(options: PIXI.ContainerOptions, data: ContainerCreatorData, parent?: PIXI.Container) {
         super(options);
@@ -21,6 +23,9 @@ export class Container extends PIXI.Container {
 
             parent.on('scene_resize', (width, height) => this.resize(width, height));
         }
+
+        this.on('childAdded', () => this.resize(this.gameScreen.gameScreenDimensions.width, this.gameScreen.gameScreenDimensions.height));
+        this.on('childRemoved', () => this.resize(this.gameScreen.gameScreenDimensions.width, this.gameScreen.gameScreenDimensions.height));
     }
 
     /**
@@ -45,5 +50,7 @@ export class Container extends PIXI.Container {
 
         this.x = caluclatedX;
         this.y = caluclatedY;
+
+        this.emit('scene_resize', width, height);
     }
 }

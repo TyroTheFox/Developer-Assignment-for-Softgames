@@ -12,15 +12,9 @@
     },
     "actors": [
         {
-            "id": "test",
+            "id": "pokerTableBG",
             "type": "sprite",
-            "texture": "cards_club_2",
-            "x": 0.2,
-            "y": 0.4,
-            "scale": {
-                "x": 1,
-                "y": 1
-            }
+            "texture": "poker_table_bg"
         },
         {
             "id": "cardSpace",
@@ -29,12 +23,51 @@
                 {
                     "id": "deckContainer1",
                     "type": "container",
-                    "x": -400
+                    "x": -0.4
                 },
                 {
                     "id": "deckContainer2",
                     "type": "container",
-                    "x": 400
+                    "x": 0.4
+                }
+            ]
+        },
+        {
+            "id": "dealerSpace",
+            "type": "container",
+            "y": -0.4,
+            "children": [
+                {
+                    "id": "dealerLeftHand",
+                    "type": "characterSprite",
+                    "x": 0.2,
+                    "y": 0,
+                    "scale": {
+                        "x": 0.5,
+                        "y": -0.5
+                    },
+                    "spriteFrames": [
+                        {
+                            "id": "handOpen",
+                            "frame": "hand-1"
+                        }
+                    ]
+                },
+                {
+                    "id": "dealerRightHand",
+                    "type": "characterSprite",
+                    "x": -0.2,
+                    "y": 0,
+                    "scale": {
+                        "x": -0.5,
+                        "y": -0.5
+                    },
+                    "spriteFrames": [
+                        {
+                            "id": "handOpen",
+                            "frame": "hand-1"
+                        }
+                    ]
                 }
             ]
         }

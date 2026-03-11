@@ -9,12 +9,12 @@ export type ListCreatorData = PositionalActorData & {
     options?: PIXIUI.ListOptions,
     children?: any[]
 }
-
+ 
 export class ListCreator extends BaseFactoryCreator<PIXIUI.List> {
     public build(data: ListCreatorData, parent: PIXI.Container): PIXIUI.List {
         const actorFactory = ActorFactory.instance;
         
-        const { id, x, y, xExactPos, yExactPos, scale, visible, alpha, rotation, angle, zIndex, children, options, cullable } = data;
+        const { id, x, y, xExactPos, yExactPos, pivotX, pivotY, scale, visible, alpha, rotation, angle, zIndex, children, options, cullable } = data;
 
         let caluclatedX = xExactPos ? xExactPos : (x || 0) * parent.width;
         let caluclatedY = yExactPos ? yExactPos : (y || 0) * parent.height;
@@ -30,6 +30,7 @@ export class ListCreator extends BaseFactoryCreator<PIXIUI.List> {
         list.visible = visible || list.visible;
         list.alpha = alpha || list.alpha;
         list.cullable = cullable || true;
+        list.pivot = { x: pivotX || 0, y: pivotY || 0 };
 
         // Add children from data
         if (children) {
@@ -39,6 +40,8 @@ export class ListCreator extends BaseFactoryCreator<PIXIUI.List> {
                 actorFactory.buildActor(sceneDataEntry, list);
             }
         }
+
+        list.arrangeChildren();
 
         return list;
     }

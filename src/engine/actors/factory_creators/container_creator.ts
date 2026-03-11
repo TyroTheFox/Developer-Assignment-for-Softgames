@@ -10,7 +10,7 @@ export type ContainerCreatorData = PositionalActorData & {
 export class ContainerCreator extends BaseFactoryCreator<Container> {
     public build(data: ContainerCreatorData, parent: PIXI.Container): Container {
         const actorFactory = ActorFactory.instance;
-        const { id, x, y, xExactPos, yExactPos, scale, visible, alpha, rotation, angle, zIndex, children, cullable} = data;
+        const { id, x, y, xExactPos, yExactPos, pivotX, pivotY, scale, visible, alpha, rotation, angle, zIndex, children, cullable} = data;
 
         let caluclatedX = xExactPos ? xExactPos : (x || 0) * parent.width;
         let caluclatedY = yExactPos ? yExactPos : (y || 0) * parent.height;
@@ -24,7 +24,8 @@ export class ContainerCreator extends BaseFactoryCreator<Container> {
             zIndex: zIndex || 0,
             visible: visible || true,
             alpha: alpha || 1,
-            cullable: cullable || true
+            cullable: cullable || true,
+            pivot: { x: pivotX || 0, y: pivotY || 0 }
         }, data, parent);
 
         // Add children from data

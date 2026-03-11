@@ -11,7 +11,7 @@ export type SpriteCreatorData = PositionalActorData & {
 export class SpriteCreator extends BaseFactoryCreator<Sprite> {
     public build(data: SpriteCreatorData, parent: PIXI.Container): Sprite {
         const gameScreen = GameScreen.instance;
-        const { id, texture, anchor, x, y, xExactPos, yExactPos, scale, visible, alpha, rotation, angle, zIndex, cullable } = data;
+        const { id, texture, anchor, x, y, pivotX, pivotY, xExactPos, yExactPos, scale, visible, alpha, rotation, angle, zIndex, cullable } = data;
 
         let caluclatedX = xExactPos ? xExactPos : (x || 0) * gameScreen.gameScreenDimensions.width;
         let caluclatedY = yExactPos ? yExactPos : (y || 0) * gameScreen.gameScreenDimensions.height;
@@ -27,7 +27,8 @@ export class SpriteCreator extends BaseFactoryCreator<Sprite> {
             zIndex: zIndex || 0,
             visible: visible || true,
             alpha: alpha || 1,
-            cullable: cullable || true
+            cullable: cullable || true,
+            pivot: { x: pivotX || 0, y: pivotY || 0 }
         }, data, parent);
 
         return sprite;

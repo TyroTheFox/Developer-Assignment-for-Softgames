@@ -1,15 +1,18 @@
 import * as PIXI from 'pixi.js';
-import * as PIXIUI from "@pixi/ui";
 import { GameScreen } from '../../screen/game_screen';
-import { ListCreatorData } from '../factory_creators/list_creator';
+import { Sprite } from './sprite';
+import { CharacterSpriteCreatorData } from '../factory_creators/character_sprite_creator';
 
-export class List extends PIXIUI.List {
+export class CharacterSprite extends PIXI.Container {
     private gameScreen = GameScreen.instance;
-    protected actorData!: ListCreatorData;
+    protected actorData!: CharacterSpriteCreatorData;
     protected gamePosition: { x: number | null, y: number | null } = { x: null, y: null};
     protected exactPosition: { x: number | null, y: number | null } = { x: null, y: null};
     
-    constructor(options: PIXIUI.ListOptions, data: ListCreatorData, parent?: PIXI.Container) {
+    protected spriteMap: Map<string, Sprite> = new Map();
+    protected currentSprite!: Sprite;
+    
+    constructor(options: PIXI.ContainerOptions, data: CharacterSpriteCreatorData, spriteList: Record<string, Sprite>, parent?: PIXI.Container) {
         super(options);
 
         this.actorData = data;
@@ -23,10 +26,19 @@ export class List extends PIXIUI.List {
             parent.on('scene_resize', (width, height) => this.resize(width, height));
         }
 
-        this.on('childAdded', () => this.resize(this.gameScreen.gameScreenDimensions.width, this.gameScreen.gameScreenDimensions.height));
-        this.on('childRemoved', () => this.resize(this.gameScreen.gameScreenDimensions.width, this.gameScreen.gameScreenDimensions.height));
+        (Object.entries(spriteList) as [string, Sprite][]).forEach(([key, value]) => {
+            this.spriteMap.set(key, value);
+            this.addChild(value);
+            value.visible = false;
+        });
+
+        if (data?.initialSprite) {
+            this.setSprite(data.initialSprite);
+        } else if (this.spriteMap.size > 0) {
+            this.setSprite(this.spriteMap.keys().next().value as string);
+        }
     }
-     
+
     /**
      * Position of X as a percentage of the Screen
      */
@@ -41,6 +53,16 @@ export class List extends PIXIUI.List {
     public set gameY(coord: number) {
         this.gamePosition.y = coord;
         this.y = (this.parent?.height || this.gameScreen.gameScreenDimensions.height) * this.gamePosition.y;
+    }
+
+    public setSprite(frameName: string) {
+        if (this.spriteMap.has(frameName)) {
+            if (this.currentSprite) {
+                this.currentSprite.visible = false;
+            }
+            this.currentSprite = this.spriteMap.get(frameName) as Sprite;
+            this.currentSprite.visible = true;
+        }
     }
 
     public resize(width: number, height: number) {

@@ -25,6 +25,8 @@ export class Scene extends PIXI.Container {
     constructor(options: SceneContainerOptions) {
         super(options);
 
+        this.visible = false;
+
         this.sceneActorData = options.actors;
         this.sceneSettingsData = options?.settings || {};
 

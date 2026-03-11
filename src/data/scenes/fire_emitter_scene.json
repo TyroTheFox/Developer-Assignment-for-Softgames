@@ -1,0 +1,13 @@
+{
+    "id": "fire emitter",
+    "type": "scene",
+    "settings": {
+    },
+    "actors": [
+        {
+            "id": "test",
+            "type": "sprite",
+            "texture": "cards_heart_4"
+        }
+    ]
+}

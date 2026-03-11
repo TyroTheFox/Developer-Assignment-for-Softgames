@@ -1,3 +1,4 @@
+import * as PIXI from "pixi.js";
 import { gsap } from "gsap";
 import { PixiPlugin } from "gsap/PixiPlugin";
 import { app, GameScreen } from "./engine/screen/game_screen";
@@ -11,8 +12,18 @@ import gameMenuSceneData from './data/scenes/game_menu_scene.json' assert {type:
 import { CardExampleScene } from "./game/scenes/card_example_scene";
 import cardExampleSceneData from './data/scenes/card_example_scene.json' assert {type: 'json'};
 
+// "Magic Words" Dialogue Scene
+import { DialogueExampleScene } from "./game/scenes/dialogue_example_scene";
+import dialogueExampleScene from './data/scenes/dialogue_example_scene.json' assert {type: 'json'};
+
+// "Phoenix Flame" Particle Effect Scene
+import { FireEmitterScene } from "./game/scenes/fire_emitter_scene";
+import fireEmitterSceneData from './data/scenes/fire_emitter_scene.json' assert {type: 'json'};
+
 export const mainGameScreen = GameScreen.instance;
+
 gsap.registerPlugin(PixiPlugin);
+PixiPlugin.registerPIXI(PIXI);
 
 (async () => {
   const assetLoader: AssetLoader = AssetLoader.instance;
@@ -25,12 +36,15 @@ gsap.registerPlugin(PixiPlugin);
 
   await mainGameScreen.loadGame(
     [
-      { key: "card_example", scene: new CardExampleScene(cardExampleSceneData) },
-      { key: "main_menu", scene: new GameMenuScene(gameMenuSceneData) }
+      { key: "card_example",      scene: new CardExampleScene(cardExampleSceneData) },
+      { key: "fire_emitter",      scene: new FireEmitterScene(fireEmitterSceneData) },
+      { key: "dialogue_example",  scene: new DialogueExampleScene(dialogueExampleScene) },
+
+      { key: "main_menu",         scene: new GameMenuScene(gameMenuSceneData) }
     ], 
     [
-      { key: "main", initialStage: "card_example" },
-      { key: "menu", initialStage: "main_menu" }
+      { key: "main",              initialStage: "card_example" },
+      { key: "menu",              initialStage: "main_menu" }
     ]
   );
 
