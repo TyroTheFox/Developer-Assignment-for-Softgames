@@ -7,30 +7,79 @@
         {
             "id": "dialogueBox",
             "type": "dialogueBox",
+            "xExactPos": -500,
+            "yExactPos": 50,
+            "textPosition": {
+                "x": 0,
+                "y": 200
+            },
+            "nameTextPosition": {
+                "x": -100,
+                "y": 100
+            },
+            "avatarPosition": {
+                "x": -80,
+                "y": 19
+            },
             "textStyle": {
-                "fontSize": 20,
-                "fill": "white",
-                "stroke": "black",
-                "align": "center"
+                "fontSize": 40,
+                "fill": "black",
+                "align": "left",
+                "fontWeight": "bold",
+                "wordWrap": true,
+                "wordWrapWidth": 1000
             },
             "nameStyle": {
-                "fontSize": 40,
-                "fill": "white",
-                "stroke": "black",
+                "fontSize": 60,
+                "fill": "black",
+                "fontWeight": "bold",
                 "align": "center"
             },
-            "textPosition": {},
             "children": [
                 {
                     "id": "panelBackground",
                     "type": "drawnGraphics",
+                    "xExactPos": -50,
+                    "yExactPos": 150,
                     "drawSteps": [
                         {
                             "functionName": "rect",
                             "data": {
-                                "x": -250,
+                                "x": 0,
                                 "y": 0,
-                                "width": 500,
+                                "width": 1100,
+                                "height": 300
+                            }
+                        },
+                        {
+                            "functionName": "fill",
+                            "data": {
+                                "color": "0xffffff"
+                            }
+                        },
+                        {
+                            "functionName": "stroke",
+                            "data": {
+                                "style": {
+                                    "width": 3,
+                                    "color": "0x000000"
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": "namePanelBackground",
+                    "type": "drawnGraphics",
+                    "xExactPos": -120,
+                    "yExactPos": 85,
+                    "drawSteps": [
+                        {
+                            "functionName": "rect",
+                            "data": {
+                                "x": 0,
+                                "y": 0,
+                                "width": 350,
                                 "height": 100
                             }
                         },

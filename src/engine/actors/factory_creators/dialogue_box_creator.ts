@@ -9,17 +9,36 @@ export type DialogueData = {
     text: string,
 }
 
+export type AvatarDataEntry = {
+    name: string,
+    texture?: string,
+    url?: string,
+    position: string
+}
+
+export type EmojiDataEntry = {
+    name: string,
+    texture?: string,
+    url?: string
+}
+
 export type DialogueBoxCreatorData = PositionalActorData & {
     textStyle?: PIXI.TextStyleOptions,
-    nameStyle?: PIXI.TextStyleOptions,
     textPosition?: {
         x?: number,
         y?: number
     },
+    nameStyle?: PIXI.TextStyleOptions,
     nameTextPosition?: {
         x?: number,
         y?: number
     },
+    avatarData?: AvatarDataEntry[],
+    emojiData?: EmojiDataEntry[],
+    avatarPosition?: {
+        x?: number,
+        y?: number
+    }, 
     children?: any[]
 }
 

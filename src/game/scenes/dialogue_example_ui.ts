@@ -8,10 +8,13 @@ export class DialogueExampleUI extends Scene {
     protected dialogueBox!: DialogueBox;
 
     public override async init(): Promise<void> {
-        const {dialogue} = dialogueExampleData;
+        const {dialogue, avatars, emojies} = dialogueExampleData;
 
         this.dialogueBox = this.getChildByLabel('dialogueBox') as DialogueBox;
 
+        await this.dialogueBox.setAvatarData(avatars);
+        await this.dialogueBox.setEmojiData(emojies);
+        
         this.dialogueBox.setDialogueData(dialogue);
 
         this.dialogueBox.nextDialogueStep();
