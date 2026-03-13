@@ -19,12 +19,14 @@ export class StageManager {
     private sceneMap: Map<string, Scene> = new Map();
     protected gameScreen = GameScreen.instance;
 
-    private constructor(sceneList: sceneListPair[], stageList: stageListPair[], baseContainer: PIXI.Container) {
+    public async init(sceneList: sceneListPair[], stageList: stageListPair[], baseContainer: PIXI.Container) {
+        const promises = [];
+        
         for (let i = 0; i < sceneList.length; i++) {
             const {key, scene} = sceneList[i];
             this.sceneMap.set(key, scene);
             baseContainer.addChild(scene);
-            scene.init();
+            promises.push(scene.init());
         }
 
         for (let i = 0; i < stageList.length; i++) {
@@ -32,14 +34,18 @@ export class StageManager {
             const newStage = this.sceneMap.get(initialStage);
 
             if (newStage) {
-                this.stageMap.set(key, new SceneStage(newStage, this));
+                const newSceneStage = new SceneStage();
+                promises.push(newSceneStage.init(newStage, this));
+                this.stageMap.set(key, newSceneStage);
             }
         }
+
+        await Promise.all(promises);
     }
 
-    public static instance(sceneList: sceneListPair[], stageList: stageListPair[], baseContainer: PIXI.Container): StageManager {
+    public static instance(): StageManager {
         if (!StageManager.#instance) {
-            StageManager.#instance = new StageManager(sceneList, stageList, baseContainer);
+            StageManager.#instance = new StageManager();
         }
 
         return StageManager.#instance;

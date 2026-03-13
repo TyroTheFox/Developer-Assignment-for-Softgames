@@ -34,11 +34,15 @@ export type DialogueBoxCreatorData = PositionalActorData & {
         y?: number
     },
     avatarData?: AvatarDataEntry[],
-    emojiData?: EmojiDataEntry[],
     avatarPosition?: {
         x?: number,
         y?: number
     }, 
+    emojiData?: EmojiDataEntry[],
+    emojiPosition?: {
+        x?: number,
+        y?: number
+    },
     children?: any[]
 }
 

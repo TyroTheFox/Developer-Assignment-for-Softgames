@@ -10,9 +10,9 @@ export class SceneStage {
     private allowUpdate: boolean = false;
     protected stageManager!: StageManager;
 
-    constructor(state: Scene, stageManager: StageManager) {
+    public async init(state: Scene, stageManager: StageManager) {
         this.stageManager = stageManager;
-        this.transitionTo(state);
+        await this.transitionTo(state);
     }
 
     /**

@@ -21,6 +21,10 @@
                 "x": -80,
                 "y": 19
             },
+            "emojiPosition": {
+                "x": 30,
+                "y": 19
+            },
             "textStyle": {
                 "fontSize": 40,
                 "fill": "black",

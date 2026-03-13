@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import * as PIXIUI from '@pixi/ui';;
+import * as PIXIUI from '@pixi/ui';
 import { gsap } from 'gsap';
 import { EE, GameScreen } from '../../screen/game_screen';
 import { Button } from '@pixi/ui';
@@ -27,7 +27,12 @@ export class DialogueBox extends PIXI.Container {
 
         this.actorData = data;
 
-        const { x, y, xExactPos, yExactPos, textPosition: textPositionData, nameTextPosition: nameTextPositionData, textStyle, nameStyle, avatarPosition} = data;
+        const { 
+            x, y, xExactPos, yExactPos, 
+            textPosition: textPositionData, nameTextPosition: nameTextPositionData, 
+            textStyle, nameStyle, 
+            avatarPosition, emojiPosition
+        } = data;
 
         this.gamePosition = { x: x || null, y: y || null };
         this.exactPosition = { x: xExactPos || null, y: yExactPos || null };
@@ -41,6 +46,7 @@ export class DialogueBox extends PIXI.Container {
         const { x: textPosX, y: textPosY } = textPositionData || { x: 0, y: 0 };
         const { x: namePosX, y: namePosY } = nameTextPositionData || { x: 0, y: 0 };
         const { x: avatarPosX, y: avatarPosY } = avatarPosition || { x: 0, y: 0 };
+        const { x: emojiPosX, y: emojiPosY } = emojiPosition || { x: 0, y: 0 };
 
         const textPosition = { x: (textPosX || 0), y: (textPosY || 0) };
         const nameTextPosition = { x: (namePosX || 0), y: (namePosY || 0) };
@@ -61,14 +67,16 @@ export class DialogueBox extends PIXI.Container {
         });
         this.addChild(this.nameText);
 
+        this.emojiPanel = new PIXIUI.Switcher();
+        this.emojiPanel.label = "Emoji Panel";
+        this.addChild(this.emojiPanel);
+        this.emojiPanel.position.set(emojiPosX, emojiPosY);
+        this.emojiPanel.alpha = 0;
+
         this.avatarPanel = new PIXIUI.Switcher();
+        this.avatarPanel.label = "Avatar Panel";
         this.addChild(this.avatarPanel);
         this.avatarPanel.position.set(avatarPosX, avatarPosY);
-
-        this.emojiPanel = new PIXIUI.Switcher();
-        this.addChild(this.emojiPanel);
-        this.emojiPanel.position.set(avatarPosX, avatarPosY);
-        this.emojiPanel.alpha = 0;
 
         this.on('childAdded', () => this.resize(this.gameScreen.gameScreenDimensions.width, this.gameScreen.gameScreenDimensions.height));
         this.on('childRemoved', () => this.resize(this.gameScreen.gameScreenDimensions.width, this.gameScreen.gameScreenDimensions.height));
@@ -119,11 +127,13 @@ export class DialogueBox extends PIXI.Container {
     }
 
     public async setAvatarData(data: AvatarDataEntry[]) {
+        this.actorData.avatarData = data;
+
         for (let i = 0; i < data.length; i++) {
             const {url, texture, name} = data[i];
 
             if (url) {
-                const imageExists = this.imageExists(url);
+                const imageExists = await this.imageExists(url);
 
                 if (imageExists) {
                     const element = document.createElement('img');
@@ -137,6 +147,8 @@ export class DialogueBox extends PIXI.Container {
 
                     this.avatarPanel.add(domContainer);
                 }
+
+                continue;
             }
 
             if (!PIXI.Assets.cache.has(`avatar_${name}`)) {
@@ -151,7 +163,9 @@ export class DialogueBox extends PIXI.Container {
             }
         }
 
-        this.actorData.avatarData = data;
+        // Default Sprite
+        const defaultSprite = new PIXI.Sprite(PIXI.Texture.EMPTY);
+        this.avatarPanel.add(defaultSprite);
     }
 
     public setAvatarImage(avatarName: string) {
@@ -162,16 +176,20 @@ export class DialogueBox extends PIXI.Container {
 
             if (foundEntry !== -1) {
                 this.avatarPanel.switch(foundEntry);
+            } else {
+                this.avatarPanel.switch(this.avatarPanel.views.length - 1);
             }
         }
     }
 
     public async setEmojiData(data: EmojiDataEntry[]) {
+        this.actorData.emojiData = data;
+
         for (let i = 0; i < data.length; i++) {
             const {url, texture, name} = data[i];
 
             if (url) {
-                const imageExists = this.imageExists(url);
+                const imageExists = await this.imageExists(url);
 
                 if (imageExists) {
                     const domContainer = new PIXI.DOMContainer({
@@ -181,6 +199,8 @@ export class DialogueBox extends PIXI.Container {
 
                     this.emojiPanel.add(domContainer);
                 }
+
+                continue;
             }
 
             if (!PIXI.Assets.cache.has(`emoji_${name}`)) {
@@ -195,7 +215,9 @@ export class DialogueBox extends PIXI.Container {
             }
         }
 
-        this.actorData.emojiData = data;
+        // Default Sprite
+        const defaultSprite = new PIXI.Sprite(PIXI.Texture.EMPTY);
+        this.avatarPanel.add(defaultSprite);
     }
 
     public setEmojiImage(emojiName: string) {
@@ -221,6 +243,8 @@ export class DialogueBox extends PIXI.Container {
                             alpha: 0
                         }
                     );
+            } else {
+                this.emojiPanel.switch(this.avatarPanel.views.length - 1);
             }
         }
     }
@@ -251,10 +275,11 @@ export class DialogueBox extends PIXI.Container {
 
         this.dialogueText.chars.forEach((char, i) => {
             const filteredData = tagList.filter((tagData: TagTimingData) => tagData.time <= i);
+            const currentData = filteredData.pop();
 
-            if (filteredData.length > 0) {
-                const currentData = filteredData.pop();
+            if (currentData) {
                 EE.emit("dialogue_tag_fired", currentData?.tag);
+                this.setEmojiImage(currentData.tag);
                 tagList = tagList.filter((tagData: TagTimingData) => tagData.time > i);
             }
 
@@ -331,18 +356,12 @@ export class DialogueBox extends PIXI.Container {
      * @param {string} url - The URL of the Hosted Image
      * @returns {HTMLImageElement | boolean}
      */
-    private imageExists(url: string): HTMLImageElement | boolean {
-        var image = new Image();
-
-        image.src = url;
-
-        if (!image.complete) {
-            return false;
-        }
-        else if (image.height === 0) {
-            return false;
-        }
-
-        return image;
+    private imageExists(url: string): Promise<HTMLImageElement | boolean> {
+        return new Promise(resolve => {
+            var img = document.createElement('img');
+            img.addEventListener('load', () => resolve(img));
+            img.addEventListener('error', () => resolve(false));
+            img.src = url;
+        });
     }
 }

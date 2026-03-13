@@ -4,21 +4,30 @@ import { AssetLoader } from "../assets/asset_loader";
 import EventEmitter from 'eventemitter3';
 import { sceneListPair, stageListPair, StageManager } from "../actors/actors/scene/stage_manager";
 import { initDevtools } from '@pixi/devtools';
+import { LoadingScreen } from "../loading_screen";
 
 /** The PixiJS app Application instance, shared across the project */
 export const app = new Application();
 export const EE: EventEmitter = new EventEmitter();
+
+export type GameScreenDimensions = {
+    width: number,
+    height: number,
+    scaleWithValue: number,
+    scaleAgainstValue: number
+}
 
 export class GameScreen {
     static #instance: GameScreen;
     public assetLoader: AssetLoader = AssetLoader.instance;
     public stageManager!: StageManager;
     public fpsCounter!: PIXI.Text;
+    public loadingScreen!: LoadingScreen;
 
     public minWidth = 1000;
     public minHeight = 1000;
 
-    public gameScreenDimensions = {
+    public gameScreenDimensions: GameScreenDimensions = {
         width: window.innerWidth,
         height: window.innerHeight,
         scaleWithValue: 1,
@@ -39,19 +48,24 @@ export class GameScreen {
 
     public async initGame() {
         await app.init({ 
-            background: "#1099bb", 
+            background: "#000000", 
             resolution: Math.max(window.devicePixelRatio, 2),
         });
 
         // Append the application canvas to the document body
         document.getElementById("pixi-container")!.appendChild(app.canvas);
         app.canvas.setAttribute('allow', 'fullscreen');
+
+        this.loadingScreen = new LoadingScreen(app.stage, this.gameScreenDimensions);
+
         // Set up window resize event listener
         window.addEventListener('resize', () => {
             this.resize();
         });
         // Trigger the first resize
         this.resize();
+
+        app.stage.sortableChildren = true;
 
         this.fpsCounter = new PIXI.Text({
             x: this.gameScreenDimensions.width * 0.05,
@@ -81,8 +95,10 @@ export class GameScreen {
     }
 
     public async loadGame(sceneList: sceneListPair[], stageList: stageListPair[]) {
-        this.stageManager = StageManager.instance(sceneList, stageList, app.stage);
+        this.stageManager = StageManager.instance();
+        await this.stageManager.init(sceneList, stageList, app.stage);
         this.resize();
+        this.loadingScreen.hideLoadingScreen();
     }
 
     public beginUpdateLoop() {
@@ -97,7 +113,7 @@ export class GameScreen {
         await this.stageManager.changeScene(stageName, sceneName);
     }
 
-    public resize(): { width: number, height: number, scaleWithValue: number, scaleAgainstValue: number} {
+    public resize(): { width: number, height: number, scaleWithValue: number, scaleAgainstValue: number } {
         const windowWidth = window.innerWidth;
         const windowHeight = window.innerHeight;
 
@@ -124,6 +140,8 @@ export class GameScreen {
         this.gameScreenDimensions = {width, height, scaleWithValue: inverseScale, scaleAgainstValue: scale};
 
         EE.emit('game_resize', width, height, inverseScale, scale);
+
+        this.loadingScreen.resize(width, height, inverseScale, scale);
 
         return { width, height, scaleWithValue: inverseScale, scaleAgainstValue: scale };
     }
