@@ -1,11 +1,11 @@
 import * as PIXI from "pixi.js";
 import { gsap } from 'gsap';
-import { CharacterSprite } from "../../../engine/actors/actors/character_sprite";
 import { Container } from 'pixi.js';
 import { CardPoint } from "./card_point";
-import { Sprite } from "../../../engine/actors/actors/sprite";
+import { Sprite } from "../../../engine/actors/actors/sprite/sprite";
 import { Scene } from "../../../engine/actors/actors/scene/scene";
 import { EE } from "../../../engine/screen/game_screen";
+import { CharacterSprite } from "../../../engine/actors/actors/sprite/character_sprite";
 
 export class Dealer {
     protected leftHand!: CharacterSprite;

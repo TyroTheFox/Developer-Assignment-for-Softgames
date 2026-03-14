@@ -1,0 +1,57 @@
+{"frames": {
+
+"sheldon_idle":
+{
+	"frame": {"x":1,"y":438,"w":444,"h":436},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":444,"h":436},
+	"sourceSize": {"w":444,"h":436},
+	"anchor": {"x":0.441441,"y":0.87156}
+},
+"sheldon_intrieged":
+{
+	"frame": {"x":1,"y":1626,"w":405,"h":426},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":0,"w":405,"h":426},
+	"sourceSize": {"w":410,"h":426},
+	"anchor": {"x":0.48,"y":0.855769}
+},
+"sheldon_laughing":
+{
+	"frame": {"x":1,"y":1296,"w":328,"h":435},
+	"rotated": true,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":328,"h":435},
+	"sourceSize": {"w":328,"h":435},
+	"anchor": {"x":0.5125,"y":0.90566}
+},
+"sheldon_sad":
+{
+	"frame": {"x":1,"y":1,"w":508,"h":435},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":508,"h":435},
+	"sourceSize": {"w":508,"h":435},
+	"anchor": {"x":0.508065,"y":0.839623}
+},
+"sheldon_satisfied":
+{
+	"frame": {"x":1,"y":876,"w":436,"h":418},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":436,"h":418},
+	"sourceSize": {"w":436,"h":418},
+	"anchor": {"x":0.474747,"y":0.863158}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "sheldon.webp",
+	"format": "RGBA8888",
+	"size": {"w":510,"h":2032},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:4dea393db4fd579a53ecf5f1d3d007df:18fd61ffb684452952e3e6f0b922859c:6aa4dfbe1cedb8a4d5f1877f97961b2c$"
+}
+}

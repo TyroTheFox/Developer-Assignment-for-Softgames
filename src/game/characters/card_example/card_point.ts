@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 import { gsap } from 'gsap';
-import { Sprite } from "../../../engine/actors/actors/sprite";
+import { Sprite } from "../../../engine/actors/actors/sprite/sprite";
 import { EE } from "../../../engine/screen/game_screen";
 
 export class CardPoint {
@@ -16,6 +16,8 @@ export class CardPoint {
     protected topCardPivotX: number = -60;
     protected baseZIndex: number = 0;
 
+    protected animationPaused: boolean = false;
+
     constructor (name: string, position: PIXI.Point, parent: PIXI.Container, slideTopCard: boolean = true, baseZIndex?: number) {
         this.name = name;
         this.slideTopCard = slideTopCard;
@@ -27,6 +29,10 @@ export class CardPoint {
             this.parent.width * this.gamePosition.x,
             this.parent.height * this.gamePosition.y
         );
+
+        EE.off('pauseCardTweens', (pause: boolean) => {
+            this.animationPaused = pause;
+        });
     }
 
     public get x(): number {
@@ -82,7 +88,7 @@ export class CardPoint {
     public sendTopCardToLocation(x: number, y: number, duration: number, delay: number = 0, newCardPoint?: CardPoint) {
         const topCard = this.getTopCard();
 
-        if (!topCard) {
+        if (!topCard && this.animationPaused) {
             return;
         }
 

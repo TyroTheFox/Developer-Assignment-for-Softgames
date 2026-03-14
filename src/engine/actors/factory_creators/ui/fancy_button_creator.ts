@@ -1,9 +1,9 @@
 import * as PIXI from "pixi.js";
 import * as PIXIUI from "@pixi/ui";
-import { BaseFactoryCreator } from "../base_factory_creator";
-import { ActorFactory, PositionalActorData } from "../actor_factory";
-import { FancyButton } from "../actors/fancy_button";
-import { GameScreen } from "../../screen/game_screen";
+import { BaseFactoryCreator } from "../../base_factory_creator";
+import { ActorFactory, PositionalActorData } from "../../actor_factory";
+import { GameScreen } from "../../../screen/game_screen";
+import { FancyButton } from "../../actors/ui/fancy_button";
 
 export type FancyButtonCreatorData = PositionalActorData & {
     options: PIXIUI.ButtonOptions,
@@ -25,8 +25,8 @@ export class FancyButtonCreator extends BaseFactoryCreator<FancyButton> {
         const gameScreen = GameScreen.instance;
         const { id, x, y, xExactPos, yExactPos, pivotX, pivotY, scale, visible, alpha, rotation, angle, zIndex, views, options, text, cullable } = data;
 
-        let caluclatedX = xExactPos ? xExactPos : (x || 0) * gameScreen.gameScreenDimensions.width;
-        let caluclatedY = yExactPos ? yExactPos : (y || 0) * gameScreen.gameScreenDimensions.height;
+        let caluclatedX = xExactPos ? xExactPos : (x ?? 0) * gameScreen.gameScreenDimensions.width;
+        let caluclatedY = yExactPos ? yExactPos : (y ?? 0) * gameScreen.gameScreenDimensions.height;
 
         const buttonOptions = {...options};
 
@@ -68,16 +68,16 @@ export class FancyButtonCreator extends BaseFactoryCreator<FancyButton> {
 
         const fancyButton = new FancyButton(buttonOptions, data, parent);
 
-        fancyButton.label = id || "fancyButton";
+        fancyButton.label = id ?? "fancyButton";
         fancyButton.position.set(caluclatedX, caluclatedY);
-        fancyButton.scale.set(scale?.x || 1, scale?.y || 1);
-        fancyButton.rotation = rotation || fancyButton.rotation;
-        fancyButton.angle = angle || fancyButton.angle;
-        fancyButton.zIndex = zIndex || 0;
-        fancyButton.visible = visible || fancyButton.visible;
-        fancyButton.alpha = alpha || fancyButton.alpha;
-        fancyButton.cullable = cullable || true;
-        fancyButton.pivot = { x: pivotX || 0, y: pivotY || 0 };
+        fancyButton.scale.set(scale?.x ?? 1, scale?.y ?? 1);
+        fancyButton.rotation = rotation ?? fancyButton.rotation;
+        fancyButton.angle = angle ?? fancyButton.angle;
+        fancyButton.zIndex = zIndex ?? 0;
+        fancyButton.visible = visible ?? fancyButton.visible;
+        fancyButton.alpha = alpha ?? fancyButton.alpha;
+        fancyButton.cullable = cullable ?? true;
+        fancyButton.pivot = { x: pivotX ?? 0, y: pivotY ?? 0 };
 
         return fancyButton;
     }

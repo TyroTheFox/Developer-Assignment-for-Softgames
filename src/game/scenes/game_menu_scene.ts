@@ -1,12 +1,12 @@
+import * as PIXIUI from '@pixi/ui';
 import { gsap } from 'gsap';
 import { Scene } from "../../engine/actors/actors/scene/scene";
-import { Container } from "../../engine/actors/actors/container";
-import { Button, FancyButton } from "@pixi/ui";
-import { List } from "../../engine/actors/actors/list";
+import { Container } from '../../engine/actors/actors/container/container';
+import { List } from '../../engine/actors/actors/container/list';
 
 export class GameMenuScene extends Scene {
     protected menuPanel!: Container;
-    protected menuButton!: Button;
+    protected menuButton!: PIXIUI.Button;
     protected lowerShutter: boolean = true;
 
     public override async init(): Promise<void> {
@@ -17,9 +17,9 @@ export class GameMenuScene extends Scene {
         this.menuButton = menuButtonView.buttonInstance;
 
         const buttonList = this.menuPanel.getChildByLabel('buttonList') as List;
-        const cardExampleButton = buttonList.getChildByLabel('cardButton') as FancyButton;
-        const dialogueExampleButton = buttonList.getChildByLabel('dialogueExampleButton') as FancyButton;
-        const fireEmitterButton = buttonList.getChildByLabel('fireEmitterButton') as FancyButton;
+        const cardExampleButton = buttonList.getChildByLabel('cardButton') as PIXIUI.FancyButton;
+        const dialogueExampleButton = buttonList.getChildByLabel('dialogueExampleButton') as PIXIUI.FancyButton;
+        const fireEmitterButton = buttonList.getChildByLabel('fireEmitterButton') as PIXIUI.FancyButton;
 
         const menuTween = gsap.to(this.menuPanel, { 
             y: 50, 

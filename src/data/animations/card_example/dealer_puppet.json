@@ -1,0 +1,122 @@
+[
+    {
+        "id": "idleLeft",
+        "settings": {
+            "repeat": -1,
+            "yoyo": true,
+            "repeatDelay": 0.15
+        },
+        "steps": [
+            {
+                "asset": "dealerLeftHand",
+                "to": {
+                    "duration": 1.5,
+                    "pivotY": 25,
+                    "ease": "sine.inOut"
+                }
+            }
+        ]
+    },
+    {
+        "id": "idleRight",
+        "settings": {
+            "repeat": -1,
+            "yoyo": true,
+            "repeatDelay": 0.15
+        },
+        "steps": [
+            {
+                "asset": "dealerRightHand",
+                "to": {
+                    "duration": 1.5,
+                    "pivotY": 25,
+                    "ease": "sine.inOut"
+                }
+            }
+        ]
+    },
+    {
+        "id": "dealCard",
+        "steps": [
+            {
+                "asset": "dealerRightHand",
+                "to": {
+                    "delay": "#delayBetweenLoops",
+                    "duration": "#normalDuration",
+                    "angle": 75,
+                    "x": -250,
+                    "ease": "sine.inOut",
+                    "eventComplete": "point_RightHand"
+                }
+            },
+            {
+                "asset": "dealerRightHand",
+                "to": {
+                    "delay": "#delayBetweenEachAction",
+                    "duration": "#quickDuration",
+                    "angle": 25,
+                    "ease": "sine.inOut",
+                    "eventStart": "send_Deck_to_Discard"
+                }
+            },
+            {
+                "asset": "dealerRightHand",
+                "to": {
+                    "delay": "#delayBetweenEachAction",
+                    "duration": "#quickDuration",
+                    "angle": 0,
+                    "x": -400,
+                    "y": -50,
+                    "ease": "sine.inOut",
+                    "eventStart": "open_RightHand"
+                }
+            },
+            {
+                "asset": "dealerLeftHand",
+                "to": {
+                    "delay": "#delayBetweenEachAction",
+                    "duration": "#normalDuration",
+                    "angle": 75,
+                    "x": -100,
+                    "y": 400,
+                    "ease": "sine.inOut",
+                    "eventComplete": "point_LeftHand"
+                }
+            },
+            {
+                "asset": "dealerLeftHand",
+                "to": {
+                    "delay": "#delayBetweenEachAction",
+                    "duration": "#quickDuration",
+                    "angle": 0,
+                    "ease": "sine.inOut",
+                    "eventStart": "send_Deck_to_Player_Hand"
+                }
+            },
+            {
+                "asset": "dealerLeftHand",
+                "to": {
+                    "delay": "#delayBetweenEachAction",
+                    "duration": "#normalDuration",
+                    "angle": 0,
+                    "x": "#leftHandStartingPositionX",
+                    "y": "#leftHandStartingPositionY",
+                    "ease": "sine.inOut",
+                    "eventStart": "open_LeftHand"
+                }
+            },
+            {
+                "asset": "dealerRightHand",
+                "to": {
+                    "delay": "#delayBetweenEachAction",
+                    "duration": "#normalDuration",
+                    "angle": 0,
+                    "x": "#rightHandStartingPositionX",
+                    "y": "#rightHandStartingPositionY",
+                    "ease": "sine.inOut",
+                    "eventComplete": "end_deal_card"
+                }
+            }
+        ]
+    }
+]

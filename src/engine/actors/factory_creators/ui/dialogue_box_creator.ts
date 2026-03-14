@@ -1,8 +1,8 @@
 import * as PIXI from "pixi.js";
-import { BaseFactoryCreator } from "../base_factory_creator";
-import { ActorFactory, PositionalActorData } from "../actor_factory";
-import { GameScreen } from "../../screen/game_screen";
-import { DialogueBox } from "../actors/dialogue_box";
+import { BaseFactoryCreator } from "../../base_factory_creator";
+import { ActorFactory, PositionalActorData } from "../../actor_factory";
+import { GameScreen } from "../../../screen/game_screen";
+import { DialogueBox } from "../../actors/ui/dialogue_box";
 
 export type DialogueData = {
     name: string,
@@ -39,10 +39,6 @@ export type DialogueBoxCreatorData = PositionalActorData & {
         y?: number
     }, 
     emojiData?: EmojiDataEntry[],
-    emojiPosition?: {
-        x?: number,
-        y?: number
-    },
     children?: any[]
 }
 
@@ -52,20 +48,20 @@ export class DialogueBoxCreator extends BaseFactoryCreator<DialogueBox> {
         const gameScreen = GameScreen.instance;
         const { id, x, y, xExactPos, yExactPos, pivotX, pivotY, scale, visible, alpha, rotation, angle, zIndex, children, cullable} = data;
 
-        let caluclatedX = xExactPos ? xExactPos : (x || 0) * gameScreen.gameScreenDimensions.width;
-        let caluclatedY = yExactPos ? yExactPos : (y || 0) * gameScreen.gameScreenDimensions.height;
+        let caluclatedX = xExactPos ? xExactPos : (x ?? 0) * gameScreen.gameScreenDimensions.width;
+        let caluclatedY = yExactPos ? yExactPos : (y ?? 0) * gameScreen.gameScreenDimensions.height;
 
         const container = new DialogueBox({
-            label: id || "dialogueBox",
+            label: id ?? "dialogueBox",
             position: { x: caluclatedX, y: caluclatedY },
-            scale: { x: scale?.x || 1, y: scale?.y || 1 },
-            rotation: rotation || undefined,
-            angle: angle || undefined,
-            zIndex: zIndex || 0,
-            visible: visible || true,
-            alpha: alpha || 1,
-            cullable: cullable || true,
-            pivot: { x: pivotX || 0, y: pivotY || 0 }
+            scale: { x: scale?.x ?? 1, y: scale?.y ?? 1 },
+            rotation: rotation ?? undefined,
+            angle: angle ?? undefined,
+            zIndex: zIndex ?? 0,
+            visible: visible ?? true,
+            alpha: alpha ?? 1,
+            cullable: cullable ?? true,
+            pivot: { x: pivotX ?? 0, y: pivotY ?? 0 }
         }, data, parent);
 
         // Add children from data
@@ -75,8 +71,8 @@ export class DialogueBoxCreator extends BaseFactoryCreator<DialogueBox> {
                 
                 const newActor = actorFactory.buildActor<any, any>(sceneDataEntry, container);
 
-                newActor.x = sceneDataEntry.x || 0;
-                newActor.y = sceneDataEntry.y || 0;
+                newActor.x = sceneDataEntry.x ?? 0;
+                newActor.y = sceneDataEntry.y ?? 0;
             }
         }
 

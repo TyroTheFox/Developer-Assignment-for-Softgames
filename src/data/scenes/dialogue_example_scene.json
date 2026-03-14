@@ -2,12 +2,110 @@
     "id": "dialogue scene",
     "type": "scene",
     "settings": {
+        "marginBetweenPuppets": 300,
+        "scenePositionCoords": {
+            "right": {
+                "x": 0,
+                "y": 150
+            },
+            "left": {
+                "x": -450,
+                "y": 150
+            }
+        }
     },
     "actors": [
         {
-            "id": "test",
+            "id": "hallwayBG",
             "type": "sprite",
-            "texture": "cards_spade_jack"
+            "texture": "hallway_bg"
+        },
+        {
+            "id": "puppetSpace",
+            "type": "container",
+            "x": 0,
+            "y": 0,
+            "alpha": 0,
+            "children": [
+                {
+                    "id": "leonardPuppet",
+                    "type": "characterSprite",
+                    "spriteFrames": [
+                        {
+                            "id": "neutral",
+                            "frame": "leonard_idle"
+                        },
+                        {
+                            "id": "intrigued",
+                            "frame": "leonard_intrieged"
+                        },
+                        {
+                            "id": "laughing",
+                            "frame": "leonard_laughing"
+                        },
+                        {
+                            "id": "sad",
+                            "frame": "leonard_sad"
+                        },
+                        {
+                            "id": "satisfied",
+                            "frame": "leonard_satisfied"
+                        }
+                    ]
+                },
+                {
+                    "id": "pennyPuppet",
+                    "type": "characterSprite",
+                    "spriteFrames": [
+                        {
+                            "id": "neutral",
+                            "frame": "penny_idle"
+                        },
+                        {
+                            "id": "intrigued",
+                            "frame": "penny_intrieged"
+                        },
+                        {
+                            "id": "laughing",
+                            "frame": "penny_laughing"
+                        },
+                        {
+                            "id": "sad",
+                            "frame": "penny_sad"
+                        },
+                        {
+                            "id": "satisfied",
+                            "frame": "penny_satisfied"
+                        }
+                    ]
+                },
+                {
+                    "id": "sheldonPuppet",
+                    "type": "characterSprite",
+                    "spriteFrames": [
+                        {
+                            "id": "neutral",
+                            "frame": "sheldon_idle"
+                        },
+                        {
+                            "id": "intrigued",
+                            "frame": "sheldon_intrieged"
+                        },
+                        {
+                            "id": "laughing",
+                            "frame": "sheldon_laughing"
+                        },
+                        {
+                            "id": "sad",
+                            "frame": "sheldon_sad"
+                        },
+                        {
+                            "id": "satisfied",
+                            "frame": "sheldon_satisfied"
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }

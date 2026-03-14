@@ -1,8 +1,8 @@
 import * as PIXI from "pixi.js";
-import { BaseFactoryCreator } from "../base_factory_creator";
-import { PositionalActorData } from "../actor_factory";
-import { CharacterSprite } from "../actors/character_sprite";
-import { Sprite } from "../actors/sprite";
+import { BaseFactoryCreator } from "../../base_factory_creator";
+import { PositionalActorData } from "../../actor_factory";
+import { Sprite } from "../../actors/sprite/sprite";
+import { CharacterSprite } from "../../actors/sprite/character_sprite";
 
 export type SpriteFrame = {
     id: string,
@@ -42,7 +42,7 @@ export class CharacterSpriteCreator extends BaseFactoryCreator<CharacterSprite> 
                 );
 
                 if (spriteFrame.scale) {
-                    newSprite.scale.set(spriteFrame.scale.x || 1, spriteFrame.scale.y || 1);
+                    newSprite.scale.set(spriteFrame.scale.x ?? 1, spriteFrame.scale.y ?? 1);
                 }
 
                 frames[spriteFrame.id] = newSprite;
@@ -50,16 +50,16 @@ export class CharacterSpriteCreator extends BaseFactoryCreator<CharacterSprite> 
         }
 
         const characterSprite = new CharacterSprite({
-            label: id || "characterSprite",
-            position: { x: (x || 0), y: (y || 0) },
-            scale: { x: scale?.x || 1, y: scale?.y || 1 },
-            rotation: rotation || undefined,
-            angle: angle || undefined,
-            zIndex: zIndex || 0,
-            visible: visible || true,
-            alpha: alpha || 1,
-            cullable: cullable || true,
-            pivot: { x: pivotX || 0, y: pivotY || 0 }
+            label: id ?? "characterSprite",
+            position: { x: (x ?? 0), y: (y ?? 0) },
+            scale: { x: scale?.x ?? 1, y: scale?.y ?? 1 },
+            rotation: rotation ?? undefined,
+            angle: angle ?? undefined,
+            zIndex: zIndex ?? 0,
+            visible: visible ?? true,
+            alpha: alpha ?? 1,
+            cullable: cullable ?? true,
+            pivot: { x: pivotX ?? 0, y: pivotY ?? 0 }
         }, data, frames);
 
         if (parent) {

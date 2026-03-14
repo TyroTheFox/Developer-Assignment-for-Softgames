@@ -18,11 +18,7 @@
                 "y": 100
             },
             "avatarPosition": {
-                "x": -80,
-                "y": 19
-            },
-            "emojiPosition": {
-                "x": 30,
+                "x": -40,
                 "y": 19
             },
             "textStyle": {

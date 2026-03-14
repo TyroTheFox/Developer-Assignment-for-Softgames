@@ -1,16 +1,20 @@
 import * as PIXI from "pixi.js";
 import { Scene } from "../../engine/actors/actors/scene/scene";
-import { SpriteCreatorData } from "../../engine/actors/factory_creators/sprite_creator";
-import { Container } from "../../engine/actors/actors/container";
-import { Sprite } from "../../engine/actors/actors/sprite";
-import { CharacterSprite } from "../../engine/actors/actors/character_sprite";
-import { Dealer } from "../characters/card_example/dealer";
+import { Sprite } from "../../engine/actors/actors/sprite/sprite";
+// import { Dealer } from "../characters/card_example/dealer";
 import { EE } from "../../engine/screen/game_screen";
+import { Container } from "../../engine/actors/actors/container/container";
+import { SpriteCreatorData } from "../../engine/actors/factory_creators/sprite/sprite_creator";
+import { CharacterSprite } from "../../engine/actors/actors/sprite/character_sprite";
+import { DealerPuppet } from "../characters/card_example/dealer_puppet";
+
+import dealerPuppetAnimationData from '../../data/animations/card_example/dealer_puppet.json' assert {type: 'json'};
+import { AnimationDataEntry } from "../../engine/actors/actors/animation/puppeteer";
 
 export class CardExampleScene extends Scene {
     protected pokerTableBackground!: Sprite;
 
-    protected dealer!: Dealer;
+    protected dealer!: DealerPuppet;
     protected cardsRequested: number = 0;
 
     public override async init(): Promise<void> {
@@ -42,8 +46,9 @@ export class CardExampleScene extends Scene {
         const dealerSpaceContainer = this.getChildByLabel('dealerSpace') as Container;
         const dealerLeftHand = dealerSpaceContainer.getChildByLabel('dealerLeftHand') as CharacterSprite;
         const dealerRightHand = dealerSpaceContainer.getChildByLabel('dealerRightHand') as CharacterSprite;
+        const dealerAnimationData = dealerPuppetAnimationData as unknown as AnimationDataEntry[];
 
-        this.dealer = new Dealer(dealerLeftHand, dealerRightHand, cardSpaceContainer, this);
+        this.dealer = new DealerPuppet(this, dealerAnimationData, [dealerLeftHand, dealerRightHand, cardSpaceContainer]);
 
         EE.on('dealCard', (cardsRequested: number = 1) => { 
             this.cardsRequested = cardsRequested;
@@ -52,9 +57,6 @@ export class CardExampleScene extends Scene {
         EE.on('cardDealt', () => {
             this.checkForRequestedCards();
         });
-
-        this.dealer.dealCard();
-        EE.emit('pauseDealer');
     }
 
     public checkForRequestedCards() {
@@ -76,10 +78,11 @@ export class CardExampleScene extends Scene {
     }
 
     public override async onEnter(): Promise<void> {
-        EE.emit('resumeDealer');
+        this.dealer.restartDealer();
     }
 
     public override async onExit(): Promise<void> {
-        EE.emit('pauseDealer');
+        this.dealer.stopDealer();
+        this.cardsRequested = 0;
     }
 }

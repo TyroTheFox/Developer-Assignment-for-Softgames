@@ -1,15 +1,15 @@
 import * as PIXI from "pixi.js";
 
-import { ContainerCreator } from "./factory_creators/container_creator";
-import { SpriteCreator } from "./factory_creators/sprite_creator";
+import { ContainerCreator } from "./factory_creators/container/container_creator";
+import { SpriteCreator } from "./factory_creators/sprite/sprite_creator";
 import { BaseFactoryCreator } from "./base_factory_creator";
-import { FancyButtonCreator } from "./factory_creators/fancy_button_creator";
-import { ButtonCreator } from "./factory_creators/button_creator";
-import { ListCreator } from "./factory_creators/list_creator";
-import { TextCreator } from "./factory_creators/text_creator";
-import { DrawnGraphicsCreator } from "./factory_creators/drawn_graphics_creator";
-import { CharacterSpriteCreator } from "./factory_creators/character_sprite_creator";
-import { DialogueBoxCreator } from "./factory_creators/dialogue_box_creator";
+import { FancyButtonCreator } from "./factory_creators/ui/fancy_button_creator";
+import { ButtonCreator } from "./factory_creators/ui/button_creator";
+import { ListCreator } from "./factory_creators/container/list_creator";
+import { TextCreator } from "./factory_creators/ui/text_creator";
+import { DrawnGraphicsCreator } from "./factory_creators/ui/drawn_graphics_creator";
+import { CharacterSpriteCreator } from "./factory_creators/sprite/character_sprite_creator";
+import { DialogueBoxCreator } from "./factory_creators/ui/dialogue_box_creator";
 
 export type BaseActorData = {
     id: string,

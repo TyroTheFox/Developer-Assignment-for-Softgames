@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { Sprite } from './sprite';
-import { CharacterSpriteCreatorData } from '../factory_creators/character_sprite_creator';
+import { CharacterSpriteCreatorData } from '../../factory_creators/sprite/character_sprite_creator';
 
 export class CharacterSprite extends PIXI.Container {
     protected actorData!: CharacterSpriteCreatorData;

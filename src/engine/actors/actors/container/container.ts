@@ -1,21 +1,22 @@
 import * as PIXI from 'pixi.js';
-import * as PIXIUI from "@pixi/ui";
-import { GameScreen } from '../../screen/game_screen';
-import { ListCreatorData } from '../factory_creators/list_creator';
+import { Button } from '@pixi/ui';
+import { ContainerCreatorData } from '../../factory_creators/container/container_creator';
+import { GameScreen } from '../../../screen/game_screen';
 
-export class List extends PIXIUI.List {
+export class Container extends PIXI.Container {
     private gameScreen = GameScreen.instance;
-    protected actorData!: ListCreatorData;
+    protected actorData!: ContainerCreatorData;
     protected gamePosition: { x: number | null, y: number | null } = { x: null, y: null};
     protected exactPosition: { x: number | null, y: number | null } = { x: null, y: null};
+    public buttonInstance!: Button;
     
-    constructor(options: PIXIUI.ListOptions, data: ListCreatorData, parent?: PIXI.Container) {
+    constructor(options: PIXI.ContainerOptions, data: ContainerCreatorData, parent?: PIXI.Container) {
         super(options);
 
         this.actorData = data;
 
-        this.gamePosition = { x: data?.x || null, y: data?.y || null };
-        this.exactPosition = { x: data?.xExactPos || null, y: data?.yExactPos || null };
+        this.gamePosition = { x: data?.x ?? null, y: data?.y ?? null };
+        this.exactPosition = { x: data?.xExactPos ?? null, y: data?.yExactPos ?? null };
         
         if (parent) {
             parent.addChild(this);
@@ -26,7 +27,7 @@ export class List extends PIXIUI.List {
         this.on('childAdded', () => this.resize(this.gameScreen.gameScreenDimensions.width, this.gameScreen.gameScreenDimensions.height));
         this.on('childRemoved', () => this.resize(this.gameScreen.gameScreenDimensions.width, this.gameScreen.gameScreenDimensions.height));
     }
-     
+
     /**
      * Position of X as a percentage of the Screen
      */
@@ -58,8 +59,8 @@ export class List extends PIXIUI.List {
     }
 
     public resize(width: number, height: number) {
-        let caluclatedX = this.exactPosition.x ? this.exactPosition.x : width * (this.gamePosition.x || 0);
-        let caluclatedY = this.exactPosition.y ? this.exactPosition.y : height * (this.gamePosition.y || 0);
+        let caluclatedX = this.exactPosition.x ? this.exactPosition.x : width * (this.gamePosition.x ?? 0);
+        let caluclatedY = this.exactPosition.y ? this.exactPosition.y : height * (this.gamePosition.y ?? 0);
 
         this.x = caluclatedX;
         this.y = caluclatedY;

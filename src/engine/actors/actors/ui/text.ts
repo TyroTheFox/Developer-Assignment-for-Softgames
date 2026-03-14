@@ -1,21 +1,20 @@
 import * as PIXI from 'pixi.js';
-import * as PIXIUI from "@pixi/ui";
-import { GameScreen } from '../../screen/game_screen';
-import { FancyButtonCreatorData } from '../factory_creators/fancy_button_creator';
+import { GameScreen } from '../../../screen/game_screen';
+import { TextCreatorData } from '../../factory_creators/ui/text_creator';
 
-export class FancyButton extends PIXIUI.FancyButton {
+export class GameText extends PIXI.Text {
     private gameScreen = GameScreen.instance;
-    protected actorData!: FancyButtonCreatorData;
+    protected actorData!: TextCreatorData;
     protected gamePosition: { x: number | null, y: number | null } = { x: null, y: null};
     protected exactPosition: { x: number | null, y: number | null } = { x: null, y: null};
     
-    constructor(options: PIXIUI.ButtonOptions, data: FancyButtonCreatorData, parent?: PIXI.Container) {
+    constructor(options: PIXI.CanvasTextOptions, data: TextCreatorData, parent?: PIXI.Container) {
         super(options);
 
         this.actorData = data;
 
-        this.gamePosition = { x: data?.x || null, y: data?.y || null };
-        this.exactPosition = { x: data?.xExactPos || null, y: data?.yExactPos || null };
+        this.gamePosition = { x: data?.x ?? null, y: data?.y ?? null };
+        this.exactPosition = { x: data?.xExactPos ?? null, y: data?.yExactPos ?? null };
         
         if (parent) {
             parent.addChild(this);
@@ -55,8 +54,8 @@ export class FancyButton extends PIXIUI.FancyButton {
     }
 
     public resize(width: number, height: number) {
-        let caluclatedX = this.exactPosition.x ? this.exactPosition.x : width * (this.gamePosition.x || 0);
-        let caluclatedY = this.exactPosition.y ? this.exactPosition.y : height * (this.gamePosition.y || 0);
+        let caluclatedX = this.exactPosition.x ? this.exactPosition.x : width * (this.gamePosition.x ?? 0);
+        let caluclatedY = this.exactPosition.y ? this.exactPosition.y : height * (this.gamePosition.y ?? 0);
 
         this.x = caluclatedX;
         this.y = caluclatedY;

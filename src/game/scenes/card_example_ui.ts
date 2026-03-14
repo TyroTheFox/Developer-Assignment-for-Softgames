@@ -1,7 +1,7 @@
 import { gsap } from 'gsap';
 import { List } from "@pixi/ui";
 import { Scene } from "../../engine/actors/actors/scene/scene";
-import { Sprite } from "../../engine/actors/actors/sprite";
+import { Sprite } from "../../engine/actors/actors/sprite/sprite";
 import { EE } from "../../engine/screen/game_screen";
 
 export class CardExampleUI extends Scene {

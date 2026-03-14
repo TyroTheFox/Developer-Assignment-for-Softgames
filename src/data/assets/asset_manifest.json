@@ -16,6 +16,27 @@
                     "src": "src/assets/dealers_hand.json"
                 }
             ]
+        },
+        {
+            "name": "dialogueExampleScene",
+            "assets": [
+                {
+                    "alias": "hallway",
+                    "src": "src/assets/hallway_bg.json"
+                },
+                {
+                    "alias": "leonard",
+                    "src": "src/assets/leonard.json"
+                },
+                {
+                    "alias": "penny",
+                    "src": "src/assets/penny.json"
+                },
+                {
+                    "alias": "sheldon",
+                    "src": "src/assets/sheldon.json"
+                }
+            ]
         }
     ]
 }

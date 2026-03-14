@@ -1,0 +1,20 @@
+{"frames": {
+
+"hallway_bg":
+{
+	"frame": {"x":1,"y":1,"w":1920,"h":1080},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1920,"h":1080},
+	"sourceSize": {"w":1920,"h":1080}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "hallway_bg.webp",
+	"format": "RGBA8888",
+	"size": {"w":1922,"h":1082},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:45e7401aeb51b4c3e1dc6cef0eb5d03d:d07dbed88902abc1d953df72d48910f4:c1bfb501b0ef426625d3c89d9fc8985c$"
+}
+}

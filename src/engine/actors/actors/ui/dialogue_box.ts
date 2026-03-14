@@ -1,9 +1,8 @@
 import * as PIXI from 'pixi.js';
 import * as PIXIUI from '@pixi/ui';
 import { gsap } from 'gsap';
-import { EE, GameScreen } from '../../screen/game_screen';
-import { Button } from '@pixi/ui';
-import { AvatarDataEntry, DialogueBoxCreatorData, DialogueData, EmojiDataEntry } from '../factory_creators/dialogue_box_creator';
+import { EE, GameScreen } from '../../../screen/game_screen';
+import { AvatarDataEntry, DialogueBoxCreatorData, DialogueData, EmojiDataEntry } from '../../factory_creators/ui/dialogue_box_creator';
 
 export type TagTimingData = { time: number, tag: string };
 
@@ -12,30 +11,47 @@ export class DialogueBox extends PIXI.Container {
     protected actorData!: DialogueBoxCreatorData;
     protected gamePosition: { x: number | null, y: number | null } = { x: null, y: null};
     protected exactPosition: { x: number | null, y: number | null } = { x: null, y: null};
-    public buttonInstance!: Button;
+    public buttonInstance!: PIXIUI.Button;
 
     protected dialogueText!: PIXI.SplitText;
     protected nameText!: PIXI.Text;
+
     protected avatarPanel!: PIXIUI.Switcher;
     protected emojiPanel!: PIXIUI.Switcher;
+    protected emojiContainer!: PIXI.Container;
 
     protected dialogueData!: DialogueData[];
     protected dialogueIndex: number = -1;
+
+    public remoteAssetTimeout: number = 100;
+
+    public emojiVisibleDuration: number = 1;
+    public emojiAlphaChangeDuration: number = 0.5;
+
+    public charOffset: number = 20;
+    public charAlphaChangeDuration = 0.5;
+    public charDelayBetweenCharacter = 0.07;
+
+    public dialogueVisibleDuration = 2.5;
+
+    public pauseDialogue = false;
     
     constructor(options: PIXI.ContainerOptions, data: DialogueBoxCreatorData, parent?: PIXI.Container) {
         super(options);
 
         this.actorData = data;
 
+        this.alpha = 0;
+
         const { 
             x, y, xExactPos, yExactPos, 
             textPosition: textPositionData, nameTextPosition: nameTextPositionData, 
             textStyle, nameStyle, 
-            avatarPosition, emojiPosition
+            avatarPosition
         } = data;
 
-        this.gamePosition = { x: x || null, y: y || null };
-        this.exactPosition = { x: xExactPos || null, y: yExactPos || null };
+        this.gamePosition = { x: x ?? null, y: y ?? null };
+        this.exactPosition = { x: xExactPos ?? null, y: yExactPos ?? null };
         
         if (parent) {
             parent.addChild(this);
@@ -43,40 +59,51 @@ export class DialogueBox extends PIXI.Container {
             parent.on('scene_resize', (width, height) => this.resize(width, height));
         }
 
-        const { x: textPosX, y: textPosY } = textPositionData || { x: 0, y: 0 };
-        const { x: namePosX, y: namePosY } = nameTextPositionData || { x: 0, y: 0 };
-        const { x: avatarPosX, y: avatarPosY } = avatarPosition || { x: 0, y: 0 };
-        const { x: emojiPosX, y: emojiPosY } = emojiPosition || { x: 0, y: 0 };
+        const { x: textPosX, y: textPosY } = textPositionData ?? { x: 0, y: 0 };
+        const { x: namePosX, y: namePosY } = nameTextPositionData ?? { x: 0, y: 0 };
+        const { x: avatarPosX, y: avatarPosY } = avatarPosition ?? { x: 0, y: 0 };
 
-        const textPosition = { x: (textPosX || 0), y: (textPosY || 0) };
-        const nameTextPosition = { x: (namePosX || 0), y: (namePosY || 0) };
+        const textPosition = { x: (textPosX ?? 0), y: (textPosY ?? 0) };
+        const nameTextPosition = { x: (namePosX ?? 0), y: (namePosY ?? 0) };
+        const avatarContainerPosition = { x: (avatarPosX ?? 0), y: (avatarPosY ?? 0) };
 
         this.dialogueText = new PIXI.SplitText({
             text: "-",
             position: textPosition,
-            style: textStyle || {},
-            zIndex: 100
+            style: textStyle ?? {},
+            zIndex: 100,
+            visible: false
         });
         this.addChild(this.dialogueText);
 
         this.nameText = new PIXI.Text({
-            text: "-",
+            text: "",
             position: nameTextPosition,
-            style: nameStyle || {},
+            style: nameStyle ?? {},
             zIndex: 100
         });
         this.addChild(this.nameText);
 
+        const avatarContainer = new PIXI.Container({
+            label: "Avatar Panel Container",
+            position: avatarContainerPosition
+        });
+        this.addChild(avatarContainer);
+
+        this.emojiContainer = new PIXI.Container({
+            label: "Emoji Panel Container",
+            position: avatarContainerPosition,
+            alpha: 0
+        });
+        this.addChild(this.emojiContainer);
+
         this.emojiPanel = new PIXIUI.Switcher();
         this.emojiPanel.label = "Emoji Panel";
-        this.addChild(this.emojiPanel);
-        this.emojiPanel.position.set(emojiPosX, emojiPosY);
-        this.emojiPanel.alpha = 0;
+        this.emojiContainer.addChild(this.emojiPanel);
 
         this.avatarPanel = new PIXIUI.Switcher();
         this.avatarPanel.label = "Avatar Panel";
-        this.addChild(this.avatarPanel);
-        this.avatarPanel.position.set(avatarPosX, avatarPosY);
+        avatarContainer.addChild(this.avatarPanel);
 
         this.on('childAdded', () => this.resize(this.gameScreen.gameScreenDimensions.width, this.gameScreen.gameScreenDimensions.height));
         this.on('childRemoved', () => this.resize(this.gameScreen.gameScreenDimensions.width, this.gameScreen.gameScreenDimensions.height));
@@ -116,6 +143,42 @@ export class DialogueBox extends PIXI.Container {
         this.dialogueData = data;
     }
 
+    public show() {
+        gsap.to(
+            this,
+            {
+                duration: 0.5,
+                alpha: 1,
+                onComplete: () => { 
+                    this.nextDialogueStep();
+                    this.setAvatarImage('');
+                    this.nameText.text = "";
+                }
+            }
+        );
+    }
+
+    public hide() {
+        gsap.to(
+            this,
+            {
+                duration: 0.5,
+                alpha: 0,
+                onComplete: () => {
+                    this.reset();
+                }
+            }
+        );
+    }
+
+    public reset() {
+        this.dialogueIndex = -1;
+        this.dialogueText.text = "-";
+        this.dialogueText.visible = false;
+        this.nameText.text = "";
+        this.setAvatarImage('');
+    }
+
     public nextDialogueStep() {
         if (this.dialogueIndex >= this.dialogueData.length) {
             return;
@@ -127,45 +190,7 @@ export class DialogueBox extends PIXI.Container {
     }
 
     public async setAvatarData(data: AvatarDataEntry[]) {
-        this.actorData.avatarData = data;
-
-        for (let i = 0; i < data.length; i++) {
-            const {url, texture, name} = data[i];
-
-            if (url) {
-                const imageExists = await this.imageExists(url);
-
-                if (imageExists) {
-                    const element = document.createElement('img');
-                    element.src = url;
-                    element.alt = name;
-
-                    const domContainer = new PIXI.DOMContainer({
-                        element,
-                        anchor: 0.5,
-                    });
-
-                    this.avatarPanel.add(domContainer);
-                }
-
-                continue;
-            }
-
-            if (!PIXI.Assets.cache.has(`avatar_${name}`)) {
-                await PIXI.Assets.load({ alias: `avatar_${name}`, src: texture})
-                    .then(() => {
-                        this.avatarPanel.add(`avatar_${name}`);
-                    })
-                    .catch(() => {
-                        const defaultSprite = new PIXI.Sprite(PIXI.Texture.EMPTY);
-                        this.avatarPanel.add(defaultSprite);
-                    });
-            }
-        }
-
-        // Default Sprite
-        const defaultSprite = new PIXI.Sprite(PIXI.Texture.EMPTY);
-        this.avatarPanel.add(defaultSprite);
+        await this.setPanelData(this.avatarPanel, 'avatar', data);
     }
 
     public setAvatarImage(avatarName: string) {
@@ -183,41 +208,7 @@ export class DialogueBox extends PIXI.Container {
     }
 
     public async setEmojiData(data: EmojiDataEntry[]) {
-        this.actorData.emojiData = data;
-
-        for (let i = 0; i < data.length; i++) {
-            const {url, texture, name} = data[i];
-
-            if (url) {
-                const imageExists = await this.imageExists(url);
-
-                if (imageExists) {
-                    const domContainer = new PIXI.DOMContainer({
-                        element: imageExists as HTMLImageElement,
-                        anchor: 0.5,
-                    });
-
-                    this.emojiPanel.add(domContainer);
-                }
-
-                continue;
-            }
-
-            if (!PIXI.Assets.cache.has(`emoji_${name}`)) {
-                await PIXI.Assets.load({ alias: `emoji_${name}`, src: texture})
-                    .then(() => {
-                        this.emojiPanel.add(`emoji_${name}`);
-                    })
-                    .catch(() => {
-                        const defaultSprite = new PIXI.Sprite(PIXI.Texture.EMPTY);
-                        this.emojiPanel.add(defaultSprite);
-                    });
-            }
-        }
-
-        // Default Sprite
-        const defaultSprite = new PIXI.Sprite(PIXI.Texture.EMPTY);
-        this.avatarPanel.add(defaultSprite);
+        await this.setPanelData(this.emojiPanel, 'emoji', data);
     }
 
     public setEmojiImage(emojiName: string) {
@@ -231,16 +222,18 @@ export class DialogueBox extends PIXI.Container {
 
                 gsap.timeline()
                     .to(
-                        this.emojiPanel,
+                        this.emojiContainer,
                         {
-                            alpha: 1
+                            alpha: 1,
+                            duration: this.emojiAlphaChangeDuration
                         }
                     )
                     .to(
-                        this.emojiPanel,
+                        this.emojiContainer,
                         {
-                            delay: 0.3,
-                            alpha: 0
+                            delay: this.emojiVisibleDuration,
+                            alpha: 0,
+                            duration: this.emojiAlphaChangeDuration
                         }
                     );
             } else {
@@ -250,8 +243,8 @@ export class DialogueBox extends PIXI.Container {
     }
 
     public resize(width: number, height: number) {
-        let caluclatedX = this.exactPosition.x ? this.exactPosition.x : width * (this.gamePosition.x || 0);
-        let caluclatedY = this.exactPosition.y ? this.exactPosition.y : height * (this.gamePosition.y || 0);
+        let caluclatedX = this.exactPosition.x ? this.exactPosition.x : width * (this.gamePosition.x ?? 0);
+        let caluclatedY = this.exactPosition.y ? this.exactPosition.y : height * (this.gamePosition.y ?? 0);
 
         this.x = caluclatedX;
         this.y = caluclatedY;
@@ -260,7 +253,7 @@ export class DialogueBox extends PIXI.Container {
     }
 
     protected displayNextDialogueStep() {
-        if (this.dialogueIndex >= this.dialogueData.length) {
+        if (this.dialogueIndex >= this.dialogueData.length || this.pauseDialogue) {
             return;
         }
 
@@ -271,14 +264,24 @@ export class DialogueBox extends PIXI.Container {
         let tagList: TagTimingData[] = this.recursivelyFindDialogueTags(text, []);
 
         this.dialogueText.text = this.recursivelyDeTag(text);
+        this.dialogueText.visible = true;
         this.setAvatarImage(name);
 
-        this.dialogueText.chars.forEach((char, i) => {
+        EE.emit('dialogue_step_start', name);
+
+        for (let i = 0; i < this.dialogueText.chars.length; i++) {
+            const char = this.dialogueText.chars[i];
+
+            if (this.pauseDialogue) {
+                i = this.dialogueText.chars.length;
+                continue;
+            }
+
             const filteredData = tagList.filter((tagData: TagTimingData) => tagData.time <= i);
             const currentData = filteredData.pop();
 
             if (currentData) {
-                EE.emit("dialogue_tag_fired", currentData?.tag);
+                EE.emit("dialogue_tag_fired", currentData?.tag, name);
                 this.setEmojiImage(currentData.tag);
                 tagList = tagList.filter((tagData: TagTimingData) => tagData.time > i);
             }
@@ -286,15 +289,18 @@ export class DialogueBox extends PIXI.Container {
             gsap.fromTo(
                 char,
                 {
-                    alpha: 0
+                    alpha: 0,
+                    y: this.charOffset
                 },
                 {
-                    delay: i * 0.07,
+                    delay: i * this.charDelayBetweenCharacter,
                     alpha: 1,
-                    duration: 0.5,
+                    y: 0,
+                    duration: this.charAlphaChangeDuration,
                     ease: 'power4.out',
                     onStart: () => {
                         this.nameText.text = name;
+                        EE.emit('char_display_start', name);
                     }
                 }
             );
@@ -303,14 +309,18 @@ export class DialogueBox extends PIXI.Container {
                 gsap.to(
                     this.dialogueText.chars,
                     {
-                        duration: ((this.dialogueText.chars.length - 1) * 0.07) + 2.5,
+                        duration: ((this.dialogueText.chars.length - 1) * this.charDelayBetweenCharacter) + this.dialogueVisibleDuration,
                         onComplete: () => {
-                            EE.emit('dialogue_entry_complete');
+                            EE.emit('dialogue_entry_complete', name);
+
+                            if (this.dialogueIndex >= this.dialogueData.length) {
+                                EE.emit('dialogue_complete', this);
+                            }
                         }
                     }
                 );
             }
-        });
+        }
     }
 
     protected recursivelyDeTag(dialogueText: string): string {
@@ -349,6 +359,54 @@ export class DialogueBox extends PIXI.Container {
         return tagList;
     }
 
+    protected async setPanelData(panel: PIXIUI.Switcher, panelType: string, data: (AvatarDataEntry | EmojiDataEntry)[]) {
+        if (panelType === 'avatar') {
+            this.actorData.avatarData = data as AvatarDataEntry[];
+        }
+        
+        if (panelType === 'emoji') {
+            this.actorData.emojiData = data as EmojiDataEntry[];
+        }
+
+        for (let i = 0; i < data.length; i++) {
+            const {url, texture, name} = data[i];
+
+            if (url) {
+                const imageExists = await this.imageExists(url);
+
+                if (imageExists) {
+                    const element = document.createElement('img');
+                    element.src = url;
+                    element.alt = name;
+
+                    const domContainer = new PIXI.DOMContainer({
+                        element,
+                        anchor: 0.5,
+                    });
+
+                    panel.add(domContainer);
+
+                    continue;
+                }
+            }
+
+            if (!PIXI.Assets.cache.has(`${panelType}_${name}`)) {
+                await PIXI.Assets.load({ alias: `${panelType}_${name}`, src: texture})
+                    .then(() => {
+                        panel.add(`${panelType}_${name}`);
+                    })
+                    .catch(() => {
+                        const defaultSprite = new PIXI.Sprite(PIXI.Texture.EMPTY);
+                        panel.add(defaultSprite);
+                    });
+            }
+        }
+
+        // Default Sprite
+        const defaultSprite = new PIXI.Sprite(PIXI.Texture.EMPTY);
+        panel.add(defaultSprite);
+    }
+
     /**
      * To cover the possibility of a hoasted screen element not being available for use, the game will double check
      * that the hosted element is actually there
@@ -359,9 +417,15 @@ export class DialogueBox extends PIXI.Container {
     private imageExists(url: string): Promise<HTMLImageElement | boolean> {
         return new Promise(resolve => {
             var img = document.createElement('img');
-            img.addEventListener('load', () => resolve(img));
+            img.addEventListener('load', () => {
+                resolve(img.complete ? img: false);
+            });
             img.addEventListener('error', () => resolve(false));
             img.src = url;
+
+            setTimeout(function() {
+                resolve(img.complete ? img: false);
+            }, this.remoteAssetTimeout);
         });
     }
 }

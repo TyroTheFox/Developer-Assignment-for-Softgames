@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 import { Scene } from "../../engine/actors/actors/scene/scene";
-import { Sprite } from "../../engine/actors/actors/sprite";
+import { Sprite } from "../../engine/actors/actors/sprite/sprite";
 
 export class FireEmitterScene extends Scene {
     private testSprite!: PIXI.Sprite;

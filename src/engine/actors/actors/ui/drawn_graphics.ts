@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
-import { GameScreen } from "../../screen/game_screen";
-import { DrawnGraphicsCreatorData } from "../factory_creators/drawn_graphics_creator";
+import { GameScreen } from "../../../screen/game_screen";
+import { DrawnGraphicsCreatorData } from "../../factory_creators/ui/drawn_graphics_creator";
 
 export class DrawnGraphics extends PIXI.Container {
     private gameScreen = GameScreen.instance;
@@ -31,8 +31,8 @@ export class DrawnGraphics extends PIXI.Container {
 
         this.actorData = data;
 
-        this.gamePosition = { x: data?.x || null, y: data?.y || null };
-        this.exactPosition = { x: data?.xExactPos || null, y: data?.yExactPos || null };
+        this.gamePosition = { x: data?.x ?? null, y: data?.y ?? null };
+        this.exactPosition = { x: data?.xExactPos ?? null, y: data?.yExactPos ?? null };
         
         if (parent) {
             parent.addChild(this);
@@ -92,8 +92,8 @@ export class DrawnGraphics extends PIXI.Container {
     }
 
     public resize(width: number, height: number) {
-        let caluclatedX = this.exactPosition.x ? this.exactPosition.x : width * (this.gamePosition.x || 0);
-        let caluclatedY = this.exactPosition.y ? this.exactPosition.y : height * (this.gamePosition.y || 0);
+        let caluclatedX = this.exactPosition.x ? this.exactPosition.x : width * (this.gamePosition.x ?? 0);
+        let caluclatedY = this.exactPosition.y ? this.exactPosition.y : height * (this.gamePosition.y ?? 0);
 
         this.x = caluclatedX;
         this.y = caluclatedY;
