@@ -1,7 +1,6 @@
 import * as PIXI from "pixi.js";
 import { Scene } from "../../engine/actors/actors/scene/scene";
 import { Sprite } from "../../engine/actors/actors/sprite/sprite";
-// import { Dealer } from "../characters/card_example/dealer";
 import { EE } from "../../engine/screen/game_screen";
 import { Container } from "../../engine/actors/actors/container/container";
 import { SpriteCreatorData } from "../../engine/actors/factory_creators/sprite/sprite_creator";

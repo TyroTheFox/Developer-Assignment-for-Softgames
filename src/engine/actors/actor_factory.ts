@@ -10,6 +10,7 @@ import { TextCreator } from "./factory_creators/ui/text_creator";
 import { DrawnGraphicsCreator } from "./factory_creators/ui/drawn_graphics_creator";
 import { CharacterSpriteCreator } from "./factory_creators/sprite/character_sprite_creator";
 import { DialogueBoxCreator } from "./factory_creators/ui/dialogue_box_creator";
+import { ParticleContainerCreator } from "./factory_creators/container/particle_container_creator";
 
 export type BaseActorData = {
     id: string,
@@ -35,7 +36,8 @@ export type PositionalActorData = BaseActorData & {
     anchor?: number,
     alpha?: number,
     angle?: number,
-    rotation?: number
+    rotation?: number,
+    tint?: number
 }
 
 export class ActorFactory {
@@ -50,7 +52,8 @@ export class ActorFactory {
         ["text", new TextCreator()],
         ["drawnGraphics", new DrawnGraphicsCreator()],
         ["characterSprite", new CharacterSpriteCreator()],
-        ["dialogueBox", new DialogueBoxCreator()]
+        ["dialogueBox", new DialogueBoxCreator()],
+        ["particleContainer", new ParticleContainerCreator()]
     ]);
 
     private constructor() {}

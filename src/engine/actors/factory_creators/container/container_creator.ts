@@ -12,7 +12,7 @@ export class ContainerCreator extends BaseFactoryCreator<Container> {
     public build(data: ContainerCreatorData, parent: PIXI.Container): Container {
         const actorFactory = ActorFactory.instance;
         const gameScreen = GameScreen.instance;
-        const { id, x, y, xExactPos, yExactPos, pivotX, pivotY, scale, visible, alpha, rotation, angle, zIndex, children, cullable} = data;
+        const { id, x, y, xExactPos, yExactPos, pivotX, pivotY, scale, visible, alpha, rotation, angle, zIndex, children, cullable, tint} = data;
 
         let caluclatedX = xExactPos ? xExactPos : (x ?? 0) * gameScreen.gameScreenDimensions.width;
         let caluclatedY = yExactPos ? yExactPos : (y ?? 0) * gameScreen.gameScreenDimensions.height;
@@ -29,6 +29,10 @@ export class ContainerCreator extends BaseFactoryCreator<Container> {
             cullable: cullable ?? true,
             pivot: { x: pivotX ?? 0, y: pivotY ?? 0 }
         }, data, parent);
+
+        if (tint) {
+            container.tint = tint;
+        }
 
         // Add children from data
         if (children) {

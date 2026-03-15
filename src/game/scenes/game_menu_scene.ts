@@ -43,13 +43,13 @@ export class GameMenuScene extends Scene {
         });
 
         dialogueExampleButton.onPress.connect(() => {
-            this.gameScreen.changeScene('main', 'fire_emitter');
-            this.gameScreen.changeScene('hud', 'empty_ui');
+            this.gameScreen.changeScene('main', 'dialogue_example');
+            this.gameScreen.changeScene('hud', 'dialogue_example_ui');
         });
 
         fireEmitterButton.onPress.connect(() => {
-            this.gameScreen.changeScene('main', 'dialogue_example');
-            this.gameScreen.changeScene('hud', 'dialogue_example_ui');
+            this.gameScreen.changeScene('main', 'fire_emitter');
+            this.gameScreen.changeScene('hud', 'empty_ui');
         });
 
         this.menuButton.onPress.connect(() => {

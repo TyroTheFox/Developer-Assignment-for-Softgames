@@ -5,9 +5,52 @@
     },
     "actors": [
         {
-            "id": "test",
+            "id": "castleBG",
             "type": "sprite",
-            "texture": "cards_heart_4"
+            "texture": "castle_background"
+        },
+        {
+            "id": "soraCast",
+            "type": "sprite",
+            "x": -0.04,
+            "y": 0.01,
+            "texture": "sora_cast_sprite",
+            "scale": {
+                "x": 2.5,
+                "y": 2.5
+            }
+        },
+        {
+            "id": "emitterSpace",
+            "type": "container",
+            "children": [
+                {
+                    "id": "emitterContainer",
+                    "type": "particleContainer",
+                    "dynamicProperties": {
+                        "position": true,
+                        "rotation": false,
+                        "vertex": true,
+                        "color": true
+                    },
+                    "maximumParticles": 10,
+                    "removeParticlesWhenAtMax": false,
+                    "particle": [
+                        {
+                            "id": "diamond",
+                            "spawnDelay": 125,
+                            "options": {
+                                "texture": "particle_diamond_white",
+                                "anchorX": 0.5,
+                                "anchorY": 0.5,
+                                "scaleX": 0.5,
+                                "scaleY": 0.5,
+                                "tint": "white"
+                            }
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }

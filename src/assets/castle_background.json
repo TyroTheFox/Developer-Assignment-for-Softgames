@@ -1,0 +1,20 @@
+{"frames": {
+
+"castle_background":
+{
+	"frame": {"x":1,"y":1,"w":1123,"h":794},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1123,"h":794},
+	"sourceSize": {"w":1123,"h":794}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "castle_background.webp",
+	"format": "RGBA8888",
+	"size": {"w":1125,"h":796},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:bca5b8c363fb3e25132d68719eee1c08:b6a2ca563a06fc6c0ffbc6a353de0545:5eca5052d863cc0ad4d6f10601a20e38$"
+}
+}

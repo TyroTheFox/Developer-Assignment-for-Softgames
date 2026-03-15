@@ -128,8 +128,6 @@ export class DialogueExampleScene extends Scene {
                     }
                 );
         });
-
-        this.startDialogueSequence();
     }
 
     public startDialogueSequence() {
@@ -171,10 +169,14 @@ export class DialogueExampleScene extends Scene {
         }
     }
 
-    public override async onEnter(): Promise<void> {}
+    public override async onEnter(): Promise<void> {
+        this.startDialogueSequence();
+    }
 
     public override async onExit(): Promise<void> {
         EE.emit('hideDialogue');
         this.sequenceTween.kill();
+        this.hallwayBackground.alpha = 1;
+        this.puppetSpace.alpha = 0;
     }
 }

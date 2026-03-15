@@ -22,6 +22,8 @@ export class DialogueBox extends PIXI.Container {
 
     protected dialogueData!: DialogueData[];
     protected dialogueIndex: number = -1;
+    
+    protected currentDialogueCharTweens: gsap.core.Tween[] = [];
 
     public remoteAssetTimeout: number = 100;
 
@@ -150,8 +152,8 @@ export class DialogueBox extends PIXI.Container {
                 duration: 0.5,
                 alpha: 1,
                 onComplete: () => { 
-                    this.nextDialogueStep();
                     this.setAvatarImage('');
+                    this.nextDialogueStep();
                     this.nameText.text = "";
                 }
             }
@@ -172,6 +174,7 @@ export class DialogueBox extends PIXI.Container {
     }
 
     public reset() {
+        this.killAllDialogueTweens();
         this.dialogueIndex = -1;
         this.dialogueText.text = "-";
         this.dialogueText.visible = false;
@@ -252,6 +255,15 @@ export class DialogueBox extends PIXI.Container {
         this.emit('scene_resize', width, height);
     }
 
+    protected killAllDialogueTweens() {
+        for (let i = 0; i < this.currentDialogueCharTweens.length; i++) {
+            const currentDialogueCharTween = this.currentDialogueCharTweens[i];
+            currentDialogueCharTween.kill();
+        }
+
+        this.currentDialogueCharTweens = [];
+    }
+
     protected displayNextDialogueStep() {
         if (this.dialogueIndex >= this.dialogueData.length || this.pauseDialogue) {
             return;
@@ -268,6 +280,8 @@ export class DialogueBox extends PIXI.Container {
         this.setAvatarImage(name);
 
         EE.emit('dialogue_step_start', name);
+
+        this.currentDialogueCharTweens = [];
 
         for (let i = 0; i < this.dialogueText.chars.length; i++) {
             const char = this.dialogueText.chars[i];
@@ -286,7 +300,7 @@ export class DialogueBox extends PIXI.Container {
                 tagList = tagList.filter((tagData: TagTimingData) => tagData.time > i);
             }
 
-            gsap.fromTo(
+            this.currentDialogueCharTweens.push(gsap.fromTo(
                 char,
                 {
                     alpha: 0,
@@ -303,10 +317,10 @@ export class DialogueBox extends PIXI.Container {
                         EE.emit('char_display_start', name);
                     }
                 }
-            );
+            ));
 
             if (i === this.dialogueText.chars.length - 1) {
-                gsap.to(
+                this.currentDialogueCharTweens.push(gsap.to(
                     this.dialogueText.chars,
                     {
                         duration: ((this.dialogueText.chars.length - 1) * this.charDelayBetweenCharacter) + this.dialogueVisibleDuration,
@@ -318,7 +332,7 @@ export class DialogueBox extends PIXI.Container {
                             }
                         }
                     }
-                );
+                ));
             }
         }
     }
@@ -399,6 +413,8 @@ export class DialogueBox extends PIXI.Container {
                         const defaultSprite = new PIXI.Sprite(PIXI.Texture.EMPTY);
                         panel.add(defaultSprite);
                     });
+            } else {
+                panel.add(`${panelType}_${name}`);
             }
         }
 

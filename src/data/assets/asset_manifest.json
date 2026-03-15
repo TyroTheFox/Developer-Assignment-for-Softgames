@@ -35,6 +35,23 @@
                 {
                     "alias": "sheldon",
                     "src": "src/assets/sheldon.json"
+                },
+                {
+                    "alias": "avatar_emoji_backup",
+                    "src": "src/assets/avatar_emoji_backup.json"
+                }
+            ]
+        },
+        {
+            "name": "particleEmitterScene",
+            "assets": [
+                {
+                    "alias": "sora_cast_sprite",
+                    "src": "src/assets/sora_cast_sprite.json"
+                },
+                {
+                    "alias": "castle_background",
+                    "src": "src/assets/castle_background.json"
                 }
             ]
         }

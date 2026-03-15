@@ -57,8 +57,8 @@ PixiPlugin.registerPIXI(PIXI);
       { key: "main_menu",             scene: new GameMenuScene(gameMenuSceneData) }
     ], 
     [
-      { key: "main",                  initialStage: "dialogue_example" },
-      { key: "hud",                   initialStage: "dialogue_example_ui" },
+      { key: "main",                  initialStage: "fire_emitter" },
+      { key: "hud",                   initialStage: "empty_ui" },
       { key: "menu",                  initialStage: "main_menu" }
     ]
   );

@@ -7,7 +7,7 @@
         {"name": "Sheldon", "text": "Incorrect. {neutral} I’m studying its mechanics. The progression system is oddly satisfying."},
         {"name": "Penny", "text": "It’s called fun, Sheldon. You should try it more often."},
         {"name": "Leonard", "text": "She’s got a point. Sometimes, a simple game can be relaxing."},
-        {"name": "Neighbour", "text": "I fully agree {affirmative}"},
+        {"name": "Neighbour", "text": "I fully agree. {affirmative}"},
         {"name": "Sheldon", "text": "Relaxing? I suppose there’s merit in low-stakes gameplay to reduce cortisol levels."},
         {"name": "Penny", "text": "Translation: Sheldon likes crushing cookies but won’t admit it. {laughing}"},
         {"name": "Sheldon", "text": "Fine. I find the color-matching oddly soothing. Happy?"},
@@ -23,15 +23,15 @@
     [
         {
             "name": "sad",
-            "url": "https://api.dicebear.com/9.x/fun-emoji/png?seed=Sad"
+            "url": "https://api.dicebear.com/9.x/fun-emoji/png?seed=Sophie&backgroundColor=b6e3f4"
         },
         {
             "name": "intrigued",
-            "url": "https://api.dicebear.com/9.x/fun-emoji/png?seed=Sawyer"
+            "url": "https://api.dicebear.com/9.x/fun-emoji/png?seed=Sawyer&backgroundColor=ffff44"
         },
         {
             "name": "neutral",
-            "url": "https://api.dicebear.com/9.x/fun-emoji/png?seed=Destiny"
+            "url": "https://api.dicebear.com/9.x/fun-emoji/png?seed=Destiny&backgroundColor=ffffff"
         },
         {
             "name": "satisfied",
@@ -39,7 +39,15 @@
         },
         {
             "name": "laughing",
-            "url": "https://api.dicebear.com/9.x/fun-emoji/png?seed=Sophia"
+            "url": "https://api.dicebear.com/9.x/fun-emoji/png?seed=Sophia&mouth=smileLol"
+        },
+        {
+            "name": "affirmative",
+            "url": "https://api.dicebear.com/9.x/fun-emoji/png?seed=Joeseph&backgroundColor=cc3333"
+        },
+        {
+            "name": "win",
+            "url": "https://api.dicebear.com/9.x/fun-emoji/png?seed=Felix&backgroundColor=fcfa44"
         }
     ],
     "avatars": 
