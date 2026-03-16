@@ -2,7 +2,7 @@ import dialogueExampleData from '../../data/dialogue/dialogue_example.json' asse
 
 import { gsap } from 'gsap';
 import { Scene } from "../../engine/actors/actors/scene/scene";
-import { EE } from "../../engine/screen/game_screen";
+import { app, EE } from "../../engine/screen/game_screen";
 import { Sprite } from '../../engine/actors/actors/sprite/sprite';
 import { Container } from 'pixi.js';
 import { CharacterSprite } from '../../engine/actors/actors/sprite/character_sprite';
@@ -22,14 +22,11 @@ export class DialogueExampleScene extends Scene {
     protected speakerBobbing: boolean = false;
 
     public override async init(): Promise<void> {
-        const { gameScreen, sceneSettingsData } = this;
-        const { width, height, scaleAgainstValue } = gameScreen.gameScreenDimensions;
+        const { sceneSettingsData } = this;
         const { scenePositionCoords, marginBetweenPuppets } = sceneSettingsData;
         const { avatars } = dialogueExampleData;
 
         this.hallwayBackground = this.getChildByLabel('hallwayBG') as Sprite;
-        this.hallwayBackground.width = width * scaleAgainstValue;
-        this.hallwayBackground.height = height * scaleAgainstValue;
 
         this.puppetSpace = this.getChildByLabel('puppetSpace') as Container;
 
@@ -158,19 +155,25 @@ export class DialogueExampleScene extends Scene {
             )
     }
 
-    public override resize(width: number, height: number, scale: number) {
-        super.resize(width, height, scale);
+    public override resize(width: number, height: number, scaleWithValue: number, scaleAgainstValue: number) {
+        super.resize(width, height, scaleWithValue, scaleAgainstValue);
 
-        const { scaleAgainstValue } = this.gameScreen.gameScreenDimensions;
+        if (this.puppetSpace) {
+            if (this.puppetSpace.width <= this.sceneSettingsData.minimumPuppetSpaceWidth) {
+                this.puppetSpace.width = this.sceneSettingsData.minimumPuppetSpaceWidth;
+                this.puppetSpace.scale.y = this.puppetSpace.scale.x;
+            }
+        }
 
         if (this.hallwayBackground) {
             this.hallwayBackground.width = width * scaleAgainstValue;
-            this.hallwayBackground.height = height * scaleAgainstValue;
+            this.hallwayBackground.scale.y = this.hallwayBackground.scale.x;
         }
     }
 
     public override async onEnter(): Promise<void> {
         this.startDialogueSequence();
+        app.renderer.background.color = this.sceneSettingsData.backgroundColour;
     }
 
     public override async onExit(): Promise<void> {

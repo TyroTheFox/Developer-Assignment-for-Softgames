@@ -12,7 +12,9 @@
                 "x": -450,
                 "y": 150
             }
-        }
+        },
+        "backgroundColour": "0x000000",
+        "minimumWidth": 1200
     },
     "actors": [
         {

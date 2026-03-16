@@ -3,7 +3,7 @@ import { SceneStage } from './scene_stage';
 import { ActorFactory, BaseActorData } from '../../actor_factory';
 import { StageManager } from './stage_manager';
 import { AssetLoader } from '../../../assets/asset_loader';
-import { EE, GameScreen } from '../../../screen/game_screen';
+import { GameScreen } from '../../../screen/game_screen';
 
 export type SceneContainerOptions = BaseActorData & PIXI.ContainerOptions & {
     settings?: any,
@@ -11,11 +11,11 @@ export type SceneContainerOptions = BaseActorData & PIXI.ContainerOptions & {
 }
 
 export class Scene extends PIXI.Container {
-    protected stage!: SceneStage;
-    protected stageManager!: StageManager;
-    protected actorFactory = ActorFactory.instance;
-    protected assetLoader = AssetLoader.instance;
-    protected gameScreen = GameScreen.instance;
+    public stage!: SceneStage;
+    public stageManager!: StageManager;
+    public actorFactory = ActorFactory.instance;
+    public assetLoader = AssetLoader.instance;
+    public gameScreen = GameScreen.instance;
 
     protected actorMap: Map<string, any> = new Map();
 
@@ -31,13 +31,10 @@ export class Scene extends PIXI.Container {
         this.sceneSettingsData = options?.settings || {};
 
         const { actors } = options;
-        const scaleWithScreen = 'scaleWithScreen' in this.sceneSettingsData ? this.sceneSettingsData.scaleWithScreen : true;
 
         const { width: gameWidth, height: gameHeight, scaleWithValue, scaleAgainstValue } = this.gameScreen.gameScreenDimensions;
 
-        EE.on('game_resize', (width, height, scaleWithValue, scaleAgainstValue) => this.resize(width, height, scaleWithScreen ? scaleWithValue : scaleAgainstValue));
-
-        this.resize(gameWidth, gameHeight, scaleWithScreen ? scaleWithValue : scaleAgainstValue);
+        this.resize(gameWidth, gameHeight, scaleWithValue, scaleAgainstValue);
 
         // Add Child Actors
         for (let i = 0; i < actors.length; i++) {
@@ -54,14 +51,23 @@ export class Scene extends PIXI.Container {
         this.stageManager = stageManager;
     }
 
-    public resize(width: number, height: number, scale: number) {
+    public resize(width: number, height: number, scaleWithValue: number, scaleAgainstValue: number) {
+        const scaleWithScreen = 'scaleWithScreen' in this.sceneSettingsData ? this.sceneSettingsData.scaleWithScreen : true;
+        const { minimumWidth } = this.sceneSettingsData;
+        const usedScale = scaleWithScreen ? scaleWithValue : scaleAgainstValue
+
         this.x = width * 0.5;
         this.y = height * 0.5;
-        this.scale = scale;
+        this.scale = usedScale;
 
         this.actorMap.forEach(() => {
-            this.emit('scene_resize', width, height, scale);
+            this.emit('scene_resize', width, height, usedScale);
         });
+
+        if (this.width < (minimumWidth ? minimumWidth : 1000)) {
+            this.width = minimumWidth ? minimumWidth : 1000;
+            this.scale.y = this.scale.x;
+        }
     }
 
     public async init() {};

@@ -2,16 +2,16 @@
 
 "hand-1":
 {
-	"frame": {"x":1,"y":1,"w":649,"h":659},
+	"frame": {"x":1,"y":1,"w":615,"h":640},
 	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":86,"y":56,"w":649,"h":659},
-	"sourceSize": {"w":796,"h":725},
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":615,"h":640},
+	"sourceSize": {"w":615,"h":640},
 	"anchor": {"x":0.654523,"y":0.870345}
 },
 "hand-2":
 {
-	"frame": {"x":1,"y":662,"w":575,"h":567},
+	"frame": {"x":1,"y":643,"w":575,"h":567},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":575,"h":567},
@@ -26,8 +26,8 @@
 	"version": "1.1",
 	"image": "dealers_hand.webp",
 	"format": "RGBA8888",
-	"size": {"w":651,"h":1230},
+	"size": {"w":617,"h":1211},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:d9518422519591098497045d17bf664c:f6bbf186caf3d5a7a709e1a25a7d7b6c:137f273fb0f8731affcf6f4a02404380$"
+	"smartupdate": "$TexturePacker:SmartUpdate:f42c95addce96329d0ad85b57d3c864c:2b7683c5f70178cafcebab3da25e3f82:137f273fb0f8731affcf6f4a02404380$"
 }
 }

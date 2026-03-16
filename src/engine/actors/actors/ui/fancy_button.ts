@@ -22,6 +22,27 @@ export class FancyButton extends PIXIUI.FancyButton {
 
             parent.on('scene_resize', (width, height) => this.resize(width, height));
         }
+
+        this.calculateHitArea();
+
+        this.onPress.connect(() => this.calculateHitArea());
+        this.onDown.connect(() => this.calculateHitArea());
+        this.onUp.connect(() => this.calculateHitArea());
+        this.onHover.connect(() => this.calculateHitArea());
+        this.onOut.connect(() => this.calculateHitArea());
+        this.onUpOut.connect(() => this.calculateHitArea());
+    }
+
+    public override setState(newState: 'default' | 'hover' | 'pressed' | 'disabled', force?: boolean): void {
+        super.setState(newState, force);
+
+        if (newState === 'disabled') {
+            this.eventMode = 'none';
+            this.cursor = 'default';
+        } else {
+            this.eventMode = 'static';
+            this.cursor = 'pointer';
+        }
     }
 
     /**
@@ -60,5 +81,13 @@ export class FancyButton extends PIXIUI.FancyButton {
 
         this.x = caluclatedX;
         this.y = caluclatedY;
+
+        this.calculateHitArea();
+    }
+
+    private calculateHitArea() {
+        const bounds = this.getLocalBounds();
+        const shape = new PIXI.Rectangle(bounds.left, bounds.top, bounds.width, bounds.height);
+        this.hitArea = shape;
     }
 }

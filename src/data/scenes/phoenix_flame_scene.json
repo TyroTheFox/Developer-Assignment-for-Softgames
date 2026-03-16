@@ -1,0 +1,88 @@
+{
+    "id": "phoenix scene",
+    "type": "scene",
+    "settings": {
+        "backgroundColour": "0x000000"
+    },
+    "actors": [
+                {
+            "id": "emitterSpace",
+            "type": "container",
+            "yExactPos": 130,
+            "children": [
+                {
+                    "id": "emitterContainer",
+                    "type": "particleContainer",
+                    "dynamicProperties": {
+                        "position": true,
+                        "rotation": false,
+                        "vertex": true,
+                        "color": true
+                    },
+                    "maximumParticles": 9,
+                    "removeParticlesWhenAtMax": false,
+                    "particle": [
+                        {
+                            "id": "diamond",
+                            "spawnDelay": 125,
+                            "options": {
+                                "texture": "particle_diamond_white",
+                                "anchorX": 0.5,
+                                "anchorY": 0.5,
+                                "scaleX": 0.5,
+                                "scaleY": 0.5,
+                                "tint": "white"
+                            },
+                            "animation": {
+                                "id": "flameParticle",
+                                "steps": [
+                                    {
+                                        "to": {
+                                            "duration": 0.1,
+                                            "y": -10,
+                                            "scaleX": 0.75,
+                                            "scaleY": 0.75,
+                                            "tint": "red"
+                                        }
+                                    },
+                                    {
+                                        "to": {
+                                            "duration": 0.6,
+                                            "y": -300,
+                                            "x": "~(-250, 250)",
+                                            "scaleX": 1.25,
+                                            "scaleY": 1.25,
+                                            "tint": "yellow"
+                                        }
+                                    },
+                                    {
+                                        "to": {
+                                            "duration": 0.5,
+                                            "y": -450,
+                                            "x":"~(-500, 500)",
+                                            "scaleX": 1.5,
+                                            "scaleY": 1.5,
+                                            "alpha": 0,
+                                            "ease": "sine.out"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "phoenixContainer",
+            "type": "container",
+            "children": [
+                {
+                    "id": "phoenixSprite",
+                    "type": "sprite",
+                    "texture": "phoenix"
+                }
+            ]
+        }
+    ]
+}

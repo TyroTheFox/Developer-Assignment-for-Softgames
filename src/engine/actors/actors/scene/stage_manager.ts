@@ -17,7 +17,7 @@ export class StageManager {
     static #instance: StageManager;
     private stageMap: Map<string, SceneStage> = new Map();
     private sceneMap: Map<string, Scene> = new Map();
-    protected gameScreen = GameScreen.instance;
+    public gameScreen = GameScreen.instance;
 
     public async init(sceneList: sceneListPair[], stageList: stageListPair[], baseContainer: PIXI.Container) {
         const promises = [];

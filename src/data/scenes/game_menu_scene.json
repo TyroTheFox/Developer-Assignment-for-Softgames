@@ -8,302 +8,23 @@
         {
             "id": "menuPanel",
             "type": "container",
-            "yExactPos": -100,
             "children": [
                 {
-                    "id": "panelBackground",
-                    "type": "drawnGraphics",
-                    "drawSteps": [
-                        {
-                            "functionName": "rect",
-                            "data": {
-                                "x": -250,
-                                "y": 0,
-                                "width": 500,
-                                "height": 100
-                            }
-                        },
-                        {
-                            "functionName": "fill",
-                            "data": {
-                                "color": "0xffffff"
-                            }
-                        },
-                        {
-                            "functionName": "stroke",
-                            "data": {
-                                "style": {
-                                    "width": 3,
-                                    "color": "0x000000"
-                                }
-                            }
-                        }
-                    ]
-                },
-                {
-                    "id": "buttonList",
+                    "id": "menuButtonContainer",
                     "type": "container",
-                    "y": 0.05,
+                    "alpha": 0,
                     "children": [
                         {
-                            "id": "cardButton",
-                            "type": "fancyButton",
-                            "x": -0.07,
-                            "views": {
-                                "default": [
-                                    {
-                                        "id": "cardButton_default",
-                                        "type": "sprite",
-                                        "texture": "cards_club_2",
-                                        "scale": {
-                                            "x": 0.3,
-                                            "y": 0.3
-                                        }
-                                    }
-                                ],
-                                "hover": [
-                                    {
-                                        "id": "cardButton_hover",
-                                        "type": "sprite",
-                                        "texture": "cards_club_2",
-                                        "scale": {
-                                            "x": 0.35,
-                                            "y": 0.35
-                                        }
-                                    }
-                                ],
-                                "pressed": [
-                                    {
-                                        "id": "cardButton_pressed",
-                                        "type": "sprite",
-                                        "texture": "cards_club_2",
-                                        "scale": {
-                                            "x": 0.25,
-                                            "y": 0.25
-                                        }
-                                    }
-                                ],
-                                "disabled": [
-                                    {
-                                        "id": "cardButton_disabled",
-                                        "type": "sprite",
-                                        "texture": "cards_club_2",
-                                        "scale": {
-                                            "x": 0.3,
-                                            "y": 0.3
-                                        },
-                                        "alpha": 0.5
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "id": "dialogueExampleButton",
-                            "type": "fancyButton",
-                            "views": {
-                                "default": [
-                                    {
-                                        "id": "cardButton_default",
-                                        "type": "sprite",
-                                        "texture": "sheldon_idle",
-                                        "scale": {
-                                            "x": 0.2,
-                                            "y": 0.2
-                                        }
-                                    }
-                                ],
-                                "hover": [
-                                    {
-                                        "id": "cardButton_hover",
-                                        "type": "sprite",
-                                        "texture": "sheldon_idle",
-                                        "scale": {
-                                            "x": 0.25,
-                                            "y": 0.25
-                                        }
-                                    }
-                                ],
-                                "pressed": [
-                                    {
-                                        "id": "cardButton_pressed",
-                                        "type": "sprite",
-                                        "texture": "sheldon_idle",
-                                        "scale": {
-                                            "x": 0.15,
-                                            "y": 0.15
-                                        }
-                                    }
-                                ],
-                                "disabled": [
-                                    {
-                                        "id": "cardButton_disabled",
-                                        "type": "sprite",
-                                        "texture": "sheldon_idle",
-                                        "scale": {
-                                            "x": 0.2,
-                                            "y": 0.2
-                                        },
-                                        "alpha": 0.5
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "id": "fireEmitterButton",
-                            "type": "fancyButton",
-                            "x": 0.07,
-                            "views": {
-                                "default": [
-                                    {
-                                        "id": "icon",
-                                        "type": "container",
-                                        "scale": {
-                                            "x": 0.3,
-                                            "y": 0.3
-                                        },
-                                        "children": [
-                                            {
-                                                "id": "cardButton_default",
-                                                "type": "sprite",
-                                                "texture": "particle_diamond_white",
-                                                "tint": "yellow",
-                                                "x": 0.08
-                                            },
-                                            {
-                                                "id": "cardButton_default",
-                                                "type": "sprite",
-                                                "texture": "particle_diamond_white",
-                                                "tint": "orange",
-                                                "x": 0.04
-                                            },
-                                            {
-                                                "id": "cardButton_default",
-                                                "type": "sprite",
-                                                "texture": "particle_diamond_white",
-                                                "tint": "red"
-                                            }
-                                        ]
-                                    }
-                                ],
-                                "hover": [
-                                    {
-                                        "id": "icon",
-                                        "type": "container",
-                                        "scale": {
-                                            "x": 0.35,
-                                            "y": 0.35
-                                        },
-                                        "children": [
-                                            {
-                                                "id": "cardButton_default",
-                                                "type": "sprite",
-                                                "texture": "particle_diamond_white",
-                                                "tint": "yellow",
-                                                "x": 0.08
-                                            },
-                                            {
-                                                "id": "cardButton_default",
-                                                "type": "sprite",
-                                                "texture": "particle_diamond_white",
-                                                "tint": "orange",
-                                                "x": 0.04
-                                            },
-                                            {
-                                                "id": "cardButton_default",
-                                                "type": "sprite",
-                                                "texture": "particle_diamond_white",
-                                                "tint": "red"
-                                            }
-                                        ]
-                                    }
-                                ],
-                                "pressed": [
-                                    {
-                                        "id": "icon",
-                                        "type": "container",
-                                        "scale": {
-                                            "x": 0.25,
-                                            "y": 0.25
-                                        },
-                                        "children": [
-                                            {
-                                                "id": "cardButton_default",
-                                                "type": "sprite",
-                                                "texture": "particle_diamond_white",
-                                                "tint": "yellow",
-                                                "x": 0.08
-                                            },
-                                            {
-                                                "id": "cardButton_default",
-                                                "type": "sprite",
-                                                "texture": "particle_diamond_white",
-                                                "tint": "orange",
-                                                "x": 0.04
-                                            },
-                                            {
-                                                "id": "cardButton_default",
-                                                "type": "sprite",
-                                                "texture": "particle_diamond_white",
-                                                "tint": "red"
-                                            }
-                                        ]
-                                    }
-                                ],
-                                "disabled": [
-                                    {
-                                        "id": "icon",
-                                        "type": "container",
-                                        "scale": {
-                                            "x": 0.3,
-                                            "y": 0.3
-                                        },
-                                        "alpha": 0.5,
-                                        "children": [
-                                            {
-                                                "id": "cardButton_default",
-                                                "type": "sprite",
-                                                "texture": "particle_diamond_white",
-                                                "tint": "yellow",
-                                                "x": 0.08
-                                            },
-                                            {
-                                                "id": "cardButton_default",
-                                                "type": "sprite",
-                                                "texture": "particle_diamond_white",
-                                                "tint": "orange",
-                                                "x": 0.04
-                                            },
-                                            {
-                                                "id": "cardButton_default",
-                                                "type": "sprite",
-                                                "texture": "particle_diamond_white",
-                                                "tint": "red"
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        }
-                    ]
-                },
-                {
-                    "id": "latchButton",
-                    "type": "button",
-                    "x": 0,
-                    "yExactPos": 130,
-                    "alpha": 0.5,
-                    "children": [
-                        {
-                            "id": "cardExampleButtonPanel",
+                            "id": "panelBackground",
                             "type": "drawnGraphics",
                             "drawSteps": [
                                 {
                                     "functionName": "rect",
                                     "data": {
-                                        "x": -25,
-                                        "y": -25,
-                                        "width": 50,
-                                        "height": 50
+                                        "x": -250,
+                                        "y": 0,
+                                        "width": 500,
+                                        "height": 100
                                     }
                                 },
                                 {
@@ -322,6 +43,344 @@
                                     }
                                 }
                             ]
+                        },
+                        {
+                            "id": "buttonList",
+                            "type": "container",
+                            "xExactPos": 0,
+                            "yExactPos": 50,
+                            "children": [
+                                {
+                                    "id": "cardButton",
+                                    "type": "fancyButton",
+                                    "xExactPos": -170,
+                                    "views": {
+                                        "default": [
+                                            {
+                                                "id": "cardButton_default",
+                                                "type": "sprite",
+                                                "texture": "cards_club_2",
+                                                "scale": {
+                                                    "x": 0.3,
+                                                    "y": 0.3
+                                                }
+                                            }
+                                        ],
+                                        "hover": [
+                                            {
+                                                "id": "cardButton_hover",
+                                                "type": "sprite",
+                                                "texture": "cards_club_2",
+                                                "scale": {
+                                                    "x": 0.35,
+                                                    "y": 0.35
+                                                }
+                                            }
+                                        ],
+                                        "pressed": [
+                                            {
+                                                "id": "cardButton_pressed",
+                                                "type": "sprite",
+                                                "texture": "cards_club_2",
+                                                "scale": {
+                                                    "x": 0.25,
+                                                    "y": 0.25
+                                                }
+                                            }
+                                        ],
+                                        "disabled": [
+                                            {
+                                                "id": "cardButton_disabled",
+                                                "type": "sprite",
+                                                "texture": "cards_club_2",
+                                                "scale": {
+                                                    "x": 0.3,
+                                                    "y": 0.3
+                                                },
+                                                "alpha": 0.5
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "id": "dialogueExampleButton",
+                                    "type": "fancyButton",
+                                    "xExactPos": -60,
+                                    "views": {
+                                        "default": [
+                                            {
+                                                "id": "cardButton_default",
+                                                "type": "sprite",
+                                                "texture": "sheldon_idle",
+                                                "scale": {
+                                                    "x": 0.2,
+                                                    "y": 0.2
+                                                }
+                                            }
+                                        ],
+                                        "hover": [
+                                            {
+                                                "id": "cardButton_hover",
+                                                "type": "sprite",
+                                                "texture": "sheldon_idle",
+                                                "scale": {
+                                                    "x": 0.25,
+                                                    "y": 0.25
+                                                }
+                                            }
+                                        ],
+                                        "pressed": [
+                                            {
+                                                "id": "cardButton_pressed",
+                                                "type": "sprite",
+                                                "texture": "sheldon_idle",
+                                                "scale": {
+                                                    "x": 0.15,
+                                                    "y": 0.15
+                                                }
+                                            }
+                                        ],
+                                        "disabled": [
+                                            {
+                                                "id": "cardButton_disabled",
+                                                "type": "sprite",
+                                                "texture": "sheldon_idle",
+                                                "scale": {
+                                                    "x": 0.2,
+                                                    "y": 0.2
+                                                },
+                                                "alpha": 0.5
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "id": "phoenixButton",
+                                    "type": "fancyButton",
+                                    "xExactPos": 60,
+                                    "views": {
+                                        "default": [
+                                            {
+                                                "id": "cardButton_default",
+                                                "type": "sprite",
+                                                "texture": "phoenix",
+                                                "scale": {
+                                                    "x": 0.15,
+                                                    "y": 0.15
+                                                }
+                                            }
+                                        ],
+                                        "hover": [
+                                            {
+                                                "id": "cardButton_hover",
+                                                "type": "sprite",
+                                                "texture": "phoenix",
+                                                "scale": {
+                                                    "x": 0.2,
+                                                    "y": 0.2
+                                                }
+                                            }
+                                        ],
+                                        "pressed": [
+                                            {
+                                                "id": "cardButton_pressed",
+                                                "type": "sprite",
+                                                "texture": "phoenix",
+                                                "scale": {
+                                                    "x": 0.1,
+                                                    "y": 0.1
+                                                }
+                                            }
+                                        ],
+                                        "disabled": [
+                                            {
+                                                "id": "cardButton_disabled",
+                                                "type": "sprite",
+                                                "texture": "phoenix",
+                                                "scale": {
+                                                    "x": 0.15,
+                                                    "y": 0.15
+                                                },
+                                                "alpha": 0.5
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "id": "fireEmitterButton",
+                                    "type": "fancyButton",
+                                    "xExactPos": 160,
+                                    "views": {
+                                        "default": [
+                                            {
+                                                "id": "icon",
+                                                "type": "container",
+                                                "scale": {
+                                                    "x": 0.3,
+                                                    "y": 0.3
+                                                },
+                                                "children": [
+                                                    {
+                                                        "id": "cardButton_default",
+                                                        "type": "sprite",
+                                                        "texture": "particle_diamond_white",
+                                                        "tint": "yellow",
+                                                        "x": 0.08
+                                                    },
+                                                    {
+                                                        "id": "cardButton_default",
+                                                        "type": "sprite",
+                                                        "texture": "particle_diamond_white",
+                                                        "tint": "orange",
+                                                        "x": 0.04
+                                                    },
+                                                    {
+                                                        "id": "cardButton_default",
+                                                        "type": "sprite",
+                                                        "texture": "particle_diamond_white",
+                                                        "tint": "red"
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        "hover": [
+                                            {
+                                                "id": "icon",
+                                                "type": "container",
+                                                "scale": {
+                                                    "x": 0.35,
+                                                    "y": 0.35
+                                                },
+                                                "children": [
+                                                    {
+                                                        "id": "cardButton_default",
+                                                        "type": "sprite",
+                                                        "texture": "particle_diamond_white",
+                                                        "tint": "yellow",
+                                                        "x": 0.08
+                                                    },
+                                                    {
+                                                        "id": "cardButton_default",
+                                                        "type": "sprite",
+                                                        "texture": "particle_diamond_white",
+                                                        "tint": "orange",
+                                                        "x": 0.04
+                                                    },
+                                                    {
+                                                        "id": "cardButton_default",
+                                                        "type": "sprite",
+                                                        "texture": "particle_diamond_white",
+                                                        "tint": "red"
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        "pressed": [
+                                            {
+                                                "id": "icon",
+                                                "type": "container",
+                                                "scale": {
+                                                    "x": 0.25,
+                                                    "y": 0.25
+                                                },
+                                                "children": [
+                                                    {
+                                                        "id": "cardButton_default",
+                                                        "type": "sprite",
+                                                        "texture": "particle_diamond_white",
+                                                        "tint": "yellow",
+                                                        "x": 0.08
+                                                    },
+                                                    {
+                                                        "id": "cardButton_default",
+                                                        "type": "sprite",
+                                                        "texture": "particle_diamond_white",
+                                                        "tint": "orange",
+                                                        "x": 0.04
+                                                    },
+                                                    {
+                                                        "id": "cardButton_default",
+                                                        "type": "sprite",
+                                                        "texture": "particle_diamond_white",
+                                                        "tint": "red"
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        "disabled": [
+                                            {
+                                                "id": "icon",
+                                                "type": "container",
+                                                "scale": {
+                                                    "x": 0.3,
+                                                    "y": 0.3
+                                                },
+                                                "alpha": 0.5,
+                                                "children": [
+                                                    {
+                                                        "id": "cardButton_default",
+                                                        "type": "sprite",
+                                                        "texture": "particle_diamond_white",
+                                                        "tint": "yellow",
+                                                        "x": 0.08
+                                                    },
+                                                    {
+                                                        "id": "cardButton_default",
+                                                        "type": "sprite",
+                                                        "texture": "particle_diamond_white",
+                                                        "tint": "orange",
+                                                        "x": 0.04
+                                                    },
+                                                    {
+                                                        "id": "cardButton_default",
+                                                        "type": "sprite",
+                                                        "texture": "particle_diamond_white",
+                                                        "tint": "red"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "latchButton",
+            "type": "button",
+            "alpha": 0.5,
+            "yExactPos": 0,
+            "children": [
+                {
+                    "id": "cardExampleButtonPanel",
+                    "type": "drawnGraphics",
+                    "drawSteps": [
+                        {
+                            "functionName": "rect",
+                            "data": {
+                                "x": -25,
+                                "y": -25,
+                                "width": 50,
+                                "height": 50
+                            }
+                        },
+                        {
+                            "functionName": "fill",
+                            "data": {
+                                "color": "0xffffff"
+                            }
+                        },
+                        {
+                            "functionName": "stroke",
+                            "data": {
+                                "style": {
+                                    "width": 3,
+                                    "color": "0x000000"
+                                }
+                            }
                         }
                     ]
                 }

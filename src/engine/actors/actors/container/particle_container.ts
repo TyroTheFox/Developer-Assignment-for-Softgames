@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js';
 import { gsap } from 'gsap';
 import { GameScreen } from '../../../screen/game_screen';
 import { ParticleContainerCreatorData, ParticleData } from '../../factory_creators/container/particle_container_creator';
+import { AnimationDataEntry, AnimationStep, TweenData } from '../animation/puppeteer';
 
 export type ParticleUpdateData = PIXI.ParticleOptions & {
     lifetime: number,
@@ -22,6 +23,8 @@ export class ParticleContainer extends PIXI.ParticleContainer {
     protected particleTimings: Record<string, number> = {};
 
     protected particleList: PIXI.Particle[] = [];
+
+    protected animationMap: Map<string, AnimationDataEntry> = new Map();
     
     constructor(options: PIXI.ParticleContainerOptions, data: ParticleContainerCreatorData, parent?: PIXI.Container) {
         super(options);
@@ -43,13 +46,16 @@ export class ParticleContainer extends PIXI.ParticleContainer {
         this.particleData = data.particle;
 
         for (let i = 0; i < this.particleData.length; i++) {
-            const { id, options } = this.particleData[i];
+            const { id, options, animation } = this.particleData[i];
 
             this.particleTimings[id] = 0;
 
             if (PIXI.Cache.has(options.texture)) {
                 options.texture = PIXI.Cache.get(options.texture);
             }
+
+            const animationDataCopy = JSON.parse(JSON.stringify(animation));
+            this.animationMap.set(id, animationDataCopy);
         }
 
         this.on('childAdded', () => this.resize(this.gameScreen.gameScreenDimensions.width, this.gameScreen.gameScreenDimensions.height));
@@ -87,8 +93,6 @@ export class ParticleContainer extends PIXI.ParticleContainer {
     }
 
     public onUpdate(time: PIXI.Ticker) {
-        console.log(this.particleChildren.length);
-
         if (this.particleChildren.length >= this.maximumParticles) {
             if (this.removeParticlesWhenAtMax) {
                 const oldestParticle = this.particleList.sort((a, b) => {
@@ -112,57 +116,25 @@ export class ParticleContainer extends PIXI.ParticleContainer {
 
             if (this.particleTimings[id] >= spawnDelay) {
                 this.particleTimings[id] = 0;
+                const particleTweenAnimation = this.animationMap.get(id) as AnimationDataEntry;
 
-                this.spawnParticle(options);
+                this.spawnParticle(options, particleTweenAnimation);
             }
         }
     }
 
-    public spawnParticle(options: PIXI.ParticleOptions): PIXI.Particle {
+    public spawnParticle(options: PIXI.ParticleOptions, particleTweenAnimation: AnimationDataEntry): PIXI.Particle {
+        const { settings, steps } = particleTweenAnimation;
         const particle = new PIXI.Particle(options);
         particle.rotation = (90 * Math.PI) / 180;
 
         this.addParticle(particle);
         this.particleList.push(particle);
 
-        gsap.timeline({
-            onComplete: () => this.deleteParticle(particle)
-        })
-        .to(
-            particle,
-            {
-                duration: 0.1,
-                x: 10,
-                scaleX: 0.75,
-                scaleY: 0.75,
-                tint: 'red'
-            }
-        )
-        .to(
-            particle,
-            {
-                duration: 0.6,
-                x: 300,
-                y: gsap.utils.random(-75, 75),
-                scaleX: 1.25,
-                scaleY: 1.25,
-                tint: 'yellow',
-            }
-        )
-        .to(
-            particle,
-            {
-                duration: 0.5,
-                x: 350,
-                y: gsap.utils.random(-100, 100),
-                scaleX: 1.5,
-                scaleY: 1.5,
-                alpha: 0,
-                ease: 'sine.out'
-            }
-        );
+        this.createParticleTweenTimeline(particle, steps, settings);
 
         return particle;
+
     }
 
     public deleteParticle(particle: PIXI.Particle) {
@@ -179,5 +151,127 @@ export class ParticleContainer extends PIXI.ParticleContainer {
         this.y = caluclatedY;
 
         this.emit('scene_resize', width, height);
+    }
+
+    protected createParticleTweenTimeline(particle: PIXI.Particle, steps: AnimationStep[], settings?: gsap.TimelineVars, variables?: Record<string, any>) {
+        if (settings) {
+            settings.onComplete = () => this.deleteParticle(particle);
+        } else {
+            settings = {
+                onComplete: () => this.deleteParticle(particle)
+            }
+        }
+
+        const newTimeline = gsap.timeline(settings);
+
+        for (let i = 0; i < steps.length; i++) {
+            const { to, from, position } = steps[i];
+
+            let toCopy = JSON.parse(JSON.stringify(to ?? {}));
+            let fromCopy = JSON.parse(JSON.stringify(from ?? {}));
+            let type = 'fromTo';
+
+            if (to) {
+                toCopy = this.addEventCalls(newTimeline, toCopy);
+                this.parseTags(toCopy, variables);
+            } else {
+                type = 'from';
+            }
+
+            if (from) {
+                fromCopy = this.addEventCalls(newTimeline, fromCopy);
+                this.parseTags(fromCopy, variables);
+            } else {
+                type = 'to';
+            }
+
+            switch(type) {
+                case 'to':
+                    newTimeline.to(particle, toCopy, position);
+                    break;
+                case 'fromTo':
+                    newTimeline.fromTo(particle, fromCopy, toCopy, position);
+                    break;
+                case 'from':
+                    newTimeline.from(particle, fromCopy, position);
+                    break;
+            };
+                
+        }
+    }
+
+    protected parseTags(tweenData: TweenData, variables?: Record<string, any>) {
+        const tweenDataEntires = Object.entries(tweenData);
+
+        for(let i = 0; i < tweenDataEntires.length; i++) {
+            const [key, value] = tweenDataEntires[i];
+
+            if (typeof value === 'string') {
+                // External Variable Tag
+                if (value.startsWith('#') && variables) {
+                    const variableTag = value.substring(1);
+                    const variable = variables[variableTag];
+
+                    if (typeof variable !== 'undefined') {
+                        tweenData[key] = variable;
+                    }
+                }
+                
+                // Random Tag
+                if (value.startsWith('~')) {
+                    // Start at 2 to avoid the brackets (for example; '~(-50, 50)')
+                    const randomTag = value.substring(2, value.length - 1);
+                    const randomVariables: string[] = randomTag.split(", ");
+
+                    if (randomVariables.length > 0) {
+                        tweenData[key] = gsap.utils.random(
+                            Number(randomVariables[0]),
+                            Number(randomVariables[1]),
+                            Number(randomVariables[2]) ?? undefined    
+                        );
+                    }
+                }
+            }
+        }
+    }
+
+    protected addEventCalls(timeline: gsap.core.Timeline, tweenData: TweenData): TweenData {
+        if(tweenData?.eventComplete) {
+            tweenData.onComplete = (eventName: string) => { this.emit(eventName ?? 'eventComplete', timeline) };
+            tweenData.onCompleteParams = [JSON.parse(JSON.stringify(tweenData.eventComplete))];
+            delete tweenData.eventComplete;
+        }
+
+        if(tweenData?.eventInterrupt) {
+            tweenData.onInterrupt = (eventName) => { this.emit(eventName ?? 'eventInterupt', timeline) };
+            tweenData.onInterruptParams = [JSON.parse(JSON.stringify(tweenData.eventInterrupt))];
+            delete tweenData.eventInterrupt;
+        }
+
+        if(tweenData?.eventRepeat) {
+            tweenData.onRepeat = (eventName) => { this.emit(eventName ?? 'eventRepeat', timeline) };
+            tweenData.onRepeatParams = [JSON.parse(JSON.stringify(tweenData.eventRepeat))];
+            delete tweenData.eventRepeat;
+        }
+
+        if(tweenData?.eventReverse) {
+            tweenData.onReverseComplete = (eventName) => { this.emit(eventName ?? 'eventReverse', timeline) };
+            tweenData.onReverseCompleteParams = [JSON.parse(JSON.stringify(tweenData.eventRepeat))];
+            delete tweenData.eventReverse;
+        }
+
+        if(tweenData?.eventStart) {
+            tweenData.onStart = (eventName) => { this.emit(eventName ?? 'eventStart', timeline) };
+            tweenData.onStartParams = [JSON.parse(JSON.stringify(tweenData.eventStart))];
+            delete tweenData.eventStart;
+        }
+
+        if(tweenData?.eventUpdate) {
+            tweenData.onUpdate = (eventName) => { this.emit(eventName ?? 'eventUpdate', timeline) };
+            tweenData.onUpdateParams = [JSON.parse(JSON.stringify(tweenData.eventUpdate))];
+            delete tweenData.eventUpdate;
+        }
+
+        return tweenData;
     }
 }

@@ -31,6 +31,10 @@ export class LoadingScreen {
         this.loadingScreenContainer.addChild(this.loadingText);
     }
 
+    public get visible(): boolean {
+        return this.loadingScreenContainer.visible;
+    }
+
     public hideLoadingScreen() {
         this.loadingScreenContainer.visible = false;
     }

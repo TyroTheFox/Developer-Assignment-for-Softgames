@@ -22,10 +22,13 @@ export class GameScreen {
     public assetLoader: AssetLoader = AssetLoader.instance;
     public stageManager!: StageManager;
     public fpsCounter!: PIXI.Text;
+    public clickScreenNotice!: PIXI.Text;
+    public clickScreenOverlayGraphic!: PIXI.Graphics;
     public loadingScreen!: LoadingScreen;
+    public staticOverlayContainer!: PIXI.Container;
 
-    public minWidth = 1000;
-    public minHeight = 1000;
+    public minWidth = 1500;
+    public minHeight = 800;
 
     public gameScreenDimensions: GameScreenDimensions = {
         width: window.innerWidth,
@@ -81,17 +84,60 @@ export class GameScreen {
 
         this.fpsCounter.zIndex = 1000;
         app.stage.addChild(this.fpsCounter);
+
+        // Static UI element Contaiiner
+        this.staticOverlayContainer = new PIXI.Container({ label: "StaticOverlay", zIndex: 999 });
+        app.stage.addChild(this.staticOverlayContainer);
+
+        this.clickScreenNotice = new PIXI.Text({
+            x: this.gameScreenDimensions.width * 0.5,
+            y: this.gameScreenDimensions.height * 0.5,
+            text: "Click to Go Full Screen",
+            style: {
+                fontSize: 80,
+                fill: 'white',
+                stroke: 'black',
+                align: 'center'
+            }
+        });
+
+        this.clickScreenNotice.pivot.x = this.clickScreenNotice.width * 0.5;
+
+        this.clickScreenNotice.zIndex = 1000;
+
+        app.stage.addChild(this.clickScreenNotice);
+
+        this.clickScreenOverlayGraphic = new PIXI.Graphics({alpha: 0.7})
+            .rect(-100, -100, 200, 200)
+            .fill({
+                color: 'black'
+            });
+        app.stage.addChild(this.clickScreenOverlayGraphic);
+        this.clickScreenOverlayGraphic.x = this.gameScreenDimensions.width * 0.5;
+        this.clickScreenOverlayGraphic.y = this.gameScreenDimensions.height * 0.5;
+        this.clickScreenOverlayGraphic.zIndex = 999;
     }
 
-    public setFullScreen() {
-        if(window.innerWidth == screen.width && window.innerHeight == screen.height) {
+    public setFullScreen() {        
+        if(this.isFullScreen()) {
             return;
         }
 
-        app.canvas.requestFullscreen().then(() => {})
+        app.canvas.requestFullscreen().then(() => {
+            this.clickScreenNotice.visible = false;
+            this.clickScreenOverlayGraphic.visible = false;
+            this.resize();
+        })
         .catch((err) => {
             console.error(`Error enabling fullscreen: ${err.message}`);
         });
+
+        this.clickScreenNotice.visible = true;
+        this.clickScreenOverlayGraphic.visible = true;
+    }
+
+    public isFullScreen(): boolean {
+        return window.innerWidth == screen.width && window.innerHeight == screen.height;
     }
 
     public async loadGame(sceneList: sceneListPair[], stageList: stageListPair[]) {
@@ -114,6 +160,11 @@ export class GameScreen {
     }
 
     public resize(): { width: number, height: number, scaleWithValue: number, scaleAgainstValue: number } {
+        if (this.clickScreenNotice) {
+            this.clickScreenNotice.visible = !this.isFullScreen();
+            this.clickScreenOverlayGraphic.visible = !this.isFullScreen();
+        }
+
         const windowWidth = window.innerWidth;
         const windowHeight = window.innerHeight;
 
@@ -141,7 +192,19 @@ export class GameScreen {
 
         EE.emit('game_resize', width, height, inverseScale, scale);
 
-        this.loadingScreen.resize(width, height, inverseScale, scale);
+        if (this.loadingScreen.visible) {
+            this.loadingScreen.resize(width, height, inverseScale, scale);
+        }
+
+        if (this.clickScreenNotice) {
+            this.clickScreenNotice.position.set(width * 0.5, height * 0.5);
+            this.clickScreenNotice.pivot.x = this.clickScreenNotice.width * 0.5;
+
+            this.clickScreenOverlayGraphic.x = this.gameScreenDimensions.width * 0.5;
+            this.clickScreenOverlayGraphic.y = this.gameScreenDimensions.height * 0.5;
+            this.clickScreenOverlayGraphic.width = width;
+            this.clickScreenOverlayGraphic.height = height;
+        }
 
         return { width, height, scaleWithValue: inverseScale, scaleAgainstValue: scale };
     }

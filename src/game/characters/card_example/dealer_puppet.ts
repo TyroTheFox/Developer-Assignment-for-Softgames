@@ -36,9 +36,9 @@ export class DealerPuppet extends Pupetteer {
         this.leftHand = this.assetMap.get('dealerLeftHand') as CharacterSprite;
         this.rightHand = this.assetMap.get('dealerRightHand') as CharacterSprite;
 
-        this.cardDeck = new CardPoint("deck", new PIXI.Point(-0.25, 0), this.attachedScene, true, 200);
-        this.discardPile = new CardPoint("discard", new PIXI.Point(0.25, 0), this.attachedScene, true, 100);
-        this.playerHandPoint = new CardPoint("playerHand", new PIXI.Point(0, 1.5), this.attachedScene, false, 300);
+        this.cardDeck = new CardPoint("deck", new PIXI.Point(-0.25, 0), this.attachedScene, this.cardSpace, true, 200);
+        this.discardPile = new CardPoint("discard", new PIXI.Point(0.25, 0), this.attachedScene, this.cardSpace, true, 100);
+        this.playerHandPoint = new CardPoint("playerHand", new PIXI.Point(0, 1.5), this.attachedScene, this.cardSpace, false, 300);
 
         for (let i = 0; i < this.cardSpace.children.length; i++) {
             this.cardDeck.addCardToTop(this.cardSpace.children[i] as Sprite);
@@ -55,7 +55,7 @@ export class DealerPuppet extends Pupetteer {
             this.cardSpace.x = 0;
             this.cardSpace.y = 0;
             this.playerHandPoint.addCardToTop(randomCard);
-            this.playerHandPoint.sendTopCardToLocation(this.discardPile.x, this.discardPile.y, 1, 0, this.discardPile);
+            this.playerHandPoint.sendTopCardToLocation(this.discardPile, 1, 0);
         });
 
         EE.on('point_RightHand', () => {
@@ -79,11 +79,11 @@ export class DealerPuppet extends Pupetteer {
         });
 
         EE.on('send_Deck_to_Discard', () => {
-            this.cardDeck.sendTopCardToLocation(this.discardPile.x, this.discardPile.y, 1, this.flickStartDelay, this.discardPile);
+            this.cardDeck.sendTopCardToLocation(this.discardPile, 1, this.flickStartDelay);
         });
 
         EE.on('send_Deck_to_Player_Hand', () => {
-            this.cardDeck.sendTopCardToLocation(this.playerHandPoint.x, this.playerHandPoint.y, 1, this.flickStartDelay, this.playerHandPoint);
+            this.cardDeck.sendTopCardToLocation(this.playerHandPoint, 1, this.flickStartDelay);
         });
 
         this.playAnimation('idleLeft');

@@ -1,28 +1,32 @@
 import * as PIXI from "pixi.js";
 import { gsap } from 'gsap';
 import { Sprite } from "../../../engine/actors/actors/sprite/sprite";
-import { EE } from "../../../engine/screen/game_screen";
+import { EE, GameScreen } from "../../../engine/screen/game_screen";
 
 export class CardPoint {
+    private gameScreen = GameScreen.instance;
+    
     protected name: string = "CardPoint";
     protected position!: PIXI.Point;
-    protected slideTopCard!: boolean;
     protected gamePosition!: PIXI.Point;
     protected attachedCards: Sprite[] = [];
     protected parent!: PIXI.Container;
-
-    protected topCard!: Sprite;
-
+    protected cardSpace!: PIXI.Container;
+    
     protected topCardPivotX: number = -60;
     protected baseZIndex: number = 0;
-
+    
     protected animationPaused: boolean = false;
 
-    constructor (name: string, position: PIXI.Point, parent: PIXI.Container, slideTopCard: boolean = true, baseZIndex?: number) {
+    public slideTopCard!: boolean;
+    public topCard!: Sprite;
+
+    constructor (name: string, position: PIXI.Point, parent: PIXI.Container, cardSpace: PIXI.Container, slideTopCard: boolean = true, baseZIndex?: number) {
         this.name = name;
         this.slideTopCard = slideTopCard;
         this.gamePosition = position;
         this.parent = parent;
+        this.cardSpace = cardSpace;
         this.baseZIndex = baseZIndex || 0;
 
         this.position = new PIXI.Point(
@@ -33,6 +37,13 @@ export class CardPoint {
         EE.off('pauseCardTweens', (pause: boolean) => {
             this.animationPaused = pause;
         });
+
+        this.parent.on('scene_resize', () => {
+            this.position = new PIXI.Point(
+                this.parent.width * this.gamePosition.x,
+                this.parent.height * this.gamePosition.y
+            );
+        });
     }
 
     public get x(): number {
@@ -41,6 +52,14 @@ export class CardPoint {
 
     public get y(): number {
         return this.position.y;
+    }
+
+    public get gameX(): number {
+        return this.gamePosition.x;
+    }
+
+    public get gameY(): number {
+        return this.gamePosition.y;
     }
 
     public get cardsLeft(): number {
@@ -61,7 +80,8 @@ export class CardPoint {
         if (this.attachedCards.length > 1 && this.slideTopCard) {
             if (easeLanding) {
                 gsap.to(this.topCard, {
-                    duration: 0.1,
+                    delay: 0.5,
+                    duration: 0.5,
                     pivotX: this.topCardPivotX
                 });
             } else {
@@ -85,13 +105,19 @@ export class CardPoint {
         return returnCard;
     }
 
-    public sendTopCardToLocation(x: number, y: number, duration: number, delay: number = 0, newCardPoint?: CardPoint) {
+    public sendTopCardToLocation(newCardPoint: CardPoint, duration: number, delay: number = 0) {
         const topCard = this.getTopCard();
 
         if (!topCard && this.animationPaused) {
             return;
         }
 
+        const { width, height } = this.gameScreen.gameScreenDimensions;
+
+        this.unoffsetTopCard(newCardPoint, true);
+        
+        const newPointPosition = new PIXI.Point(newCardPoint.gameX * width, newCardPoint.gameY * height);
+        
         gsap.fromTo(topCard, 
             {
                 x: topCard.x,
@@ -99,8 +125,8 @@ export class CardPoint {
             },
             { 
                 delay, 
-                x, 
-                y, 
+                x: newPointPosition.x, 
+                y: newPointPosition.y,
                 duration,
                 onComplete: () => {
                     if (newCardPoint) {
@@ -110,5 +136,18 @@ export class CardPoint {
                 }
             }
         );
+    }
+
+    public unoffsetTopCard(newCardPoint: CardPoint, easeLanding = false) {
+        if (newCardPoint.attachedCards.length > 1 && newCardPoint.slideTopCard) {
+            if (easeLanding) {
+                gsap.to(newCardPoint.topCard, {
+                    duration: 1,
+                    pivotX: 0
+                });
+            } else {
+                newCardPoint.topCard.pivot.x = 0;
+            }
+        }
     }
 }

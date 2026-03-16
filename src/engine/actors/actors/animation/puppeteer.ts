@@ -73,18 +73,14 @@ export class Pupetteer {
 
                 if (to) {
                     toCopy = this.addEventCalls(newTimeline, toCopy);
-                    if (variables) {
-                        this.addVariables(toCopy, variables);
-                    }
+                    this.parseTags(toCopy, variables);
                 } else {
                     type = 'from';
                 }
 
                 if (from) {
                     fromCopy = this.addEventCalls(newTimeline, fromCopy);
-                    if (variables) {
-                        this.addVariables(fromCopy, variables);
-                    }
+                    this.parseTags(fromCopy, variables);
                 } else {
                     type = 'to';
                 }
@@ -116,18 +112,37 @@ export class Pupetteer {
         this.animationsPlaying.push(id);
     }
 
-    protected addVariables(tweenData: TweenData, variables: Record<string, any>) {
+    protected parseTags(tweenData: TweenData, variables?: Record<string, any>) {
         const tweenDataEntires = Object.entries(tweenData);
 
         for(let i = 0; i < tweenDataEntires.length; i++) {
             const [key, value] = tweenDataEntires[i];
 
-            if (typeof value === 'string' && value.startsWith('#')) {
-                const variableTag = value.substring(1);
-                const variable = variables[variableTag];
+            if (typeof value === 'string') {
+                // External Variable Tag
+                if (value.startsWith('#') && variables) {
+                    // Get the variable key from the tag
+                    const variableTag = value.substring(1);
+                    const variable = variables[variableTag];
 
-                if (typeof variable !== 'undefined') {
-                    tweenData[key] = variable;
+                    if (typeof variable !== 'undefined') {
+                        tweenData[key] = variable;
+                    }
+                }
+                
+                // Random Tag
+                if (value.startsWith('~')) {
+                    // Start at 2 to avoid the brackets (for example; '~(-50, 50)')
+                    const randomTag = value.substring(2, value.length - 1);
+                    const randomVariables: string[] = randomTag.split(", ");
+
+                    if (randomVariables.length > 0) {
+                        tweenData[key] = gsap.utils.random(
+                            Number(randomVariables[0]),
+                            Number(randomVariables[1]),
+                            Number(randomVariables[2]) ?? undefined    
+                        );
+                    }
                 }
             }
         }

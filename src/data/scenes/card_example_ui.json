@@ -6,12 +6,47 @@
     },
     "actors": [
         {
+            "id": "tableShadow",
+            "type": "sprite",
+            "texture": "screen_shadow"
+        },
+        {
+            "id": "shadowPlayerContainer",
+            "type": "container",
+            "children": [
+                {
+                    "id": "background",
+                    "type": "sprite",
+                    "texture": "player_background",
+                    "xExactPos": "100"
+                },
+                {
+                    "id": "head",
+                    "type": "sprite",
+                    "texture": "player_head",
+                    "xExactPos": "70",
+                    "yExactPos": "75"
+                },
+                {
+                    "id": "cloak",
+                    "type": "sprite",
+                    "texture": "player_cloak"
+                }
+            ]
+        },
+        {
             "id": "playerHandContainer",
-            "type": "list",
-            "listType": "horizontal",
-            "options": {
-                "elementsMargin": 40 
-            }
+            "type": "container",
+            "children": [
+                {
+                    "id": "playerHand",
+                    "type": "list",
+                    "listType": "horizontal",
+                    "options": {
+                        "elementsMargin": 40 
+                    }
+                }
+            ]
         }
     ]
 }

@@ -3,11 +3,13 @@ import { BaseFactoryCreator } from "../../base_factory_creator";
 import { PositionalActorData } from "../../actor_factory";
 import { GameScreen } from "../../../screen/game_screen";
 import { ParticleContainer } from "../../actors/container/particle_container";
+import { AnimationDataEntry } from "../../actors/animation/puppeteer";
 
 export type ParticleData = {
     id: string,
     spawnDelay: number,
-    options: PIXI.ParticleOptions
+    options: PIXI.ParticleOptions,
+    animation: AnimationDataEntry
 }
 
 export type ParticleContainerCreatorData = PositionalActorData & {

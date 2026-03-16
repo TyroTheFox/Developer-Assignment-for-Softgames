@@ -14,6 +14,14 @@
                 {
                     "alias": "dealersHand",
                     "src": "src/assets/dealers_hand.json"
+                },
+                {
+                    "alias": "shadowPLayer",
+                    "src": "src/assets/shadow_player.json"
+                },
+                {
+                    "alias": "tableShadow",
+                    "src": "src/assets/table_shadow.json"
                 }
             ]
         },

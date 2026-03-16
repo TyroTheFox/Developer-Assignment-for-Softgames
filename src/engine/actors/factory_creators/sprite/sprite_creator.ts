@@ -29,11 +29,8 @@ export class SpriteCreator extends BaseFactoryCreator<Sprite> {
             alpha: alpha ?? 1,
             cullable: cullable ?? true,
             pivot: { x: pivotX ?? 0, y: pivotY ?? 0 },
+            tint: tint ?? undefined
         }, data, parent);
-
-        if (tint) {
-            sprite.tint = tint;
-        }
 
         return sprite;
     }

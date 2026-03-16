@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 import { Scene } from "../../engine/actors/actors/scene/scene";
 import { Sprite } from "../../engine/actors/actors/sprite/sprite";
-import { EE } from "../../engine/screen/game_screen";
+import { app, EE } from "../../engine/screen/game_screen";
 import { Container } from "../../engine/actors/actors/container/container";
 import { SpriteCreatorData } from "../../engine/actors/factory_creators/sprite/sprite_creator";
 import { CharacterSprite } from "../../engine/actors/actors/sprite/character_sprite";
@@ -12,6 +12,8 @@ import { AnimationDataEntry } from "../../engine/actors/actors/animation/puppete
 
 export class CardExampleScene extends Scene {
     protected pokerTableBackground!: Sprite;
+
+    protected cardSpaceContainer!: Container;
 
     protected dealer!: DealerPuppet;
     protected cardsRequested: number = 0;
@@ -26,7 +28,7 @@ export class CardExampleScene extends Scene {
         this.pokerTableBackground.width = width * scaleAgainstValue;
         this.pokerTableBackground.height = height * scaleAgainstValue;
 
-        const cardSpaceContainer = this.getChildByLabel('cardSpace') as Container;
+        this.cardSpaceContainer = this.getChildByLabel('cardSpace') as Container;
 
         const cardSpritesheet = PIXI.Assets.get('cards') as PIXI.Spritesheet;
 
@@ -39,7 +41,7 @@ export class CardExampleScene extends Scene {
             newCardSpriteData.id = "card_" + i;
             newCardSpriteData.texture = cardNameList[Math.floor(Math.random() * cardNameList.length)];
 
-            actorFactory.buildActor(newCardSpriteData, cardSpaceContainer);
+            actorFactory.buildActor(newCardSpriteData, this.cardSpaceContainer);
         }
 
         const dealerSpaceContainer = this.getChildByLabel('dealerSpace') as Container;
@@ -47,7 +49,7 @@ export class CardExampleScene extends Scene {
         const dealerRightHand = dealerSpaceContainer.getChildByLabel('dealerRightHand') as CharacterSprite;
         const dealerAnimationData = dealerPuppetAnimationData as unknown as AnimationDataEntry[];
 
-        this.dealer = new DealerPuppet(this, dealerAnimationData, [dealerLeftHand, dealerRightHand, cardSpaceContainer]);
+        this.dealer = new DealerPuppet(this, dealerAnimationData, [dealerLeftHand, dealerRightHand, this.cardSpaceContainer]);
 
         EE.on('dealCard', (cardsRequested: number = 1) => { 
             this.cardsRequested = cardsRequested;
@@ -65,19 +67,24 @@ export class CardExampleScene extends Scene {
         }
     }
 
-    public override resize(width: number, height: number, scale: number) {
-        super.resize(width, height, scale);
+    public override resize(width: number, height: number, scaleWithValue: number, scaleAgainstValue: number) {
+        super.resize(width, height, scaleWithValue, scaleAgainstValue);
 
-        const { scaleAgainstValue } = this.gameScreen.gameScreenDimensions;
+        if (height > width) {
+            // Portrait
+            this.height = height * scaleAgainstValue;
+            this.scale.x = this.scale.y;
+        }
 
         if (this.pokerTableBackground) {
-            this.pokerTableBackground.width = width * scaleAgainstValue;
             this.pokerTableBackground.height = height * scaleAgainstValue;
+            this.pokerTableBackground.scale.x = this.pokerTableBackground.scale.y;
         }
     }
 
     public override async onEnter(): Promise<void> {
         this.dealer.restartDealer();
+        app.renderer.background.color = this.sceneSettingsData.backgroundColour;
     }
 
     public override async onExit(): Promise<void> {

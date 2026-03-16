@@ -28,6 +28,9 @@ import dialogueExampleUIData from './data/scenes/dialogue_example_ui.json' asser
 import { FireEmitterScene } from "./game/scenes/fire_emitter_scene";
 import fireEmitterSceneData from './data/scenes/fire_emitter_scene.json' assert {type: 'json'};
 
+import { PhoenixFlameScene } from "./game/scenes/phoenix_flame_scene";
+import phoenixFlameSceneData from './data/scenes/phoenix_flame_scene.json' assert {type: 'json'};
+
 export const mainGameScreen = GameScreen.instance;
 
 gsap.registerPlugin(PixiPlugin);
@@ -37,7 +40,7 @@ PixiPlugin.registerPIXI(PIXI);
   const assetLoader: AssetLoader = AssetLoader.instance;
   await mainGameScreen.initGame();
 
-  app.canvas.addEventListener ("click", mainGameScreen.setFullScreen);
+  app.canvas.addEventListener ("click", () => { mainGameScreen.setFullScreen(); });
 
   await assetLoader.loadAssetManifestBundleData();
   await assetLoader.loadAssetBundles();
@@ -51,14 +54,16 @@ PixiPlugin.registerPIXI(PIXI);
 
       { key: "fire_emitter",          scene: new FireEmitterScene(fireEmitterSceneData) },
 
+      { key: "phoenix_flame",          scene: new PhoenixFlameScene(phoenixFlameSceneData) },
+
       { key: "dialogue_example",      scene: new DialogueExampleScene(dialogueExampleScene) },
       { key: "dialogue_example_ui",   scene: new DialogueExampleUI(dialogueExampleUIData) },
 
       { key: "main_menu",             scene: new GameMenuScene(gameMenuSceneData) }
     ], 
     [
-      { key: "main",                  initialStage: "fire_emitter" },
-      { key: "hud",                   initialStage: "empty_ui" },
+      { key: "main",                  initialStage: "card_example" },
+      { key: "hud",                   initialStage: "card_example_ui" },
       { key: "menu",                  initialStage: "main_menu" }
     ]
   );

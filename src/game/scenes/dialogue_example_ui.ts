@@ -3,21 +3,22 @@ import dialogueExampleData from '../../data/dialogue/dialogue_example.json' asse
 import { Scene } from "../../engine/actors/actors/scene/scene";
 import { EE } from "../../engine/screen/game_screen";
 import { DialogueBox } from "../../engine/actors/actors/ui/dialogue_box";
+import { DrawnGraphics } from '../../engine/actors/actors/ui/drawn_graphics';
 
 export class DialogueExampleUI extends Scene {
     protected dialogueBox!: DialogueBox;
+    protected panelBackground!: DrawnGraphics;
 
     public override async init(): Promise<void> {
         const {dialogue, avatars, emojies} = dialogueExampleData;
 
         this.dialogueBox = this.getChildByLabel('dialogueBox') as DialogueBox;
+        this.panelBackground = this.dialogueBox.getChildByLabel('panelBackground') as DrawnGraphics;
 
         await this.dialogueBox.setAvatarData(avatars);
         await this.dialogueBox.setEmojiData(emojies);
         
         this.dialogueBox.setDialogueData(dialogue);
-
-        // this.dialogueBox.nextDialogueStep();
 
         EE.on('dialogue_entry_complete', () => {
             this.dialogueBox.nextDialogueStep();
@@ -42,5 +43,13 @@ export class DialogueExampleUI extends Scene {
 
     public override async onExit(): Promise<void> {
         this.dialogueBox.pauseDialogue = true;
+    }
+
+    public override resize(width: number, height: number, scaleWithValue: number, scaleAgainstValue: number) {
+        super.resize(width, height, scaleWithValue, scaleAgainstValue);
+
+        if (this.dialogueBox) {
+            this.dialogueBox.pivot.x = this.panelBackground.width * 0.5;
+        }
     }
 }

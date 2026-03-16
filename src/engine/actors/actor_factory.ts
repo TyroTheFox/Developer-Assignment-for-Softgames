@@ -37,7 +37,7 @@ export type PositionalActorData = BaseActorData & {
     alpha?: number,
     angle?: number,
     rotation?: number,
-    tint?: number
+    tint?: number | string
 }
 
 export class ActorFactory {

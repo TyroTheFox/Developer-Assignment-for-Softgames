@@ -7,14 +7,14 @@
         {
             "id": "dialogueBox",
             "type": "dialogueBox",
-            "xExactPos": -500,
-            "yExactPos": 50,
+            "x": 0,
+            "y": 0.05,
             "textPosition": {
-                "x": 0,
+                "x": 20,
                 "y": 200
             },
             "nameTextPosition": {
-                "x": -100,
+                "x": -80,
                 "y": 100
             },
             "avatarPosition": {
@@ -39,14 +39,14 @@
                 {
                     "id": "panelBackground",
                     "type": "drawnGraphics",
-                    "xExactPos": -50,
-                    "yExactPos": 150,
+                    "xExactPos": 0,
+                    "yExactPos": 0,
                     "drawSteps": [
                         {
                             "functionName": "rect",
                             "data": {
                                 "x": 0,
-                                "y": 0,
+                                "y": 150,
                                 "width": 1100,
                                 "height": 300
                             }
@@ -71,7 +71,7 @@
                 {
                     "id": "namePanelBackground",
                     "type": "drawnGraphics",
-                    "xExactPos": -120,
+                    "xExactPos": -100,
                     "yExactPos": 85,
                     "drawSteps": [
                         {
