@@ -1,6 +1,5 @@
 import * as PIXI from "pixi.js";
 import { Scene } from "../../engine/actors/actors/scene/scene";
-import { Sprite } from "../../engine/actors/actors/sprite/sprite";
 import { EE } from "../../engine/screen/game_screen";
 import { Container } from "../../engine/actors/actors/container/container";
 import { SpriteCreatorData } from "../../engine/actors/factory_creators/sprite/sprite_creator";
@@ -9,6 +8,7 @@ import { DealerPuppet } from "../characters/card_example/dealer_puppet";
 
 import dealerPuppetAnimationData from '../../data/animations/card_example/dealer_puppet.json' assert {type: 'json'};
 import { AnimationDataEntry } from "../../engine/actors/actors/animation/puppeteer";
+import { TilingSprite } from "../../engine/actors/actors/sprite/tiling_sprite";
 
 /** 
  * @class
@@ -17,8 +17,9 @@ import { AnimationDataEntry } from "../../engine/actors/actors/animation/puppete
  * Card Example Scene
  */
 export class CardExampleScene extends Scene {
-    protected pokerTableBackground!: Sprite;
+    protected pokerTableBackground!: TilingSprite;
 
+    protected tableContainer!: Container;
     protected cardSpaceContainer!: Container;
 
     protected dealer!: DealerPuppet;
@@ -38,11 +39,12 @@ export class CardExampleScene extends Scene {
 
         const { width, height, scaleAgainstValue } = gameScreen.gameScreenDimensions;
 
-        this.pokerTableBackground = this.getChildByLabel('pokerTableBG') as Sprite;
+        this.pokerTableBackground = this.getChildByLabel('pokerTableBG') as TilingSprite;
         this.pokerTableBackground.width = width * scaleAgainstValue;
         this.pokerTableBackground.height = height * scaleAgainstValue;
 
-        this.cardSpaceContainer = this.getChildByLabel('cardSpace') as Container;
+        this.tableContainer = this.getChildByLabel('tableContainer') as Container;
+        this.cardSpaceContainer = this.tableContainer.getChildByLabel('cardSpace') as Container;
 
         const cardSpritesheet = PIXI.Assets.get('cards') as PIXI.Spritesheet;
 
@@ -58,7 +60,7 @@ export class CardExampleScene extends Scene {
             actorFactory.buildActor(newCardSpriteData, this.cardSpaceContainer);
         }
 
-        const dealerSpaceContainer = this.getChildByLabel('dealerSpace') as Container;
+        const dealerSpaceContainer = this.tableContainer.getChildByLabel('dealerSpace') as Container;
         const dealerLeftHand = dealerSpaceContainer.getChildByLabel('dealerLeftHand') as CharacterSprite;
         const dealerRightHand = dealerSpaceContainer.getChildByLabel('dealerRightHand') as CharacterSprite;
         const dealerAnimationData = dealerPuppetAnimationData as unknown as AnimationDataEntry[];
@@ -110,15 +112,31 @@ export class CardExampleScene extends Scene {
     public override resize(width: number, height: number, scaleWithValue: number, scaleAgainstValue: number) {
         super.resize(width, height, scaleWithValue, scaleAgainstValue);
 
-        if (height > width) {
+        if (this.tableContainer) {
+            if (height > width) {
             // Portrait
-            this.height = height * scaleAgainstValue;
-            this.scale.x = this.scale.y;
+                this.tableContainer.height = width;
+                this.tableContainer.scale.x = this.tableContainer.scale.y;
+            } else {
+                this.tableContainer.scale.x = this.tableContainer.scale.y = 1;
+            }
         }
 
         if (this.pokerTableBackground) {
             this.pokerTableBackground.height = height * scaleAgainstValue;
-            this.pokerTableBackground.scale.x = this.pokerTableBackground.scale.y;
+            this.pokerTableBackground.width = width * scaleAgainstValue;
+
+            if (height > width) {
+                // Portrait
+                this.tableContainer.height = width;
+                this.tableContainer.scale.x = this.tableContainer.scale.y;
+
+                this.pokerTableBackground.tileScale = 10;
+            } else {
+                this.tableContainer.scale.x = this.tableContainer.scale.y = 1;
+                
+                this.pokerTableBackground.tileScale = 4;
+            }
         }
     }
 
@@ -133,6 +151,10 @@ export class CardExampleScene extends Scene {
      */
     public override async onEnter(): Promise<void> {
         this.dealer.restartDealer();
+
+        const { gameScreen } = this;
+        const { width, height, scaleWithValue, scaleAgainstValue } = gameScreen.gameScreenDimensions;
+        this.resize(width, height, scaleWithValue, scaleAgainstValue);
     }
 
     /**

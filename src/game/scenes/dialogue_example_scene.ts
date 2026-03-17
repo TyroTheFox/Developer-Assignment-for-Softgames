@@ -207,10 +207,8 @@ export class DialogueExampleScene extends Scene {
         super.resize(width, height, scaleWithValue, scaleAgainstValue);
 
         if (this.puppetSpace) {
-            if (this.puppetSpace.width <= this.sceneSettingsData.minimumPuppetSpaceWidth) {
-                this.puppetSpace.width = this.sceneSettingsData.minimumPuppetSpaceWidth;
-                this.puppetSpace.scale.y = this.puppetSpace.scale.x;
-            }
+            this.puppetSpace.scale = scaleAgainstValue * 0.65;
+            this.puppetSpace.x = 0;
         }
 
         if (this.hallwayBackground) {
@@ -230,6 +228,10 @@ export class DialogueExampleScene extends Scene {
      */
     public override async onEnter(): Promise<void> {
         this.startDialogueSequence();
+
+        const { gameScreen } = this;
+        const { width, height, scaleWithValue, scaleAgainstValue } = gameScreen.gameScreenDimensions;
+        this.resize(width, height, scaleWithValue, scaleAgainstValue);
     }
 
     /**

@@ -9,7 +9,7 @@
                 },
                 {
                     "alias": "pokerTableBG",
-                    "src": "src/assets/poker_table#Q.json"
+                    "src": "src/assets/poker_table_bg#Q.json"
                 },
                 {
                     "alias": "dealersHand",

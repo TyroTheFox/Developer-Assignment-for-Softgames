@@ -1,0 +1,20 @@
+{"frames": {
+
+"table_felt":
+{
+	"frame": {"x":1,"y":1,"w":480,"h":720},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":480,"h":720},
+	"sourceSize": {"w":480,"h":720}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "poker_table_bg@0.5.webp",
+	"format": "RGBA8888",
+	"size": {"w":482,"h":722},
+	"scale": "0.5",
+	"smartupdate": "$TexturePacker:SmartUpdate:a5914cb1dba1b0c84d4c048f413786ba:8022e2e1e0c90ab4a651d8394e041230:37182d9c4cd92f28a18b7a545077e44f$"
+}
+}

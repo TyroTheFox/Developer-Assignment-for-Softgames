@@ -149,6 +149,20 @@ export class GameMenuScene extends Scene {
     }
 
     /**
+     * Called when the Scene is activated
+     * 
+     * @public
+     * @override
+     * @async
+     * @returns {Promise<void>}
+     */
+    public override async onEnter(): Promise<void> {
+        const { gameScreen } = this;
+        const { width, height, scaleWithValue, scaleAgainstValue } = gameScreen.gameScreenDimensions;
+        this.resize(width, height, scaleWithValue, scaleAgainstValue);
+    }
+
+    /**
      * Resizes the elements of the scene
      * 
      * @public
@@ -164,6 +178,7 @@ export class GameMenuScene extends Scene {
         if (this.menuPanel) {
             this.menuButtonView.x = width * 0.5;
             this.menuButtonView.y = height * 0.1;
+            this.menuButtonView.scale = scaleAgainstValue;
 
             this.menuPanel.x = width * 0.5;
             this.menuPanel.y = height * 0.2;

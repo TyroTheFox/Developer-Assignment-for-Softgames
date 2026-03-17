@@ -14,6 +14,8 @@ import { Sprite } from "../../engine/actors/actors/sprite/sprite";
 export class FireEmitterScene extends Scene {
     protected castleBackground!: Sprite;
 
+    protected sceneContainer!: Container;
+
     protected emitterContainer!: ParticleContainer;
 
     protected soraHighlightSprite!: Sprite;
@@ -42,14 +44,16 @@ export class FireEmitterScene extends Scene {
         this.castleBackground.width = width * scaleAgainstValue;
         this.castleBackground.height = height * scaleAgainstValue;
 
-        const emitterSpace = this.getChildByLabel('emitterSpace') as Container;
+        this.sceneContainer = this.getChildByLabel('sceneContainer') as Container;
+
+        const emitterSpace = this.sceneContainer.getChildByLabel('emitterSpace') as Container;
         this.emitterContainer = emitterSpace.getChildByLabel('emitterContainer') as ParticleContainer;
 
-        const soraContainer = this.getChildByLabel('soraContainer') as Container;
+        const soraContainer = this.sceneContainer.getChildByLabel('soraContainer') as Container;
         this.soraHighlightSprite = soraContainer.getChildByLabel('soraCastHighlight') as Sprite;
         this.flameFloorHighlightSprite = soraContainer.getChildByLabel('flameFloorHighlight') as Sprite;
 
-        this.heartlessContainer = this.getChildByLabel('heartlessSoldierContainer') as Container;
+        this.heartlessContainer = this.sceneContainer.getChildByLabel('heartlessSoldierContainer') as Container;
         this.heartlessSpriteHighlight = this.heartlessContainer.getChildByLabel('heartlessSoldierHighlight') as Sprite;
     }
 
@@ -67,6 +71,10 @@ export class FireEmitterScene extends Scene {
         this.createFlameFloorHighlightTween();
         this.createHeartlessShakeTween();
         this.createHeartlessHighlightTween();
+
+        const { gameScreen } = this;
+        const { width, height, scaleWithValue, scaleAgainstValue } = gameScreen.gameScreenDimensions;
+        this.resize(width, height, scaleWithValue, scaleAgainstValue);
     }
 
     /**
@@ -113,6 +121,11 @@ export class FireEmitterScene extends Scene {
         if (this.castleBackground) {
             this.castleBackground.width = width * scaleAgainstValue;
             this.castleBackground.height = height * scaleAgainstValue;
+        }
+
+        if (this.sceneContainer) {
+            this.sceneContainer.scale = scaleAgainstValue * 0.65;
+            this.sceneContainer.x = 0;
         }
     }
 

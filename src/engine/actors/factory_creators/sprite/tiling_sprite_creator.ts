@@ -1,36 +1,36 @@
 import * as PIXI from "pixi.js";
 import { PositionalActorData } from "../../actor_factory";
-import { Sprite } from "../../actors/sprite/sprite";
 import { BaseFactoryCreator } from "../../base_factory_creator";
 import { GameScreen } from "../../../screen/game_screen";
+import { TilingSprite } from "../../actors/sprite/tiling_sprite";
 
-export type SpriteCreatorData = PositionalActorData & {
+export type TilingSpriteCreatorData = PositionalActorData & {
     texture: string;
 }
 
 /**
- * Creates Sprite Actors
+ * Creates Tiled Sprite Actors
  * 
  * @class
- * @extends {BaseFactoryCreator<Sprite>}
+ * @extends {BaseFactoryCreator<TilingSprite>}
  */
-export class SpriteCreator extends BaseFactoryCreator<Sprite> {
+export class TilingSpriteCreator extends BaseFactoryCreator<TilingSprite> {
     /**
      * Builds the Actor
      * 
      * @public
-     * @param {SpriteCreatorData} data - Actor Data used to make the Actor
+     * @param {TilingSpriteCreatorData} data - Actor Data used to make the Actor
      * @param {PIXI.Container} parent - The Parent to add the Actor to
      * @returns {Sprite}
      */
-    public build(data: SpriteCreatorData, parent: PIXI.Container): Sprite {
+    public build(data: TilingSpriteCreatorData, parent: PIXI.Container): TilingSprite {
         const gameScreen = GameScreen.instance;
         const { id, texture, anchor, x, y, pivotX, pivotY, xExactPos, yExactPos, scale, visible, alpha, rotation, angle, zIndex, cullable, tint } = data;
 
         let caluclatedX = xExactPos ? xExactPos : (x ?? 0) * gameScreen.gameScreenDimensions.width;
         let caluclatedY = yExactPos ? yExactPos : (y ?? 0) * gameScreen.gameScreenDimensions.height;
 
-        const sprite = new Sprite({
+        const sprite = new TilingSprite({
             label: id ?? "container",
             texture: PIXI.Assets.get(texture),
             anchor: anchor ?? 0.5,

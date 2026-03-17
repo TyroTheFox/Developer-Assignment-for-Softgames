@@ -2,7 +2,7 @@ import { gsap } from 'gsap';
 import { List } from "@pixi/ui";
 import { Scene } from "../../engine/actors/actors/scene/scene";
 import { Sprite } from "../../engine/actors/actors/sprite/sprite";
-import { EE } from "../../engine/screen/game_screen";
+import { app, EE } from "../../engine/screen/game_screen";
 import { Container } from 'pixi.js';
 
 /** 
@@ -30,12 +30,19 @@ export class CardExampleUI extends Scene {
 
         this.maximumHandSize = sceneSettingsData.maximumHandSize;
 
+         // Grab overlay container from the base container that's not scaled like the rest of the game
+        const staticOverlayContainer = app.stage.getChildByLabel('StaticOverlay') as Container;
+
         this.tableShadow = this.getChildByLabel('tableShadow') as Sprite;
+        staticOverlayContainer.addChild(this.tableShadow);
 
         this.playerHandContainer = this.getChildByLabel('playerHandContainer') as Container;
-
+        
         this.shadowPlayerContainer = this.getChildByLabel('shadowPlayerContainer') as Container;
         this.shadowPlayerHead = this.shadowPlayerContainer.getChildByLabel('head') as Sprite;
+
+        staticOverlayContainer.addChild(this.shadowPlayerContainer);
+        staticOverlayContainer.addChild(this.playerHandContainer);
 
         this.resize(width, height, scaleWithValue, scaleAgainstValue);
 
@@ -111,6 +118,14 @@ export class CardExampleUI extends Scene {
      */
     public override async onEnter(): Promise<void> {
         this.createHeadBobTween();
+
+        this.tableShadow.visible = true;
+        this.playerHandContainer.visible = true;
+        this.shadowPlayerContainer.visible = true;
+
+        const { gameScreen } = this;
+        const { width, height, scaleWithValue, scaleAgainstValue } = gameScreen.gameScreenDimensions;
+        this.resize(width, height, scaleWithValue, scaleAgainstValue);
     }
 
     /**
@@ -124,6 +139,10 @@ export class CardExampleUI extends Scene {
      */
     public override async onExit(): Promise<void> {
         this.shadowHeadTween.kill();
+
+        this.tableShadow.visible = false;
+        this.playerHandContainer.visible = false;
+        this.shadowPlayerContainer.visible = false;
     }
 
     /**
@@ -155,23 +174,36 @@ export class CardExampleUI extends Scene {
         super.resize(width, height, scaleWithValue, scaleAgainstValue);
 
         if (this.tableShadow) {
-            this.tableShadow.width = window.innerWidth;
-            this.tableShadow.height = window.innerHeight;
+            this.tableShadow.width = width;
+            this.tableShadow.height = height;
+            
+            this.tableShadow.x = width * 0.5;
+            this.tableShadow.y = height * 0.5;
         }
 
         if (this.playerHandContainer) {
-            this.playerHandContainer.scale = scaleWithValue;
-            this.playerHandContainer.x = window.innerWidth * -0.5;
-            this.playerHandContainer.y = window.innerHeight * 0.5;
-            this.playerHandContainer.pivot.x = -350;
-            this.playerHandContainer.pivot.y = 150;
+            this.playerHandContainer.y = height * 0.9;
+            
+            if (height > width) {
+                // Portrait
+                this.playerHandContainer.x = width * 0.25;
+                this.playerHandContainer.scale = scaleAgainstValue * 0.3;
+            } else {
+                this.playerHandContainer.x = width * 0.15;
+                this.playerHandContainer.scale = scaleWithValue;
+            }
         }
 
         if (this.shadowPlayerContainer) {
-            this.shadowPlayerContainer.x = window.innerWidth * -0.5;
-            this.shadowPlayerContainer.y = window.innerHeight * 0.5;
-            this.shadowPlayerContainer.pivot.x = this.shadowPlayerContainer.width * -0.15;
-            this.shadowPlayerContainer.scale = scaleWithValue;
+            this.shadowPlayerContainer.y = height;
+            this.shadowPlayerContainer.x = width * 0.05;
+
+            if (height > width) {
+                // Portrait
+                this.shadowPlayerContainer.scale = scaleAgainstValue * 0.3;
+            } else {
+                this.shadowPlayerContainer.scale = scaleWithValue;
+            }
         }
     }
 }

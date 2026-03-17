@@ -13,7 +13,8 @@
                 "y": 150
             }
         },
-        "minimumWidth": 1200
+        "minimumWidth": 1200,
+        "minimumPuppetSpaceWidth": 3000
     },
     "actors": [
         {

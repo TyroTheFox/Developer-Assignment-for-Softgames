@@ -74,6 +74,10 @@ export class DialogueExampleUI extends Scene {
      */
     public override async onEnter(): Promise<void> {
         this.dialogueBox.pauseDialogue = false;
+
+        const { gameScreen } = this;
+        const { width, height, scaleWithValue, scaleAgainstValue } = gameScreen.gameScreenDimensions;
+        this.resize(width, height, scaleWithValue, scaleAgainstValue);
     }
 
     /**

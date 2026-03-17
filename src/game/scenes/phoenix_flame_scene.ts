@@ -26,6 +26,20 @@ export class PhoenixFlameScene extends Scene {
     }
 
     /**
+     * Called when the Scene is activated
+     * 
+     * @public
+     * @override
+     * @async
+     * @returns {Promise<void>}
+     */
+    public override async onEnter(): Promise<void> {
+        const { gameScreen } = this;
+        const { width, height, scaleWithValue, scaleAgainstValue } = gameScreen.gameScreenDimensions;
+        this.resize(width, height, scaleWithValue, scaleAgainstValue);
+    }
+
+    /**
      * Update the Emitter Container
      * 
      * @public

@@ -9,152 +9,159 @@
             "texture": "castle_background"
         },
         {
-            "id": "heartlessSoldierContainer",
+            "id": "sceneContainer",
             "type": "container",
-            "xExactPos": 300,
-            "yExactPos": 0,
-            "scale": {
-                "x": 4,
-                "y": 4
-            },
+            "y": 0.3,
             "children": [
                 {
-                    "id": "heartlessSoldier",
-                    "type": "sprite",
-                    "texture": "heartless_soldier"
-                },
-                {
-                    "id": "heartlessSoldierHighlight",
-                    "type": "sprite",
-                    "texture": "heartless_soldier_orange_highlight"
-                },
-                {
-                    "id": "flameFloorHighlight",
-                    "type": "sprite",
-                    "texture": "flame_floor_highlight",
-                    "xExactPos": 30,
-                    "yExactPos": 75,
-                    "alpha": 0.4,
-                    "tint": "black",
+                    "id": "heartlessSoldierContainer",
+                    "type": "container",
+                    "xExactPos": 300,
+                    "yExactPos": 0,
                     "scale": {
-                        "x": 0.5,
-                        "y": 0.2
-                    }
-                }
-            ]
-        },
-        {
-            "id": "emitterSpace",
-            "type": "container",
-            "y": 0.09,
-            "children": [
-                {
-                    "id": "emitterContainer",
-                    "type": "particleContainer",
-                    "dynamicProperties": {
-                        "position": true,
-                        "rotation": false,
-                        "vertex": true,
-                        "color": true
+                        "x": 4,
+                        "y": 4
                     },
-                    "maximumParticles": 10,
-                    "removeParticlesWhenAtMax": false,
-                    "particle": [
+                    "children": [
                         {
-                            "id": "diamond",
-                            "spawnDelay": 125,
-                            "options": {
-                                "texture": "particle_diamond_white",
-                                "anchorX": 0.5,
-                                "anchorY": 0.5,
-                                "scaleX": 0.5,
-                                "scaleY": 0.5,
-                                "tint": "white"
-                            },
-                            "animation": {
-                                "id": "flameParticle",
-                                "steps": [
-                                    {
-                                        "to": {
-                                            "duration": 0.1,
-                                            "x": 10,
-                                            "scaleX": 0.75,
-                                            "scaleY": 0.75,
-                                            "tint": "red"
-                                        }
-                                    },
-                                    {
-                                        "to": {
-                                            "duration": 0.6,
-                                            "x": 300,
-                                            "y": "~(-75, 75)",
-                                            "scaleX": 1.25,
-                                            "scaleY": 1.25,
-                                            "tint": "yellow"
-                                        }
-                                    },
-                                    {
-                                        "to": {
-                                            "duration": 0.5,
-                                            "x": 350,
-                                            "y":"~(-100, 100)",
-                                            "scaleX": 1.5,
-                                            "scaleY": 1.5,
-                                            "alpha": 0,
-                                            "ease": "sine.out"
-                                        }
-                                    }
-                                ]
+                            "id": "heartlessSoldier",
+                            "type": "sprite",
+                            "texture": "heartless_soldier"
+                        },
+                        {
+                            "id": "heartlessSoldierHighlight",
+                            "type": "sprite",
+                            "texture": "heartless_soldier_orange_highlight"
+                        },
+                        {
+                            "id": "flameFloorHighlight",
+                            "type": "sprite",
+                            "texture": "flame_floor_highlight",
+                            "xExactPos": 30,
+                            "yExactPos": 75,
+                            "alpha": 0.4,
+                            "tint": "black",
+                            "scale": {
+                                "x": 0.5,
+                                "y": 0.2
                             }
                         }
                     ]
-                }
-            ]
-        },
-                {
-            "id": "soraContainer",
-            "type": "container",
-            "xExactPos": -70,
-            "yExactPos": 95,
-            "scale": {
-                "x": 2.5,
-                "y": 2.5
-            },
-            "children": [
-                {
-                    "id": "soraCast",
-                    "type": "sprite",
-                    "texture": "sora_cast_sprite"
                 },
                 {
-                    "id": "soraCastHighlight",
-                    "type": "sprite",
-                    "texture": "sora_cast_sprite_orange_highlight"
+                    "id": "emitterSpace",
+                    "type": "container",
+                    "yExactPos": 90,
+                    "children": [
+                        {
+                            "id": "emitterContainer",
+                            "type": "particleContainer",
+                            "dynamicProperties": {
+                                "position": true,
+                                "rotation": false,
+                                "vertex": true,
+                                "color": true
+                            },
+                            "maximumParticles": 10,
+                            "removeParticlesWhenAtMax": false,
+                            "particle": [
+                                {
+                                    "id": "diamond",
+                                    "spawnDelay": 125,
+                                    "options": {
+                                        "texture": "particle_diamond_white",
+                                        "anchorX": 0.5,
+                                        "anchorY": 0.5,
+                                        "scaleX": 0.5,
+                                        "scaleY": 0.5,
+                                        "tint": "white"
+                                    },
+                                    "animation": {
+                                        "id": "flameParticle",
+                                        "steps": [
+                                            {
+                                                "to": {
+                                                    "duration": 0.1,
+                                                    "x": 10,
+                                                    "scaleX": 0.75,
+                                                    "scaleY": 0.75,
+                                                    "tint": "red"
+                                                }
+                                            },
+                                            {
+                                                "to": {
+                                                    "duration": 0.6,
+                                                    "x": 300,
+                                                    "y": "~(-75, 75)",
+                                                    "scaleX": 1.25,
+                                                    "scaleY": 1.25,
+                                                    "tint": "yellow"
+                                                }
+                                            },
+                                            {
+                                                "to": {
+                                                    "duration": 0.5,
+                                                    "x": 350,
+                                                    "y":"~(-100, 100)",
+                                                    "scaleX": 1.5,
+                                                    "scaleY": 1.5,
+                                                    "alpha": 0,
+                                                    "ease": "sine.out"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    ]
                 },
                 {
-                    "id": "whiteFloorHighlight",
-                    "type": "sprite",
-                    "texture": "flame_floor_highlight",
-                    "xExactPos": 0,
-                    "yExactPos": 79,
-                    "alpha": 0.1,
+                    "id": "soraContainer",
+                    "type": "container",
+                    "xExactPos": -70,
+                    "yExactPos": 95,
                     "scale": {
-                        "x": 0.2,
-                        "y": 0.15
-                    }
-                },
-                {
-                    "id": "flameFloorHighlight",
-                    "type": "sprite",
-                    "texture": "flame_floor_highlight",
-                    "xExactPos": 60,
-                    "yExactPos": 79,
-                    "alpha": 0.1,
-                    "tint": "orange",
-                    "scale": {
-                        "x": 0.7,
-                        "y": 0.5
-                    }
+                        "x": 2.5,
+                        "y": 2.5
+                    },
+                    "children": [
+                        {
+                            "id": "soraCast",
+                            "type": "sprite",
+                            "texture": "sora_cast_sprite"
+                        },
+                        {
+                            "id": "soraCastHighlight",
+                            "type": "sprite",
+                            "texture": "sora_cast_sprite_orange_highlight"
+                        },
+                        {
+                            "id": "whiteFloorHighlight",
+                            "type": "sprite",
+                            "texture": "flame_floor_highlight",
+                            "xExactPos": 0,
+                            "yExactPos": 79,
+                            "alpha": 0.1,
+                            "scale": {
+                                "x": 0.2,
+                                "y": 0.15
+                            }
+                        },
+                        {
+                            "id": "flameFloorHighlight",
+                            "type": "sprite",
+                            "texture": "flame_floor_highlight",
+                            "xExactPos": 60,
+                            "yExactPos": 79,
+                            "alpha": 0.1,
+                            "tint": "orange",
+                            "scale": {
+                                "x": 0.7,
+                                "y": 0.5
+                            }
+                        }
+                    ]
                 }
             ]
         }

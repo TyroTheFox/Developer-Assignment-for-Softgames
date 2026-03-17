@@ -14,54 +14,62 @@
     "actors": [
         {
             "id": "pokerTableBG",
-            "type": "sprite",
-            "texture": "poker_table"
+            "type": "tiledSprite",
+            "texture": "table_felt"
         },
         {
-            "id": "cardSpace",
-            "type": "container"
-        },
-        {
-            "id": "dealerSpace",
+            "id": "tableContainer",
             "type": "container",
             "xExactPos": 0,
-            "yExactPos": -350,
+            "yExactPos": 0,
             "children": [
                 {
-                    "id": "dealerLeftHand",
-                    "type": "characterSprite",
-                    "x": 100,
-                    "scale": {
-                        "x": 0.5,
-                        "y": -0.5
-                    },
-                    "spriteFrames": [
-                        {
-                            "id": "handOpen",
-                            "frame": "hand-1"
-                        },
-                        {
-                            "id": "handPoint",
-                            "frame": "hand-2"
-                        }
-                    ]
+                    "id": "cardSpace",
+                    "type": "container"
                 },
                 {
-                    "id": "dealerRightHand",
-                    "type": "characterSprite",
-                    "x": -100,
-                    "scale": {
-                        "x": -0.5,
-                        "y": -0.5
-                    },
-                    "spriteFrames": [
+                    "id": "dealerSpace",
+                    "type": "container",
+                    "xExactPos": 0,
+                    "yExactPos": -350,
+                    "children": [
                         {
-                            "id": "handOpen",
-                            "frame": "hand-1"
+                            "id": "dealerLeftHand",
+                            "type": "characterSprite",
+                            "x": 100,
+                            "scale": {
+                                "x": 0.5,
+                                "y": -0.5
+                            },
+                            "spriteFrames": [
+                                {
+                                    "id": "handOpen",
+                                    "frame": "hand-1"
+                                },
+                                {
+                                    "id": "handPoint",
+                                    "frame": "hand-2"
+                                }
+                            ]
                         },
                         {
-                            "id": "handPoint",
-                            "frame": "hand-2"
+                            "id": "dealerRightHand",
+                            "type": "characterSprite",
+                            "x": -100,
+                            "scale": {
+                                "x": -0.5,
+                                "y": -0.5
+                            },
+                            "spriteFrames": [
+                                {
+                                    "id": "handOpen",
+                                    "frame": "hand-1"
+                                },
+                                {
+                                    "id": "handPoint",
+                                    "frame": "hand-2"
+                                }
+                            ]
                         }
                     ]
                 }

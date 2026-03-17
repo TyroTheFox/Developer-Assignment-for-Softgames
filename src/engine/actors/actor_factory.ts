@@ -11,6 +11,7 @@ import { DrawnGraphicsCreator } from "./factory_creators/ui/drawn_graphics_creat
 import { CharacterSpriteCreator } from "./factory_creators/sprite/character_sprite_creator";
 import { DialogueBoxCreator } from "./factory_creators/ui/dialogue_box_creator";
 import { ParticleContainerCreator } from "./factory_creators/container/particle_container_creator";
+import { TilingSpriteCreator } from "./factory_creators/sprite/tiling_sprite_creator";
 
 export type BaseActorData = {
     id: string,
@@ -60,7 +61,8 @@ export class ActorFactory {
         ["drawnGraphics", new DrawnGraphicsCreator()],
         ["characterSprite", new CharacterSpriteCreator()],
         ["dialogueBox", new DialogueBoxCreator()],
-        ["particleContainer", new ParticleContainerCreator()]
+        ["particleContainer", new ParticleContainerCreator()],
+        ['tiledSprite', new TilingSpriteCreator()]
     ]);
 
     /**

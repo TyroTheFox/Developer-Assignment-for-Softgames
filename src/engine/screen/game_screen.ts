@@ -134,6 +134,8 @@ export class GameScreen {
 
         this.clickScreenNotice.visible = true;
         this.clickScreenOverlayGraphic.visible = true;
+
+        this.resize();
     }
 
     public isFullScreen(): boolean {
