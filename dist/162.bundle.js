@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdeveloper_assignment_for_softgames=self.webpackChunkdeveloper_assignment_for_softgames||[]).push([[162],{2162(e,s,a){a.r(s);a(6197),a(7801),a(3521)},3521(e,s,a){var r=a(8507),d=a(9430),f=a(825);r.XO.add(f.u),r.XO.add(d.L)}}]);
