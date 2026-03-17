@@ -50,9 +50,12 @@ export class GameScreen {
     }
 
     public async initGame() {
+        const isMobile = this.assetLoader.isMobile();
+
         await app.init({ 
             background: "#000000", 
-            resolution: Math.max(window.devicePixelRatio, 2),
+            resolution: window.devicePixelRatio * (isMobile ? 0.5 : 1),
+            antialias: false,
         });
 
         // Append the application canvas to the document body

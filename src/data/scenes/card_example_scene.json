@@ -6,7 +6,8 @@
             "size": 144,
             "cardSpriteData": {
                 "id": "card",
-                "type": "sprite"
+                "type": "sprite",
+                "cullable": true
             }
         },
         "minimumWidth": 0

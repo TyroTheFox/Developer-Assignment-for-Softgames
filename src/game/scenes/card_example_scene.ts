@@ -51,6 +51,7 @@ export class CardExampleScene extends Scene {
         const cardTextures = cardSpritesheet.textures;
         const cardNameList = Object.keys(cardTextures);
 
+        // Create a new copy of the sprite data
         for (let i = 0; i < size; i++) {
             const newCardSpriteData: SpriteCreatorData = JSON.parse(JSON.stringify(cardSpriteData));
 
