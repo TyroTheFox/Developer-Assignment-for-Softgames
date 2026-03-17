@@ -46,7 +46,8 @@ PixiPlugin.registerPIXI(PIXI);
   await mainGameScreen.initGame();
 
   // Hook the Full Screen call into the user clicking the screen
-  app.canvas.addEventListener ("click", () => { mainGameScreen.setFullScreen(); });
+  app.canvas.addEventListener("click", () => { mainGameScreen.setFullScreen(); });
+  app.canvas.addEventListener("touchstart", () => { mainGameScreen.setFullScreen(); });
 
   // Load the Asset Manifest
   await assetLoader.loadAssetManifestBundleData();
