@@ -137,7 +137,17 @@ export class GameScreen {
     }
 
     public isFullScreen(): boolean {
-        return window.innerWidth == screen.width && window.innerHeight == screen.height;
+        // Check for programmatic full screen (Fullscreen API)
+        const programmaticFullScreen = !!document.fullscreenElement;
+        
+        // Check for user-triggered full screen (DOM measurements)
+        const viewportHeight = window.innerHeight;
+        const availableScreenHeight = screen.availHeight;
+        const tolerance = 50;
+        const userTriggeredFullScreen = Math.abs(viewportHeight - availableScreenHeight) < tolerance;
+        
+        // Return true if either condition is met
+        return programmaticFullScreen || userTriggeredFullScreen;
     }
 
     public async loadGame(sceneList: sceneListPair[], stageList: stageListPair[]) {
