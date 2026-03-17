@@ -1,0 +1,75 @@
+{"frames": {
+
+"flame_floor_highlight":
+{
+	"frame": {"x":889,"y":1,"w":245,"h":117},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":245,"h":117},
+	"sourceSize": {"w":245,"h":118},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"heartless_soldier":
+{
+	"frame": {"x":1,"y":516,"w":70,"h":91},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":0,"w":70,"h":91},
+	"sourceSize": {"w":72,"h":93},
+	"anchor": {"x":0.46875,"y":0.879195}
+},
+"heartless_soldier_orange_highlight":
+{
+	"frame": {"x":73,"y":516,"w":70,"h":90},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":0,"w":70,"h":90},
+	"sourceSize": {"w":72,"h":93},
+	"anchor": {"x":0.46875,"y":0.879195}
+},
+"particle_diamond_white":
+{
+	"frame": {"x":837,"y":394,"w":123,"h":166},
+	"rotated": true,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":123,"h":166},
+	"sourceSize": {"w":123,"h":166},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"phoenix":
+{
+	"frame": {"x":1,"y":1,"w":693,"h":513},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":693,"h":513},
+	"sourceSize": {"w":693,"h":513},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"sora_cast_sprite":
+{
+	"frame": {"x":696,"y":1,"w":391,"h":191},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":7,"w":391,"h":191},
+	"sourceSize": {"w":612,"h":210},
+	"anchor": {"x":0.313725,"y":0.819048}
+},
+"sora_cast_sprite_orange_highlight":
+{
+	"frame": {"x":696,"y":394,"w":228,"h":139},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":94,"y":48,"w":228,"h":139},
+	"sourceSize": {"w":612,"h":210},
+	"anchor": {"x":0.313725,"y":0.819048}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "sora_cast_sprite@1.webp",
+	"format": "RGBA8888",
+	"size": {"w":1007,"h":623},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:fe699a221b44c8f9ba7ade16fb5076d6:1e230be75ea867670562c4449d90f2bf:ac89d89f4551dde4f55966606f3637e7$"
+}
+}

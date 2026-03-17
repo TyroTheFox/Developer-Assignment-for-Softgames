@@ -72,7 +72,7 @@ export class CharacterSpriteCreator extends BaseFactoryCreator<CharacterSprite> 
             zIndex: zIndex ?? 0,
             visible: visible ?? true,
             alpha: alpha ?? 1,
-            cullable: cullable ?? true,
+            cullable: cullable ?? false,
             pivot: { x: pivotX ?? 0, y: pivotY ?? 0 }
         }, data, frames);
 

@@ -5,23 +5,23 @@
             "assets": [
                 {
                     "alias": "cards",
-                    "src": "src/assets/cards.json"
+                    "src": "src/assets/cards#Q.json"
                 },
                 {
                     "alias": "pokerTableBG",
-                    "src": "src/assets/poker_table.json"
+                    "src": "src/assets/poker_table#Q.json"
                 },
                 {
                     "alias": "dealersHand",
-                    "src": "src/assets/dealers_hand.json"
+                    "src": "src/assets/dealers_hand#Q.json"
                 },
                 {
                     "alias": "shadowPLayer",
-                    "src": "src/assets/shadow_player.json"
+                    "src": "src/assets/shadow_player#Q.json"
                 },
                 {
                     "alias": "tableShadow",
-                    "src": "src/assets/table_shadow.json"
+                    "src": "src/assets/table_shadow#Q.json"
                 }
             ]
         },
@@ -30,23 +30,23 @@
             "assets": [
                 {
                     "alias": "hallway",
-                    "src": "src/assets/hallway_bg.json"
+                    "src": "src/assets/hallway_bg#Q.json"
                 },
                 {
                     "alias": "leonard",
-                    "src": "src/assets/leonard.json"
+                    "src": "src/assets/leonard#Q.json"
                 },
                 {
                     "alias": "penny",
-                    "src": "src/assets/penny.json"
+                    "src": "src/assets/penny#Q.json"
                 },
                 {
                     "alias": "sheldon",
-                    "src": "src/assets/sheldon.json"
+                    "src": "src/assets/sheldon#Q.json"
                 },
                 {
                     "alias": "avatar_emoji_backup",
-                    "src": "src/assets/avatar_emoji_backup.json"
+                    "src": "src/assets/avatar_emoji_backup#Q.json"
                 }
             ]
         },
@@ -55,11 +55,11 @@
             "assets": [
                 {
                     "alias": "sora_cast_sprite",
-                    "src": "src/assets/sora_cast_sprite.json"
+                    "src": "src/assets/sora_cast_sprite#Q.json"
                 },
                 {
                     "alias": "castle_background",
-                    "src": "src/assets/castle_background.json"
+                    "src": "src/assets/castle_background#Q.json"
                 }
             ]
         }

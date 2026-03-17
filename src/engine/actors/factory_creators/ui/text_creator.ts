@@ -43,7 +43,7 @@ export class TextCreator extends BaseFactoryCreator<GameText> {
             label: id ?? "text",
             visible: visible ?? true,
             alpha: alpha ?? 1,
-            cullable: cullable ?? true,
+            cullable: cullable ?? false,
             pivot: { x: pivotX ?? 0, y: pivotY ?? 0 }
         }, data, parent);
         

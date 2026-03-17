@@ -49,7 +49,7 @@ export class ParticleContainerCreator extends BaseFactoryCreator<ParticleContain
             zIndex: zIndex ?? 0,
             visible: visible ?? true,
             alpha: alpha ?? 1,
-            cullable: cullable ?? true,
+            cullable: cullable ?? false,
             pivot: { x: pivotX ?? 0, y: pivotY ?? 0 }
         }, data, parent);
 
