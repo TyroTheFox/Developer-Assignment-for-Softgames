@@ -2,6 +2,7 @@
 ### By Kieran Clare
 
 (LINK TO APP)[https://tyrothefox.github.io/Developer-Assignment-for-Softgames/dist/index.html]
+(LINK TO DOCS)[https://tyrothefox.github.io/Developer-Assignment-for-Softgames/docs/index.html]
 
 Made in about a week.
 
