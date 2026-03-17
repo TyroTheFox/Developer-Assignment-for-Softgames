@@ -13,7 +13,21 @@ export type DrawnGraphicsCreatorData = PositionalActorData & {
     drawSteps: DrawStep[]
 }
 
+/**
+ * Creates DrawnGraphics Actors
+ * 
+ * @class
+ * @extends {BaseFactoryCreator<DrawnGraphics>}
+ */
 export class DrawnGraphicsCreator extends BaseFactoryCreator<DrawnGraphics> {
+    /**
+     * Builds the Actor
+     * 
+     * @public
+     * @param {DrawnGraphicsCreatorData} data - Actor Data used to make the Actor
+     * @param {PIXI.Container} parent - The Parent to add the Actor to
+     * @returns {DrawnGraphics}
+     */
     public build(data: DrawnGraphicsCreatorData, parent: PIXI.Container): DrawnGraphics {
         const gameScreen = GameScreen.instance;
         const { id, x, y, xExactPos, yExactPos, pivotX, pivotY, scale, visible, alpha, rotation, angle, zIndex, cullable } = data;

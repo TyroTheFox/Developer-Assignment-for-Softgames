@@ -5,6 +5,12 @@ import { Sprite } from "../../engine/actors/actors/sprite/sprite";
 import { EE } from "../../engine/screen/game_screen";
 import { Container } from 'pixi.js';
 
+/** 
+ * @class
+ * @extends {Scene}
+ * 
+ * Card Example UI Scene
+ */
 export class CardExampleUI extends Scene {
     protected tableShadow!: Sprite;
 
@@ -15,12 +21,14 @@ export class CardExampleUI extends Scene {
     protected shadowPlayerHead!: Sprite;
     protected shadowHeadTween!: gsap.core.Timeline;
 
-    protected maximumHandSize = 5;
+    protected maximumHandSize!: number;
 
     public override async init(): Promise<void> {
-        const { gameScreen } = this;
+        const { gameScreen, sceneSettingsData } = this;
 
         const { width, height, scaleWithValue, scaleAgainstValue } = gameScreen.gameScreenDimensions;
+
+        this.maximumHandSize = sceneSettingsData.maximumHandSize;
 
         this.tableShadow = this.getChildByLabel('tableShadow') as Sprite;
 
@@ -33,27 +41,57 @@ export class CardExampleUI extends Scene {
 
         this.playerHandList = this.playerHandContainer.getChildByLabel('playerHand') as List
 
-        EE.on('addCardToHand', (card: Sprite) => {
+        /**
+         * When a card is dealt to the player, this fires and adds the dealt card to the Player's Hand
+         * 
+         * @listens DealerPuppet#event:add_card_to_hand
+         * @param {Sprite} Card - The Dealt Card Sprite
+         */
+        EE.on('add_card_to_hand', (card: Sprite) => {
             this.playerHandList.addChild(card);            
             card.gameX = 0;
             card.gameY = 0;
 
+            // If the Player's Hand contains less than the maximum cards...
             if (this.playerHandList.children.length < this.maximumHandSize) {
-                EE.emit('dealCard');
+                // Call for a new card
+
+                /**
+                 * Calls for a Card to be Dealt
+                 * 
+                 * @emits CardExampleUI#event:deal_card
+                 */
+                EE.emit('deal_card');
             } else {
+                // Otherwise, randomly pick a card to discard and ask for a new one
                 const randomCardIndex = Math.floor(Math.random() * this.playerHandList.children.length);
                 const randomCard = this.playerHandList.getChildAt(randomCardIndex);
 
                 gsap.to(this, {
                     delay: 0.5,
-                    onComplete: () => {  EE.emit('sendCardToDiscard', randomCard); }
+                    onComplete: () => {  
+                        /**
+                         * Sents the chosen card to the Discard Pile
+                         * 
+                         * @emits CardExampleUI#event:send_card_to_discard
+                         */  
+                        EE.emit('send_card_to_discard', randomCard); 
+                    }
                 });
                 gsap.to(this, {
                     delay: 0.75,
-                    onComplete: () => {  EE.emit('dealCard'); }
+                    onComplete: () => {
+                        /**
+                         * Calls for a Card to be Dealt
+                         * 
+                         * @emits CardExampleUI#event:deal_card
+                         */  
+                        EE.emit('deal_card'); 
+                    }
                 });
             }
 
+            // Arrange all cards in the Player's Hand
             for (let i = 0; i < this.playerHandList.children.length; i++) {
                 const cardInHand = this.playerHandList.children[i] as Sprite;
                 
@@ -62,14 +100,35 @@ export class CardExampleUI extends Scene {
         });
     }
 
+    /**
+     * Called when the Scene is activated
+     * Starts the Shadowy Player's head movment
+     * 
+     * @public
+     * @override
+     * @async
+     * @returns {Promise<void>}
+     */
     public override async onEnter(): Promise<void> {
         this.createHeadBobTween();
     }
 
+    /**
+     * Called when the Scene is deactivated
+     * Stops the Shadowy Player's head movment
+     * 
+     * @public
+     * @override
+     * @async
+     * @returns {Promise<void>}
+     */
     public override async onExit(): Promise<void> {
         this.shadowHeadTween.kill();
     }
 
+    /**
+     * Reates the Shadowy Player's Head Bob
+     */
     protected createHeadBobTween() {
         this.shadowHeadTween = gsap.timeline({ repeat: -1, yoyo: true })
             .to(
@@ -82,6 +141,16 @@ export class CardExampleUI extends Scene {
             );
     }
 
+    /**
+     * Resizes the elements of the scene
+     * 
+     * @public
+     * @override
+     * @param {number} width - Scaled Screen Width 
+     * @param {number} height - Scaled Screen Height 
+     * @param {number} scaleWithValue - Scale value that matches that of the Game Screen Space 
+     * @param {number} scaleAgainstValue - Scale vale that inverts that of the Game Screen Space
+     */
     public override resize(width: number, height: number, scaleWithValue: number, scaleAgainstValue: number) {
         super.resize(width, height, scaleWithValue, scaleAgainstValue);
 

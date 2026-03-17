@@ -18,7 +18,21 @@ export type ParticleContainerCreatorData = PositionalActorData & {
     removeParticlesWhenAtMax: boolean
 }
 
+/**
+ * Creates Particle Container Actors
+ * 
+ * @class
+ * @extends {BaseFactoryCreator<ParticleContainer>}
+ */
 export class ParticleContainerCreator extends BaseFactoryCreator<ParticleContainer> {
+    /**
+     * Builds the Actor
+     * 
+     * @public
+     * @param {ParticleContainerCreatorData} data - Actor Data used to make the Actor
+     * @param {PIXI.Container} parent - The Parent to add the Actor to
+     * @returns {ParticleContainer}
+     */
     public build(data: ParticleContainerCreatorData, parent: PIXI.Container): ParticleContainer {
         const gameScreen = GameScreen.instance;
         const { id, x, y, xExactPos, yExactPos, pivotX, pivotY, scale, visible, alpha, rotation, angle, zIndex, cullable} = data;

@@ -42,7 +42,21 @@ export type DialogueBoxCreatorData = PositionalActorData & {
     children?: any[]
 }
 
+/**
+ * Creates Dialogue Box Actors
+ * 
+ * @class
+ * @extends {BaseFactoryCreator<DialogueBox>}
+ */
 export class DialogueBoxCreator extends BaseFactoryCreator<DialogueBox> {
+    /**
+     * Builds the Actor
+     * 
+     * @public
+     * @param {DialogueBoxCreatorData} data - Actor Data used to make the Actor
+     * @param {PIXI.Container} parent - The Parent to add the Actor to
+     * @returns {DialogueBox}
+     */
     public build(data: DialogueBoxCreatorData, parent: PIXI.Container): DialogueBox {
         const actorFactory = ActorFactory.instance;
         const gameScreen = GameScreen.instance;

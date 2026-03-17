@@ -9,7 +9,21 @@ export type ButtonCreatorData = PositionalActorData & {
     children?: any[]
 }
 
+/**
+ * Creates Button Actors
+ * 
+ * @class
+ * @extends {BaseFactoryCreator<Button>}
+ */
 export class ButtonCreator extends BaseFactoryCreator<Button> {
+    /**
+     * Builds the Actor
+     * 
+     * @public
+     * @param {ButtonCreatorData} data - Actor Data used to make the Actor
+     * @param {PIXI.Container} parent - The Parent to add the Actor to
+     * @returns {Button}
+     */
     public build(data: ButtonCreatorData, parent: PIXI.Container): Button {
         const actorFactory = ActorFactory.instance;
         const gameScreen = GameScreen.instance;

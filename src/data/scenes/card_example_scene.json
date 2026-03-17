@@ -9,7 +9,6 @@
                 "type": "sprite"
             }
         },
-        "backgroundColour": "0x000000",
         "minimumWidth": 0
     },
     "actors": [

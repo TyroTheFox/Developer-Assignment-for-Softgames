@@ -1,9 +1,7 @@
 {
     "id": "fire emitter",
     "type": "scene",
-    "settings": {
-        "backgroundColour": "0x000000"
-    },
+    "settings": {},
     "actors": [
         {
             "id": "castleBG",

@@ -40,9 +40,16 @@ export type PositionalActorData = BaseActorData & {
     tint?: number | string
 }
 
+/**
+ * Factory Class that creates Game Actors
+ * 
+ * @class
+ */
 export class ActorFactory {
     static #instance: ActorFactory;
     
+    // Map of Actor Creators
+    // All possible Actors are stored here
     private actorCreators = new Map<string, BaseFactoryCreator<any>>([
         ["container", new ContainerCreator()],
         ["sprite", new SpriteCreator()],
@@ -56,8 +63,18 @@ export class ActorFactory {
         ["particleContainer", new ParticleContainerCreator()]
     ]);
 
+    /**
+     * @private
+     * @constructor
+     */
     private constructor() {}
 
+    /**
+     * @static
+     * @public
+     * @get
+     * @returns {ActorFactory}
+     */
     public static get instance(): ActorFactory {
         if (!ActorFactory.#instance) {
             ActorFactory.#instance = new ActorFactory();
@@ -66,7 +83,14 @@ export class ActorFactory {
         return ActorFactory.#instance;
     }
 
-    public buildActor<ActorDataType extends BaseActorData, ReturnType>(data: ActorDataType, parent?: PIXI.Container): ReturnType {
+    /**
+     * Builds an Actor from given data
+     * 
+     * @param {ActorDataType} data - Actor Data 
+     * @param {PIXI.Container} parent 
+     * @returns {ReturnType}
+     */
+    public buildActor<ActorDataType extends BaseActorData, ReturnType>(data: ActorDataType, parent: PIXI.Container): ReturnType {
         const {id, type} = data;
 
         const actorCreator = this.actorCreators.get(type);

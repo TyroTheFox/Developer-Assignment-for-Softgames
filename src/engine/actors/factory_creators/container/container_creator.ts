@@ -8,7 +8,21 @@ export type ContainerCreatorData = PositionalActorData & {
     children?: any[]
 }
 
+/**
+ * Creates Text Actors
+ * 
+ * @class
+ * @extends {BaseFactoryCreator<Container>}
+ */
 export class ContainerCreator extends BaseFactoryCreator<Container> {
+    /**
+     * Builds the Actor
+     * 
+     * @public
+     * @param {ContainerCreatorData} data - Actor Data used to make the Actor
+     * @param {PIXI.Container} parent - The Parent to add the Actor to
+     * @returns {Container}
+     */
     public build(data: ContainerCreatorData, parent: PIXI.Container): Container {
         const actorFactory = ActorFactory.instance;
         const gameScreen = GameScreen.instance;

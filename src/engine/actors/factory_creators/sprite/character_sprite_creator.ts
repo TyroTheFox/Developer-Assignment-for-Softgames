@@ -18,7 +18,21 @@ export type CharacterSpriteCreatorData = PositionalActorData & {
     initialSprite?: string
 }
 
+/**
+ * Creates Character Sprite Actors
+ * 
+ * @class
+ * @extends {BaseFactoryCreator<CharacterSprite>}
+ */
 export class CharacterSpriteCreator extends BaseFactoryCreator<CharacterSprite> {
+    /**
+     * Builds the Actor
+     * 
+     * @public
+     * @param {CharacterSpriteCreatorData} data - Actor Data used to make the Actor
+     * @param {PIXI.Container} parent - The Parent to add the Actor to
+     * @returns {CharacterSprite}
+     */
     public build(data: CharacterSpriteCreatorData, parent: PIXI.Container): CharacterSprite {
         const { id, x, y, pivotX, pivotY, scale, visible, alpha, rotation, angle, zIndex, spriteFrames, cullable} = data;
 

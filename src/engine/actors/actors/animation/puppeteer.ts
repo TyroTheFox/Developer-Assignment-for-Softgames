@@ -25,6 +25,18 @@ export type AnimationDataEntry = {
     steps: AnimationStep[]
 }
 
+/**
+ * Puppeteer
+ * 
+ * Used to create complex Character Puppets by bringing together a collection of animation data
+ * and on-screen assets into one place in a manner that allows for easier manipulation and cues
+ * for an onscreen character.
+ * 
+ * Resulted from a refactoring of the original Dealer Class in order to create a system that can
+ * create gsap timelines procedurally from external data.
+ * 
+ * @class
+ */
 export class Pupetteer {
     protected attachedScene!: Scene;
 
@@ -33,6 +45,11 @@ export class Pupetteer {
 
     protected animationsPlaying: string[] = [];
     
+    /**
+     * @constructor
+     * @param {AnimationDataEntry[]} animationData - Animations this character can perform
+     * @param {?PIXI.Container[]} assets - The parts of the Character the class manipulates (must be Labeled to be referenced in data)
+     */
     constructor(scene: Scene, animationData: AnimationDataEntry[], assets?: PIXI.Container[]) {
         this.attachedScene = scene;
 
@@ -47,10 +64,23 @@ export class Pupetteer {
         }
     }
 
+    /**
+     * Checks if an animation is currently playing
+     * 
+     * @param {string} id - ID of the Animation 
+     * @returns {void}
+     */
     public isAnimationPlaying(id: string) {
         return this.animationsPlaying.indexOf(id) !== -1;
     }
 
+    /**
+     * Plays a given animation loaded into the character
+     * 
+     * @param {string} id - Animation ID
+     * @param {Record<string, any>} variables - Additional variables that can be fed in and referenced in the Step data for consistency
+     * @returns 
+     */
     public playAnimation(id: string, variables?: Record<string, any>): gsap.core.Timeline | void {
         const animationData = this.animationMap.get(id);
 
@@ -112,6 +142,13 @@ export class Pupetteer {
         this.animationsPlaying.push(id);
     }
 
+    /**
+     * Parse tags included in the Step Data
+     * 
+     * @protected
+     * @param {TweenData} tweenData - Raw data for this step
+     * @param {?Record<string, any>} variables - Additional variables that can be fed in and referenced in the Step data for consistency
+     */
     protected parseTags(tweenData: TweenData, variables?: Record<string, any>) {
         const tweenDataEntires = Object.entries(tweenData);
 
@@ -148,6 +185,14 @@ export class Pupetteer {
         }
     }
 
+    /**
+     * Replaces a given Event variable in raw Tween data with a given event emission
+     * It removes the original variable from the object because otherwise gsap complains
+     * 
+     * @param {gsap.core.Timeline} timeline - Tween Timeline
+     * @param {TweenData} tweenData - Tween data
+     * @returns {TweenData} - Conditioned tween data
+     */
     protected addEventCalls(timeline: gsap.core.Timeline, tweenData: TweenData): TweenData {
         if(tweenData?.eventComplete) {
             tweenData.onComplete = (eventName: string) => { EE.emit(eventName ?? 'eventComplete', timeline) };

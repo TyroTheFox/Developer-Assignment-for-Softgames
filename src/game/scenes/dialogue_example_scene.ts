@@ -1,24 +1,35 @@
+// Import Dialogue Data
 import dialogueExampleData from '../../data/dialogue/dialogue_example.json' assert {type: 'json'};
 
 import { gsap } from 'gsap';
 import { Scene } from "../../engine/actors/actors/scene/scene";
-import { app, EE } from "../../engine/screen/game_screen";
+import { EE } from "../../engine/screen/game_screen";
 import { Sprite } from '../../engine/actors/actors/sprite/sprite';
 import { Container } from 'pixi.js';
 import { CharacterSprite } from '../../engine/actors/actors/sprite/character_sprite';
 
+/** 
+ * @class
+ * @extends {Scene}
+ * 
+ * Dialogue Example Scene
+ */
 export class DialogueExampleScene extends Scene {
     protected hallwayBackground!: Sprite;
 
+    // 'Puppet Space' is a container that holds just the other on-screen 'Puppets'
+    // Puppets being on-screen actors intended to present a character
     protected puppetSpace!: Container;
     protected leonardPuppet!: CharacterSprite;
     protected pennyPuppet!: CharacterSprite;
     protected sheldonPuppet!: CharacterSprite;
 
+    // Tween that handles the overall flow of the dialogue scene
     protected sequenceTween!: gsap.core.Timeline;
 
     protected puppetMap: Map<string, CharacterSprite> = new Map();
 
+    // Whether or not the current Speaker's Puppet is bobbing up and down
     protected speakerBobbing: boolean = false;
 
     public override async init(): Promise<void> {
@@ -38,6 +49,7 @@ export class DialogueExampleScene extends Scene {
         this.puppetMap.set('Penny', this.pennyPuppet);
         this.puppetMap.set('Sheldon', this.sheldonPuppet);
 
+        // Set the relative position of each puppet based on the Avatar data
         for (let i = 0; i < avatars.length; i++) {
             const { position, name } = avatars[i];
             const puppet = this.puppetMap.get(name) as CharacterSprite;
@@ -52,6 +64,11 @@ export class DialogueExampleScene extends Scene {
             }
         }
 
+        /**
+         * When a character in the Dialogue Box text is being tweened in, this fires to allow Puppets to bob along
+         * 
+         * @listens DialogueBox#event:char_display_start
+         */
         EE.on('char_display_start', (name) => {
             const puppet = this.puppetMap.get(name) as CharacterSprite;
 
@@ -67,6 +84,7 @@ export class DialogueExampleScene extends Scene {
 
             this.speakerBobbing = true;
 
+            // Tween to bob along
             gsap.timeline()
                 .to(
                     puppet,
@@ -90,6 +108,11 @@ export class DialogueExampleScene extends Scene {
                 )
         });
 
+        /**
+         * Allows Puppets to switch shown faces based on Emoji tags
+         * 
+         * @listens DialogueBox#event:dialogue_tag_fired
+         */
         EE.on('dialogue_tag_fired', (tag, name) => { 
             const puppet = this.puppetMap.get(name) as CharacterSprite;
 
@@ -97,29 +120,37 @@ export class DialogueExampleScene extends Scene {
                 return;
             }
 
+            // Flips to a given face
             puppet.setSprite(tag);
         });
 
+        /**
+         * Fires when the Dialogue Box has finished displaying all the loaded Dialogue lines
+         * 
+         * @listens DialogueBox-event:dialogue_complete
+         */
         EE.on('dialogue_complete', () => {
             this.sequenceTween = gsap.timeline()
                 .to(
                     this.puppetSpace,
                     {
-                        delay: 3,
+                        delay: 3, // Wait for a bit
                         duration: 0.3,
-                        alpha: 0
+                        alpha: 0 // Hide the Puppets
                     }
                 )
                 .to(
                     this.hallwayBackground,
                     {
                         duration: 0.5,
-                        alpha: 1,
+                        alpha: 1, // Return the Backdrop to normal
                         onComplete: () => {
+                            // Set all Puppets to Neutral
                             this.leonardPuppet.setSprite('neutral');
                             this.pennyPuppet.setSprite('neutral');
                             this.sheldonPuppet.setSprite('neutral');
                             
+                            // Start again
                             this.startDialogueSequence();
                         }
                     }
@@ -127,6 +158,13 @@ export class DialogueExampleScene extends Scene {
         });
     }
 
+    /**
+     * Starts the Dialogue Loop
+     * Works a little like dominos. Once this is called, it kicks the Dialogue Box into loading as well as starting
+     * all the other animations
+     * 
+     * @public
+     */
     public startDialogueSequence() {
         this.sequenceTween = gsap.timeline()
             .to(
@@ -149,12 +187,22 @@ export class DialogueExampleScene extends Scene {
                 {
                     delay: 1,
                     onComplete: () => {
-                        EE.emit('showDialogue');
+                        EE.emit('show_dialogue');
                     }
                 }
             )
     }
 
+    /**
+     * Resizes the elements of the scene
+     * 
+     * @public
+     * @override
+     * @param {number} width - Scaled Screen Width 
+     * @param {number} height - Scaled Screen Height 
+     * @param {number} scaleWithValue - Scale value that matches that of the Game Screen Space 
+     * @param {number} scaleAgainstValue - Scale vale that inverts that of the Game Screen Space
+     */
     public override resize(width: number, height: number, scaleWithValue: number, scaleAgainstValue: number) {
         super.resize(width, height, scaleWithValue, scaleAgainstValue);
 
@@ -171,13 +219,30 @@ export class DialogueExampleScene extends Scene {
         }
     }
 
+    /**
+     * Called when the Scene is activated
+     * Starts the scene
+     * 
+     * @public
+     * @override
+     * @async
+     * @returns {Promise<void>}
+     */
     public override async onEnter(): Promise<void> {
         this.startDialogueSequence();
-        app.renderer.background.color = this.sceneSettingsData.backgroundColour;
     }
 
+    /**
+     * Called when the Scene is deactivated
+     * Kills all the on-screen tween and resets
+     * 
+     * @public
+     * @override
+     * @async
+     * @returns {Promise<void>}
+     */
     public override async onExit(): Promise<void> {
-        EE.emit('hideDialogue');
+        EE.emit('hide_dialogue');
         this.sequenceTween.kill();
         this.hallwayBackground.alpha = 1;
         this.puppetSpace.alpha = 0;

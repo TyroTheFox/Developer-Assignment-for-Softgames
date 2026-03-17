@@ -190,10 +190,17 @@ export class GameScreen {
 
         this.gameScreenDimensions = {width, height, scaleWithValue: inverseScale, scaleAgainstValue: scale};
 
+        /**
+         * @emits GameScreen#event:game_resize
+         * @param {number} width
+         * @param {number} height
+         * @param {number} scaleWithValue
+         * @param {number} scaleAgainstValue
+         */
         EE.emit('game_resize', width, height, inverseScale, scale);
 
         if (this.loadingScreen.visible) {
-            this.loadingScreen.resize(width, height, inverseScale, scale);
+            this.loadingScreen.resize(width, height);
         }
 
         if (this.clickScreenNotice) {

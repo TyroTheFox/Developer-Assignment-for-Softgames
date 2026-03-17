@@ -71,7 +71,6 @@ export default (_env, argv) => {
       // Copy our static assets to the final build
       new CopyPlugin({
         patterns: [
-          { from: "public/" },
           { from: "src/assets/**/*" }
         ],
       }),

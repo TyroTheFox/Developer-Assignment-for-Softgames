@@ -8,7 +8,21 @@ export type SpriteCreatorData = PositionalActorData & {
     texture: string;
 }
 
+/**
+ * Creates Sprite Actors
+ * 
+ * @class
+ * @extends {BaseFactoryCreator<GameText>}
+ */
 export class SpriteCreator extends BaseFactoryCreator<Sprite> {
+    /**
+     * Builds the Actor
+     * 
+     * @public
+     * @param {SpriteCreatorData} data - Actor Data used to make the Actor
+     * @param {PIXI.Container} parent - The Parent to add the Actor to
+     * @returns {Sprite}
+     */
     public build(data: SpriteCreatorData, parent: PIXI.Container): Sprite {
         const gameScreen = GameScreen.instance;
         const { id, texture, anchor, x, y, pivotX, pivotY, xExactPos, yExactPos, scale, visible, alpha, rotation, angle, zIndex, cullable, tint } = data;

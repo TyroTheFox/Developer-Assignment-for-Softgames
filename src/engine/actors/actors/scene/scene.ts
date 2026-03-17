@@ -10,6 +10,22 @@ export type SceneContainerOptions = BaseActorData & PIXI.ContainerOptions & {
     actors: any[]
 }
 
+/**
+ * Scene
+ * 
+ * This is both State and Actor Container, which comes with an accompanying data object to more easily form
+ * all the Actors that are contained therein. 
+ * 
+ * As part of the Metaphor, a Scene is the current 'Thing that's happening', and instructs what each actor is
+ * currently doing. It needs to be placed within a Stage to function but doesn't strictly care which stage it's
+ * placed inside. 
+ * 
+ * This base Scene is what all other scenes derrive their functionality from, creating specific functionality
+ * for each intended scene the game enacts.
+ * 
+ * @class
+ * @extends {PIXI.Container}
+ */
 export class Scene extends PIXI.Container {
     public stage!: SceneStage;
     public stageManager!: StageManager;
@@ -22,6 +38,10 @@ export class Scene extends PIXI.Container {
     protected sceneSettingsData: any;
     protected sceneActorData: any[];
     
+    /**
+     * @constructor
+     * @param {PIXI.SceneContainerOptions} options
+     */
     constructor(options: SceneContainerOptions) {
         super(options);
 
@@ -46,11 +66,27 @@ export class Scene extends PIXI.Container {
         }
     }
 
+    /**
+     * Sets the current Stage and Stage Manager instances
+     * 
+     * @param {SceneStage} stage 
+     * @param {StageManager} stageManager 
+     */
     public setStage(stage: SceneStage, stageManager: StageManager) {
         this.stage = stage;
         this.stageManager = stageManager;
     }
 
+    /**
+     * Resizes the elements of the scene
+     * 
+     * @public
+     * @override
+     * @param {number} width - Scaled Screen Width 
+     * @param {number} height - Scaled Screen Height 
+     * @param {number} scaleWithValue - Scale value that matches that of the Game Screen Space 
+     * @param {number} scaleAgainstValue - Scale vale that inverts that of the Game Screen Space
+     */
     public resize(width: number, height: number, scaleWithValue: number, scaleAgainstValue: number) {
         const scaleWithScreen = 'scaleWithScreen' in this.sceneSettingsData ? this.sceneSettingsData.scaleWithScreen : true;
         const { minimumWidth } = this.sceneSettingsData;
@@ -70,8 +106,24 @@ export class Scene extends PIXI.Container {
         }
     }
 
+    /**
+     * @async
+     * @public
+     */
     public async init() {};
+    /**
+     * @async
+     * @public
+     */
     public async onEnter() {};
+    /**
+     * @async
+     * @public
+     */
     public update(_time: PIXI.Ticker) {};
+    /**
+     * @async
+     * @public
+     */
     public async onExit() {};
 }

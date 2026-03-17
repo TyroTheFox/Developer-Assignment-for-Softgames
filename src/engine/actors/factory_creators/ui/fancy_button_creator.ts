@@ -16,10 +16,25 @@ export type FancyButtonCreatorData = PositionalActorData & {
     text?: {
         text: string,
         style: PIXI.TextStyleOptions
-    }
+    },
+    hitArea?: PIXI.Rectangle
 }
 
+/**
+ * Creates Fancy Button Actors
+ * 
+ * @class
+ * @extends {BaseFactoryCreator<FancyButton>}
+ */
 export class FancyButtonCreator extends BaseFactoryCreator<FancyButton> {
+    /**
+     * Builds the Actor
+     * 
+     * @public
+     * @param {FancyButtonCreatorData} data - Actor Data used to make the Actor
+     * @param {PIXI.Container} parent - The Parent to add the Actor to
+     * @returns {FancyButton}
+     */
     public build(data: FancyButtonCreatorData, parent: PIXI.Container): FancyButton {
         const actorFactory = ActorFactory.instance;
         const gameScreen = GameScreen.instance;
@@ -79,10 +94,29 @@ export class FancyButtonCreator extends BaseFactoryCreator<FancyButton> {
         fancyButton.cullable = cullable ?? true;
         fancyButton.pivot = { x: pivotX ?? 0, y: pivotY ?? 0 };
 
+        if (data.hitArea) {
+            const shape = new PIXI.Rectangle(
+                data.hitArea.x,
+                data.hitArea.y,
+                data.hitArea.width,
+                data.hitArea.height
+            );
+            fancyButton.hitArea = shape;
+        } else {
+            fancyButton.calculateHitArea();
+        }
+
         return fancyButton;
     }
 
-    private constructViewContainer(viewData: any[], actorFactory: ActorFactory) {
+    /**
+     * Creates a View Container that the Button Switches to
+     * 
+     * @param {any[]} viewData 
+     * @param {ActorFactory} actorFactory 
+     * @returns {PIXI.Container}
+     */
+    private constructViewContainer(viewData: any[], actorFactory: ActorFactory): PIXI.Container {
         const container = new PIXI.Container();
 
         for (let i = 0; i < viewData.length; i++) {

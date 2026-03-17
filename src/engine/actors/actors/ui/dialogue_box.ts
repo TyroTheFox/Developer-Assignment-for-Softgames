@@ -6,6 +6,13 @@ import { AvatarDataEntry, DialogueBoxCreatorData, DialogueData, EmojiDataEntry }
 
 export type TagTimingData = { time: number, tag: string };
 
+/**
+ * Dialogue Box
+ * Displays dialogue text to the screen
+ * 
+ * @class
+ * @extends {PIXI.Container}
+ */
 export class DialogueBox extends PIXI.Container {
     private gameScreen = GameScreen.instance;
     protected actorData!: DialogueBoxCreatorData;
@@ -38,6 +45,12 @@ export class DialogueBox extends PIXI.Container {
 
     public pauseDialogue = false;
     
+    /**
+     * @constructor
+     * @param {PIXI.ContainerOptions} options 
+     * @param {DialogueBoxCreatorData} data 
+     * @param {?PIXI.Container} parent 
+     */
     constructor(options: PIXI.ContainerOptions, data: DialogueBoxCreatorData, parent?: PIXI.Container) {
         super(options);
 
@@ -58,6 +71,11 @@ export class DialogueBox extends PIXI.Container {
         if (parent) {
             parent.addChild(this);
 
+            /**
+             * Updates the internal position when the scene resizes
+             * 
+             * @listens this.position#event:scene_resize
+             */
             parent.on('scene_resize', (width, height) => this.resize(width, height));
         }
 
@@ -107,12 +125,21 @@ export class DialogueBox extends PIXI.Container {
         this.avatarPanel.label = "Avatar Panel";
         avatarContainer.addChild(this.avatarPanel);
 
+        /**
+         * @listens DialogueBox#event:childAdded
+         */
         this.on('childAdded', () => this.resize(this.gameScreen.gameScreenDimensions.width, this.gameScreen.gameScreenDimensions.height));
+        /**
+         * @listens DialogueBox#event:childRemoved
+         */
         this.on('childRemoved', () => this.resize(this.gameScreen.gameScreenDimensions.width, this.gameScreen.gameScreenDimensions.height));
     }
 
     /**
      * Position of X as a percentage of the Screen
+     * 
+     * @set
+     * @param {number} coord
      */
     public set gameX(coord: number) {
         this.gamePosition.x = coord;
@@ -121,6 +148,9 @@ export class DialogueBox extends PIXI.Container {
 
     /**
      * Position of Y as a percentage of the Screen
+     * 
+     * @set
+     * @param {number} coord
      */
     public set gameY(coord: number) {
         this.gamePosition.y = coord;
@@ -129,6 +159,9 @@ export class DialogueBox extends PIXI.Container {
 
     /**
      * Relative Pivot X Position of the Object
+     * 
+     * @set
+     * @param {number} coord
      */
     public set pivotX(coord: number) {
         this.pivot.x = coord;
@@ -136,15 +169,29 @@ export class DialogueBox extends PIXI.Container {
 
     /**
      * Relative Pivot Y Position of the Object
+     * 
+     * @set
+     * @param {number} coord
      */
     public set pivotY(coord: number) {
         this.pivot.y = coord;
     }
 
+    /**
+     * Set the Dialogue Data to display
+     * 
+     * @param {DialogueData[]} data - Dialogue Scene Data
+     * @public
+     */
     public setDialogueData(data: DialogueData[]) {
         this.dialogueData = data;
     }
 
+    /**
+     * Show the Dialogue Box
+     * 
+     * @public
+     */
     public show() {
         gsap.to(
             this,
@@ -160,6 +207,11 @@ export class DialogueBox extends PIXI.Container {
         );
     }
 
+    /**
+     * Hide the Dialogue Box
+     * 
+     * @public
+     */
     public hide() {
         gsap.to(
             this,
@@ -173,6 +225,11 @@ export class DialogueBox extends PIXI.Container {
         );
     }
 
+    /**
+     * Resets the Dialogue Box back to the start
+     * 
+     * @public
+     */
     public reset() {
         this.killAllDialogueTweens();
         this.dialogueIndex = -1;
@@ -182,6 +239,12 @@ export class DialogueBox extends PIXI.Container {
         this.setAvatarImage('');
     }
 
+    /**
+     * Displays the next part of the Dialogue sequence
+     * 
+     * @public
+     * @returns {void}
+     */
     public nextDialogueStep() {
         if (this.dialogueIndex >= this.dialogueData.length) {
             return;
@@ -192,10 +255,23 @@ export class DialogueBox extends PIXI.Container {
         this.displayNextDialogueStep();
     }
 
+    /**
+     * Sets the data required to display the Character Avatars
+     * 
+     * @param {AvatarDataEntry[]} data
+     * @async
+     * @public
+     */
     public async setAvatarData(data: AvatarDataEntry[]) {
         await this.setPanelData(this.avatarPanel, 'avatar', data);
     }
 
+    /**
+     * Sets the current Avatar to display
+     * 
+     * @param {string} avatarName 
+     * @public
+     */
     public setAvatarImage(avatarName: string) {
         const { avatarData } = this.actorData;
 
@@ -210,10 +286,21 @@ export class DialogueBox extends PIXI.Container {
         }
     }
 
+    /**
+     * Sets the data required to display the Emoji
+     * 
+     * @param {EmojiDataEntry[]} data 
+     * @public
+     */
     public async setEmojiData(data: EmojiDataEntry[]) {
         await this.setPanelData(this.emojiPanel, 'emoji', data);
     }
 
+    /**
+     * Sets what Emoji to display
+     * 
+     * @param {string} emojiName 
+     */
     public setEmojiImage(emojiName: string) {
         const { emojiData } = this.actorData;
 
@@ -245,6 +332,12 @@ export class DialogueBox extends PIXI.Container {
         }
     }
 
+    /**
+     * Repositions the Actor
+     * 
+     * @param {number} width 
+     * @param {number} height 
+     */
     public resize(width: number, height: number) {
         let caluclatedX = this.exactPosition.x ? this.exactPosition.x : width * (this.gamePosition.x ?? 0);
         let caluclatedY = this.exactPosition.y ? this.exactPosition.y : height * (this.gamePosition.y ?? 0);
@@ -252,9 +345,19 @@ export class DialogueBox extends PIXI.Container {
         this.x = caluclatedX;
         this.y = caluclatedY;
 
+        /**
+         * Updates the internal position when the scene resizes
+         * 
+         * @emit DialogueBox#event:scene_resize
+         */
         this.emit('scene_resize', width, height);
     }
 
+    /**
+     * Kills all current Dialogue Tweens
+     * 
+     * @protected
+     */
     protected killAllDialogueTweens() {
         for (let i = 0; i < this.currentDialogueCharTweens.length; i++) {
             const currentDialogueCharTween = this.currentDialogueCharTweens[i];
@@ -264,6 +367,11 @@ export class DialogueBox extends PIXI.Container {
         this.currentDialogueCharTweens = [];
     }
 
+    /**
+     * Renders the next dialogue step to the Dialogue Box, setting up all the tweens
+     * 
+     * @returns {void}
+     */
     protected displayNextDialogueStep() {
         if (this.dialogueIndex >= this.dialogueData.length || this.pauseDialogue) {
             return;
@@ -337,6 +445,13 @@ export class DialogueBox extends PIXI.Container {
         }
     }
 
+    /**
+     * Recursively removes tags from the dialogue text
+     * 
+     * @protected
+     * @param {string} dialogueText - Raw dialogue text 
+     * @returns {string}
+     */
     protected recursivelyDeTag(dialogueText: string): string {
         const foundTagStartIndex = dialogueText.indexOf('{');
 
@@ -354,6 +469,13 @@ export class DialogueBox extends PIXI.Container {
         return dialogueText;
     }
 
+    /**
+     * Recursively records each tag returning a list of each one
+     * 
+     * @param {string} dialogueText - Raw dialogue text 
+     * @param {TagTimingData[]} tagList - Returned list of tags and the index it appears on
+     * @returns {TagTimingData[]}
+     */
     protected recursivelyFindDialogueTags(dialogueText: string, tagList: TagTimingData[]): TagTimingData[] {
         const foundTagStartIndex = dialogueText.indexOf('{');
 
@@ -373,6 +495,13 @@ export class DialogueBox extends PIXI.Container {
         return tagList;
     }
 
+    /**
+     * Sets up a panel using data
+     * 
+     * @param {PIXIUI.Switcher} panel - Panel Switcher object 
+     * @param {string} panelType - Which panel is being set up
+     * @param {(AvatarDataEntry | EmojiDataEntry)[]} data - Panel data
+     */
     protected async setPanelData(panel: PIXIUI.Switcher, panelType: string, data: (AvatarDataEntry | EmojiDataEntry)[]) {
         if (panelType === 'avatar') {
             this.actorData.avatarData = data as AvatarDataEntry[];
@@ -427,6 +556,7 @@ export class DialogueBox extends PIXI.Container {
      * To cover the possibility of a hoasted screen element not being available for use, the game will double check
      * that the hosted element is actually there
      * 
+     * @private
      * @param {string} url - The URL of the Hosted Image
      * @returns {HTMLImageElement | boolean}
      */

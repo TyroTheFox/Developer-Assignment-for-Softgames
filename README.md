@@ -3,7 +3,7 @@
 
 Made in about a week.
 
-There are some small tweaks and alterations based on the directive that the flare I present my code with would also be taken into account alongside my technical prowess I display. I did take the small liberty to alter some of the materials provided in order to better accomplish what makes sense to me and fixing deliberate mistakes. Flare and style were criteria in each task.
+There are some small tweaks and alterations based on the directive that the flare I present each scenario with would also be taken into account alongside my technical prowess I display. I did take the small liberty to alter some of the materials provided in order to better accomplish what makes sense to me and fixing deliberate mistakes. Flare and style were criteria in each task.
 
 ## Engine
 - Built within around a week
@@ -28,6 +28,12 @@ There are some small tweaks and alterations based on the directive that the flar
 - Did spot the error where Sheldon's URL includes a port number where it doesn't need it, but now can show off the redundancy at work.
 
 ### 'Pheonix Flame' Particle Emitter Example
+- A straightforward interpretation of the prompt with a neat image I made
+- Uses the new Particle Container with gsap handling manipulation of particles (primarily because the Particle Container for v8 is still a WIP).
+- The particle emitter should be hovering around 9 sprites at a time, with a single Sprite for the Phoenix to sell the idea a little better.
+
+### Alternative 'Pheonix Flame' Particle Emitter Example
+- I was uncertain if I would be going overboard for adding more than 10 Sprites to the whole scene but already had the work done so I included this too.
 - The particle emitter uses only 10 Sprites at any time. Buuuut, dressed it up with a few extra ones to make it look more like a Magic attack.
 - Got this Sprite from FictionFight87 on DeviantArt: https://www.deviantart.com/fictionfight87/art/Sora-Sprite-Sheet-1-1075285701
 - The rest is all me.

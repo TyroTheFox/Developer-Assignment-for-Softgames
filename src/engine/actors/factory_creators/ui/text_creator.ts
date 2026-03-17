@@ -9,7 +9,21 @@ export type TextCreatorData = PositionalActorData & {
     style?: PIXI.TextStyleOptions
 }
 
+/**
+ * Creates Text Actors
+ * 
+ * @class
+ * @extends {BaseFactoryCreator<GameText>}
+ */
 export class TextCreator extends BaseFactoryCreator<GameText> {
+    /**
+     * Builds the Actor
+     * 
+     * @public
+     * @param {TextCreatorData} data - Actor Data used to make the Actor
+     * @param {PIXI.Container} parent - The Parent to add the Actor to
+     * @returns {GameText}
+     */
     public build(data: TextCreatorData, parent: PIXI.Container): GameText {
         const gameScreen = GameScreen.instance;
         const { id, text, style, anchor, x, y, xExactPos, yExactPos, pivotX, pivotY, scale, visible, alpha, rotation, angle, zIndex, cullable } = data;

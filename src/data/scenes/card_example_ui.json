@@ -2,7 +2,8 @@
     "id": "card_example_ui",
     "type": "scene",
     "settings": {
-        "scaleWithScreen": false
+        "scaleWithScreen": false,
+        "maximumHandSize": 5
     },
     "actors": [
         {

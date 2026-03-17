@@ -11,7 +11,21 @@ export type ListCreatorData = PositionalActorData & {
     children?: any[]
 }
  
+/**
+ * Creates List Actors
+ * 
+ * @class
+ * @extends {BaseFactoryCreator<PIXIUI.List>}
+ */
 export class ListCreator extends BaseFactoryCreator<PIXIUI.List> {
+    /**
+     * Builds the Actor
+     * 
+     * @public
+     * @param {ListCreatorData} data - Actor Data used to make the Actor
+     * @param {PIXI.Container} parent - The Parent to add the Actor to
+     * @returns {PIXIUI.List}
+     */
     public build(data: ListCreatorData, parent: PIXI.Container): PIXIUI.List {
         const actorFactory = ActorFactory.instance;
         const gameScreen = GameScreen.instance;
@@ -46,6 +60,7 @@ export class ListCreator extends BaseFactoryCreator<PIXIUI.List> {
             }
         }
 
+        // Once everything is added to the List, arrange them
         list.arrangeChildren();
 
         return list;

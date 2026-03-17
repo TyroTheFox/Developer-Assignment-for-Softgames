@@ -4,8 +4,13 @@ import { Scene } from "../../engine/actors/actors/scene/scene";
 import { Container } from "../../engine/actors/actors/container/container";
 import { ParticleContainer } from "../../engine/actors/actors/container/particle_container";
 import { Sprite } from "../../engine/actors/actors/sprite/sprite";
-import { app } from "../../engine/screen/game_screen";
 
+/** 
+ * @class
+ * @extends {Scene}
+ * 
+ * Fire Emitter Scene
+ */
 export class FireEmitterScene extends Scene {
     protected castleBackground!: Sprite;
 
@@ -21,6 +26,14 @@ export class FireEmitterScene extends Scene {
     protected heartlessShakeTween!: gsap.core.Timeline;
     protected heartlessHighlightTween!: gsap.core.Timeline;
 
+    /**
+     * Initialise the scene
+     * 
+     * @public
+     * @override
+     * @async
+     * @returns {Promise<void>}
+     */
     public override async init(): Promise<void> {
         const { gameScreen } = this;
         const { width, height, scaleAgainstValue } = gameScreen.gameScreenDimensions;
@@ -40,15 +53,31 @@ export class FireEmitterScene extends Scene {
         this.heartlessSpriteHighlight = this.heartlessContainer.getChildByLabel('heartlessSoldierHighlight') as Sprite;
     }
 
-    public override async onEnter(): Promise<void> {
-        app.renderer.background.color = this.sceneSettingsData.backgroundColour;
-        
+    /**
+     * Called when the Scene is activated
+     * Starts all the on-screen tweens
+     * 
+     * @public
+     * @override
+     * @async
+     * @returns {Promise<void>}
+     */
+    public override async onEnter(): Promise<void> {        
         this.createSoraHighlightTween();
         this.createFlameFloorHighlightTween();
         this.createHeartlessShakeTween();
         this.createHeartlessHighlightTween();
     }
 
+    /**
+     * Called when the Scene is deactivated
+     * Kills all the on-screen tweens
+     * 
+     * @public
+     * @override
+     * @async
+     * @returns {Promise<void>}
+     */
     public override async onExit(): Promise<void> {
         this.soraHighlightTween.kill();
         this.flameFloorHighlightTween.kill();
@@ -56,10 +85,28 @@ export class FireEmitterScene extends Scene {
         this.heartlessHighlightTween.kill();
     }
 
+    /**
+     * Update the Emitter Container
+     * 
+     * @public
+     * @override
+     * @param {PIXI.Ticker} time - PIXI Ticker instance
+     * @returns {void}
+     */
     public override update(time: PIXI.Ticker): void {
         this.emitterContainer.onUpdate(time);
     }
 
+    /**
+     * Resizes the elements of the scene
+     * 
+     * @public
+     * @override
+     * @param {number} width - Scaled Screen Width 
+     * @param {number} height - Scaled Screen Height 
+     * @param {number} scaleWithValue - Scale value that matches that of the Game Screen Space 
+     * @param {number} scaleAgainstValue - Scale vale that inverts that of the Game Screen Space
+     */
     public override resize(width: number, height: number, scaleWithValue: number, scaleAgainstValue: number) {
         super.resize(width, height, scaleWithValue, scaleAgainstValue);
 
@@ -69,8 +116,14 @@ export class FireEmitterScene extends Scene {
         }
     }
 
+    /**
+     * Creates the Tweens that flash the Sora Highlight tween
+     * 
+     * @private
+     */
     private createSoraHighlightTween() {
         this.soraHighlightTween = gsap.timeline({ 
+            // When complete, loop again
             onComplete: () => this.createSoraHighlightTween()
          })
             .to(
@@ -91,6 +144,11 @@ export class FireEmitterScene extends Scene {
             );
     }
 
+    /**
+     * Creates the Tween for the Flame highlight on the floor
+     * 
+     * @private
+     */
     private createFlameFloorHighlightTween() {
         this.flameFloorHighlightTween = gsap.timeline({
             onComplete: () => this.createFlameFloorHighlightTween()
@@ -111,6 +169,11 @@ export class FireEmitterScene extends Scene {
             );
     }
 
+    /**
+     * Creates tweens for the Heartless where it shakes about
+     * 
+     * @private
+     */
     private createHeartlessShakeTween() {
         this.heartlessShakeTween = gsap.timeline({
             onComplete: () => this.createHeartlessShakeTween()
@@ -126,6 +189,11 @@ export class FireEmitterScene extends Scene {
             );
     }
 
+    /**
+     * Create tweens that blink the flame highlight sprite
+     * 
+     * @private
+     */
     private createHeartlessHighlightTween() {
         this.heartlessHighlightTween = gsap.timeline({
             onComplete: () => this.createHeartlessHighlightTween()

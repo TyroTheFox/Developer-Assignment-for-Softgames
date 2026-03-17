@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 import { Scene } from "../../engine/actors/actors/scene/scene";
 import { Sprite } from "../../engine/actors/actors/sprite/sprite";
-import { app, EE } from "../../engine/screen/game_screen";
+import { EE } from "../../engine/screen/game_screen";
 import { Container } from "../../engine/actors/actors/container/container";
 import { SpriteCreatorData } from "../../engine/actors/factory_creators/sprite/sprite_creator";
 import { CharacterSprite } from "../../engine/actors/actors/sprite/character_sprite";
@@ -10,6 +10,12 @@ import { DealerPuppet } from "../characters/card_example/dealer_puppet";
 import dealerPuppetAnimationData from '../../data/animations/card_example/dealer_puppet.json' assert {type: 'json'};
 import { AnimationDataEntry } from "../../engine/actors/actors/animation/puppeteer";
 
+/** 
+ * @class
+ * @extends {Scene}
+ * 
+ * Card Example Scene
+ */
 export class CardExampleScene extends Scene {
     protected pokerTableBackground!: Sprite;
 
@@ -18,6 +24,14 @@ export class CardExampleScene extends Scene {
     protected dealer!: DealerPuppet;
     protected cardsRequested: number = 0;
 
+    /**
+     * Initialise the scene
+     * 
+     * @public
+     * @override
+     * @async
+     * @returns {Promise<void>}
+     */
     public override async init(): Promise<void> {
         const { actorFactory, gameScreen } = this;
         const { size, cardSpriteData } = this.sceneSettingsData.deck;
@@ -51,15 +65,31 @@ export class CardExampleScene extends Scene {
 
         this.dealer = new DealerPuppet(this, dealerAnimationData, [dealerLeftHand, dealerRightHand, this.cardSpaceContainer]);
 
-        EE.on('dealCard', (cardsRequested: number = 1) => { 
+        /**
+         * Queue up cards to send to the player
+         * 
+         * @listens CardExampleUI#event:deal_card
+         */
+        EE.on('deal_card', (cardsRequested: number = 1) => { 
             this.cardsRequested = cardsRequested;
             this.checkForRequestedCards();
         });
-        EE.on('cardDealt', () => {
+
+        /**
+         * The Dealer just dealt a new card, so now check if there's another needed
+         * 
+         * @listens DealerPuppet#event:card_dealt
+         */
+        EE.on('card_dealt', () => {
             this.checkForRequestedCards();
         });
     }
 
+    /**
+     * Check for any card requests, deal a card if so
+     * 
+     * @public
+     */
     public checkForRequestedCards() {
         if (this.cardsRequested > 0) {
             this.cardsRequested--;
@@ -67,6 +97,16 @@ export class CardExampleScene extends Scene {
         }
     }
 
+    /**
+     * Resizes the elements of the scene
+     * 
+     * @public
+     * @override
+     * @param {number} width - Scaled Screen Width 
+     * @param {number} height - Scaled Screen Height 
+     * @param {number} scaleWithValue - Scale value that matches that of the Game Screen Space 
+     * @param {number} scaleAgainstValue - Scale vale that inverts that of the Game Screen Space
+     */
     public override resize(width: number, height: number, scaleWithValue: number, scaleAgainstValue: number) {
         super.resize(width, height, scaleWithValue, scaleAgainstValue);
 
@@ -82,11 +122,28 @@ export class CardExampleScene extends Scene {
         }
     }
 
+    /**
+     * Called when the Scene is activated
+     * Kick-starts the dealer loop
+     * 
+     * @public
+     * @override
+     * @async
+     * @returns {Promise<void>}
+     */
     public override async onEnter(): Promise<void> {
         this.dealer.restartDealer();
-        app.renderer.background.color = this.sceneSettingsData.backgroundColour;
     }
 
+    /**
+     * Called when the Scene is deactivated
+     * Halts the dealer loop
+     * 
+     * @public
+     * @override
+     * @async
+     * @returns {Promise<void>}
+     */
     public override async onExit(): Promise<void> {
         this.dealer.stopDealer();
         this.cardsRequested = 0;

@@ -1,8 +1,7 @@
 {
     "id": "dialogue scene",
     "type": "scene",
-    "settings": {
-    },
+    "settings": {},
     "actors": [
         {
             "id": "dialogueBox",
