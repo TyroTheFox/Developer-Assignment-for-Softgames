@@ -109,7 +109,7 @@ export class List extends PIXIUI.List {
         /**
          * Updates the internal position when the scene resizes
          * 
-         * @emit List#event:scene_resize
+         * @emits List#event:scene_resize
          */
         this.emit('scene_resize', width, height);
     }

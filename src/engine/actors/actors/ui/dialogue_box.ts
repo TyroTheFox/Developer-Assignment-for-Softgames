@@ -280,6 +280,15 @@ export class DialogueBox extends PIXI.Container {
 
             if (foundEntry !== -1) {
                 this.avatarPanel.switch(foundEntry);
+
+                const foundObject = this.avatarPanel.children[0].children[foundEntry];
+
+                if (foundObject instanceof PIXI.DOMContainer && (foundObject as PIXI.DOMContainer).element.clientWidth === 0) {
+                    foundObject.addChild(new PIXI.Sprite({
+                        texture: PIXI.Assets.get(`avatar_${avatarName}`), 
+                        anchor: 0.5
+                    }));
+                }
             } else {
                 this.avatarPanel.switch(this.avatarPanel.views.length - 1);
             }
@@ -309,6 +318,15 @@ export class DialogueBox extends PIXI.Container {
 
             if (foundEntry !== -1) {
                 this.emojiPanel.switch(foundEntry);
+
+                const foundObject = this.emojiPanel.children[0].children[foundEntry];
+
+                if (foundObject instanceof PIXI.DOMContainer && (foundObject as PIXI.DOMContainer).element.clientWidth === 0) {
+                    foundObject.addChild(new PIXI.Sprite({
+                        texture: PIXI.Assets.get(`emoji_${emojiName}`), 
+                        anchor: 0.5
+                    }));
+                }
 
                 gsap.timeline()
                     .to(
@@ -348,7 +366,7 @@ export class DialogueBox extends PIXI.Container {
         /**
          * Updates the internal position when the scene resizes
          * 
-         * @emit DialogueBox#event:scene_resize
+         * @emits DialogueBox#event:scene_resize
          */
         this.emit('scene_resize', width, height);
     }
@@ -399,7 +417,7 @@ export class DialogueBox extends PIXI.Container {
                 continue;
             }
 
-            const filteredData = tagList.filter((tagData: TagTimingData) => tagData.time <= i);
+            const filteredData = tagList.filter((tagData: TagTimingData) => tagData.time === i);
             const currentData = filteredData.pop();
 
             if (currentData) {
@@ -459,9 +477,10 @@ export class DialogueBox extends PIXI.Container {
         if (foundTagStartIndex !== -1) {
             const foundTagEndIndex = dialogueText.indexOf('}');
             const tagText = dialogueText.substring(foundTagStartIndex + 1, foundTagEndIndex);
+            const regExpression = new RegExp(`\s?{${tagText}}\s?`);
 
-            dialogueText = dialogueText.replace(` {${tagText}}`, "");
-            dialogueText = dialogueText.replace(`{${tagText}}`, "");
+            dialogueText = dialogueText.replace(regExpression, "");
+            dialogueText = dialogueText.replace("  ", " ");
 
             this.recursivelyDeTag(dialogueText);
         }
@@ -477,17 +496,27 @@ export class DialogueBox extends PIXI.Container {
      * @returns {TagTimingData[]}
      */
     protected recursivelyFindDialogueTags(dialogueText: string, tagList: TagTimingData[]): TagTimingData[] {
+        // Because timing is based on when the Split Text's char list is animated, it's possible to have
+        // spaces throw off the timing. This removes those spaces for accurate timing.
+        dialogueText = dialogueText.replace(/\s/g, '');
+
         const foundTagStartIndex = dialogueText.indexOf('{');
 
         // Found a tag
         if (foundTagStartIndex !== -1) {
             const foundTagEndIndex = dialogueText.indexOf('}');
             const tagText = dialogueText.substring(foundTagStartIndex + 1, foundTagEndIndex);
+            const regExpression = new RegExp(`\s?{${tagText}}\s?`);
 
             tagList.push({ time: foundTagStartIndex, tag: tagText });
 
-            dialogueText = dialogueText.replace(` {${tagText}}`, "");
-            dialogueText = dialogueText.replace(`{${tagText}}`, "");
+            dialogueText = dialogueText.replace(regExpression, "");
+            dialogueText = dialogueText.replace("  ", " ");
+
+            // Found tag exceeds the bounds of the string and is corrected
+            if (foundTagStartIndex >= dialogueText.length) {
+                tagList[tagList.length - 1].time = dialogueText.length - 1;
+            }
 
             this.recursivelyFindDialogueTags(dialogueText, tagList);
         }

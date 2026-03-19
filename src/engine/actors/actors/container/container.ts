@@ -112,7 +112,7 @@ export class Container extends PIXI.Container {
         /**
          * Updates the internal position when the scene resizes
          * 
-         * @emit Container#event:scene_resize
+         * @emits Container#event:scene_resize
          */
         this.emit('scene_resize', width, height);
     }
