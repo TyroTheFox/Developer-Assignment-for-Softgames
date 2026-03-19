@@ -277,18 +277,9 @@ export class DialogueBox extends PIXI.Container {
 
         if (avatarData) {
             const foundEntry = avatarData.findIndex((entry: AvatarDataEntry) => entry.name === avatarName);
-
+            
             if (foundEntry !== -1) {
                 this.avatarPanel.switch(foundEntry);
-
-                const foundObject = this.avatarPanel.children[0].children[foundEntry];
-
-                if (foundObject instanceof PIXI.DOMContainer && (foundObject as PIXI.DOMContainer).element.clientWidth === 0) {
-                    foundObject.addChild(new PIXI.Sprite({
-                        texture: PIXI.Assets.get(`avatar_${avatarName}`), 
-                        anchor: 0.5
-                    }));
-                }
             } else {
                 this.avatarPanel.switch(this.avatarPanel.views.length - 1);
             }
@@ -318,15 +309,6 @@ export class DialogueBox extends PIXI.Container {
 
             if (foundEntry !== -1) {
                 this.emojiPanel.switch(foundEntry);
-
-                const foundObject = this.emojiPanel.children[0].children[foundEntry];
-
-                if (foundObject instanceof PIXI.DOMContainer && (foundObject as PIXI.DOMContainer).element.clientWidth === 0) {
-                    foundObject.addChild(new PIXI.Sprite({
-                        texture: PIXI.Assets.get(`emoji_${emojiName}`), 
-                        anchor: 0.5
-                    }));
-                }
 
                 gsap.timeline()
                     .to(
@@ -541,26 +523,7 @@ export class DialogueBox extends PIXI.Container {
         }
 
         for (let i = 0; i < data.length; i++) {
-            const {url, texture, name} = data[i];
-
-            if (url) {
-                const imageExists = await this.imageExists(url);
-
-                if (imageExists) {
-                    const element = document.createElement('img');
-                    element.src = url;
-                    element.alt = name;
-
-                    const domContainer = new PIXI.DOMContainer({
-                        element,
-                        anchor: 0.5,
-                    });
-
-                    panel.add(domContainer);
-
-                    continue;
-                }
-            }
+            const {texture, name} = data[i];
 
             if (!PIXI.Assets.cache.has(`${panelType}_${name}`)) {
                 await PIXI.Assets.load({ alias: `${panelType}_${name}`, src: texture})
@@ -579,28 +542,5 @@ export class DialogueBox extends PIXI.Container {
         // Default Sprite
         const defaultSprite = new PIXI.Sprite(PIXI.Texture.EMPTY);
         panel.add(defaultSprite);
-    }
-
-    /**
-     * To cover the possibility of a hoasted screen element not being available for use, the game will double check
-     * that the hosted element is actually there
-     * 
-     * @private
-     * @param {string} url - The URL of the Hosted Image
-     * @returns {HTMLImageElement | boolean}
-     */
-    private imageExists(url: string): Promise<HTMLImageElement | boolean> {
-        return new Promise(resolve => {
-            var img = document.createElement('img');
-            img.addEventListener('load', () => {
-                resolve(img.complete ? img: false);
-            });
-            img.addEventListener('error', () => resolve(false));
-            img.src = url;
-
-            setTimeout(function() {
-                resolve(img.complete ? img: false);
-            }, this.remoteAssetTimeout);
-        });
     }
 }
